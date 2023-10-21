@@ -1,0 +1,11 @@
+#BlueJ class context
+comment0.target=Tensor
+comment1.params=shape\ value
+comment1.target=Tensor(int[],\ int)
+comment2.params=dimension\ value
+comment2.target=void\ fillTensor(int,\ int)
+comment3.params=
+comment3.target=java.util.ArrayList\ getData()
+comment4.params=args
+comment4.target=void\ main(java.lang.String[])
+numComments=5
