@@ -1,0 +1,25 @@
+#BlueJ class context
+comment0.target=Ant
+comment0.text=Information\ about\ a\ Ant<br>\r\n<b>(colony,row,column,age,state,nextState,\ color)</b><br>\r\n<br>\r\n
+comment1.params=name\ colony\ row\ column
+comment1.target=Ant(java.lang.String,\ Colony,\ int,\ int)
+comment1.text=Create\ a\ new\ Ant\ (<b>row,column</b>)\ in\ the\ colony\ <b>colony</b>.\r\n\ Every\ new\ Ant\ is\ going\ to\ be\ alive\ in\ the\ following\ state.\r\n\ @param\ colony\ \r\n\ @param\ row\ \r\n\ @param\ column\ \r\n
+comment2.params=
+comment2.target=int\ shape()
+comment2.text=Returns\ the\ shape\r\n\ \ \ \ @return\ \r\n
+comment3.params=
+comment3.target=int\ getRow()
+comment3.text=Returns\ the\ row\r\n\ \ \ \ @return\ \r\n
+comment4.params=
+comment4.target=int\ getColumn()
+comment4.text=Returns\ tha\ column\r\n\ \ \ \ @return\ \r\n
+comment5.params=
+comment5.target=java.lang.String\ getName()
+comment6.params=
+comment6.target=java.awt.Color\ getColor()
+comment6.text=Returns\ the\ color\r\n\ \ \ \ @return\ \r\n
+comment7.params=
+comment7.target=void\ act()
+comment8.params=
+comment8.target=void\ move()
+numComments=9

@@ -1,0 +1,19 @@
+#BlueJ class context
+comment0.target=Colony
+comment0.text=No\ olviden\ adicionar\ la\ documentacion
+comment1.params=
+comment1.target=Colony()
+comment2.params=
+comment2.target=int\ getLength()
+comment3.params=r\ c
+comment3.target=Entity\ getEntity(int,\ int)
+comment4.params=r\ c\ e
+comment4.target=void\ setEntity(int,\ int,\ Entity)
+comment5.params=
+comment5.target=void\ someEntities()
+comment6.params=
+comment6.target=void\ ticTac()
+comment6.text=\r\n\ Avanza\ un\ paso\ de\ tiempo\ en\ la\ colonia,\ realizando\ las\ acciones\ necesarias\ para\ cada\ entidad.\r\n
+comment7.params=startRow\ startColumn\ targetType
+comment7.target=int[]\ findNearestEntityPosition(int,\ int,\ java.lang.Class)
+numComments=8
