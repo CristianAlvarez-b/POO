@@ -25,7 +25,11 @@ public class Colony {
         setEntity(0, 1, new Food());
         setEntity(0, 2, new Food());
         setEntity(1, 0, new Food());
-        setEntity(1, 1, new Food());
+        setEntity(28, 0, new Food());
+        setEntity(29, 0, new Food());
+        setEntity(27, 0, new Food());
+        setEntity(29, 1, new Food());
+        setEntity(28, 1, new Food());
         someEntities();
     }
 
