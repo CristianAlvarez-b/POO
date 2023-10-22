@@ -1,56 +1,70 @@
 package domain;
+
 import java.awt.Color;
 
 /**
- * Write a description of class Flower here.
- * 
- * @author (your name) 
- * @version (a version number or a date)
+ * La clase Flower representa una flor en la colonia. Las flores pueden estar abiertas o cerradas y cambian de color.
  */
-public class Flower implements Entity
-{
-    // instance variables - replace the example below with your own
-    protected Color color; 
+public class Flower implements Entity {
+    protected Color color;
     protected boolean isOpen;
     protected Colony colony;
-    protected int row,column;
+    protected int row, column;
     protected String name;
+
     /**
-     * Constructor for objects of class Flower
+     * Constructor para objetos de la clase Flower.
+     * Crea una nueva flor en la fila y columna especificadas en la colonia dada.
+     * @param name Nombre de la flor.
+     * @param colony La colonia a la que pertenece la flor.
+     * @param row Fila de ubicación de la flor.
+     * @param column Columna de ubicación de la flor.
      */
-    public Flower(String name, Colony colony,int row, int column)
-    {
+    public Flower(String name, Colony colony, int row, int column) {
         this.name = name;
         isOpen = true;
-        this.colony=colony;
-        this.row=row;
-        this.column=column;
-        colony.setEntity(row,column,(Entity)this);  
-        this.color = Color.green;
+        this.colony = colony;
+        this.row = row;
+        this.column = column;
+        colony.setEntity(row, column, (Entity) this);
+        this.color = Color.red;
     }
-    
-    public void act(){
-        if(isOpen){
-            color = Color.red;
-            isOpen = false;
-        }else{
+
+    /**
+     * Realiza una acción relacionada con la flor, alternando entre los colores verde y rojo para simular la apertura y cierre de la flor.
+     */
+    public void act() {
+        if (isOpen) {
             color = Color.green;
-            isOpen = true;                     
+            isOpen = false;
+        } else {
+            color = Color.red;
+            isOpen = true;
         }
     }
-    
-    public final int shape(){
+
+    /**
+     * Obtiene la forma de la flor.
+     * @return Valor entero que representa la forma de la flor (FLORES).
+     */
+    public final int shape() {
         return Entity.FLOWER;
     }
-    
+
+    /**
+     * Comprueba si la flor "es" una flor abierta (isOpen).
+     * @return `true` si la flor está abierta, `false` si está cerrada.
+     */
     @Override
-    public boolean is(){
-        if(!isOpen){
-            return false;
-        }
-        return true;
+    public boolean is() {
+        return isOpen;
     }
-     public final Color getColor(){
+
+    /**
+     * Obtiene el color de la flor.
+     * @return Color de la flor (puede ser verde o rojo).
+     */
+    public final Color getColor() {
         return color;
     }
 }

@@ -1,19 +1,25 @@
 #BlueJ class context
 comment0.target=Colony
-comment0.text=No\ olviden\ adicionar\ la\ documentacion
+comment0.text=\r\n\ La\ clase\ Colony\ representa\ una\ colonia\ de\ entidades,\ incluyendo\ hormigas,\ flores\ y\ abejas.\r\n
 comment1.params=
 comment1.target=Colony()
+comment1.text=\r\n\ Constructor\ de\ la\ colonia\ que\ inicializa\ la\ matriz\ y\ agrega\ algunas\ entidades\ iniciales.\r\n
 comment2.params=
 comment2.target=int\ getLength()
+comment2.text=\r\n\ Obtiene\ el\ tama\u00F1o\ de\ la\ colonia.\r\n\ @return\ Tama\u00F1o\ de\ la\ colonia.\r\n
 comment3.params=r\ c
 comment3.target=Entity\ getEntity(int,\ int)
+comment3.text=\r\n\ Obtiene\ la\ entidad\ en\ una\ ubicaci\u00F3n\ espec\u00EDfica\ de\ la\ colonia.\r\n\ @param\ r\ Fila\ de\ la\ ubicaci\u00F3n.\r\n\ @param\ c\ Columna\ de\ la\ ubicaci\u00F3n.\r\n\ @return\ Entidad\ en\ la\ ubicaci\u00F3n\ especificada.\r\n
 comment4.params=r\ c\ e
 comment4.target=void\ setEntity(int,\ int,\ Entity)
+comment4.text=\r\n\ Establece\ una\ entidad\ en\ una\ ubicaci\u00F3n\ espec\u00EDfica\ de\ la\ colonia.\r\n\ @param\ r\ Fila\ de\ la\ ubicaci\u00F3n.\r\n\ @param\ c\ Columna\ de\ la\ ubicaci\u00F3n.\r\n\ @param\ e\ Entidad\ a\ establecer.\r\n
 comment5.params=
 comment5.target=void\ someEntities()
+comment5.text=\r\n\ Agrega\ algunas\ entidades\ iniciales\ a\ la\ colonia.\r\n
 comment6.params=
 comment6.target=void\ ticTac()
 comment6.text=\r\n\ Avanza\ un\ paso\ de\ tiempo\ en\ la\ colonia,\ realizando\ las\ acciones\ necesarias\ para\ cada\ entidad.\r\n
 comment7.params=startRow\ startColumn\ targetType
 comment7.target=int[]\ findNearestEntityPosition(int,\ int,\ java.lang.Class)
+comment7.text=\r\n\ Encuentra\ la\ posici\u00F3n\ de\ la\ entidad\ m\u00E1s\ cercana\ de\ un\ tipo\ espec\u00EDfico\ a\ partir\ de\ una\ ubicaci\u00F3n\ de\ inicio.\r\n\ @param\ startRow\ Fila\ de\ inicio.\r\n\ @param\ startColumn\ Columna\ de\ inicio.\r\n\ @param\ targetType\ Tipo\ de\ entidad\ a\ buscar.\r\n\ @return\ Arreglo\ de\ dos\ elementos\ que\ representa\ la\ fila\ y\ la\ columna\ de\ la\ entidad\ m\u00E1s\ cercana.\r\n
 numComments=8

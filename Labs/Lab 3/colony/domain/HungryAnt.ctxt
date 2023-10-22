@@ -1,9 +1,13 @@
 #BlueJ class context
 comment0.target=HungryAnt
-comment0.text=\r\n\ Write\ a\ description\ of\ class\ HungryAnt\ here.\r\n\ \r\n\ @author\ (your\ name)\ \r\n\ @version\ (a\ version\ number\ or\ a\ date)\r\n
+comment0.text=\r\n\ La\ clase\ HungryAnt\ representa\ una\ hormiga\ hambrienta\ en\ la\ colonia.\ Las\ hormigas\ hambrientas\ cambian\ de\ color\ cuando\ tienen\ hambre\ y\ buscan\ comida\ en\ la\ colonia.\r\n
 comment1.params=name\ colony\ row\ column
 comment1.target=HungryAnt(java.lang.String,\ Colony,\ int,\ int)
-comment1.text=\r\n\ Constructor\ for\ objects\ of\ class\ HungryAnt\r\n
+comment1.text=\r\n\ Constructor\ para\ objetos\ de\ la\ clase\ HungryAnt.\r\n\ Crea\ una\ nueva\ hormiga\ hambrienta\ en\ la\ fila\ y\ columna\ especificadas\ en\ la\ colonia\ dada.\r\n\ @param\ name\ Nombre\ de\ la\ hormiga\ hambrienta.\r\n\ @param\ colony\ La\ colonia\ a\ la\ que\ pertenece\ la\ hormiga\ hambrienta.\r\n\ @param\ row\ Fila\ de\ ubicaci\u00F3n\ de\ la\ hormiga\ hambrienta.\r\n\ @param\ column\ Columna\ de\ ubicaci\u00F3n\ de\ la\ hormiga\ hambrienta.\r\n
 comment2.params=
 comment2.target=void\ move()
-numComments=3
+comment2.text=\r\n\ El\ m\u00E9todo\ move\ permite\ que\ la\ hormiga\ hambrienta\ busque\ comida\ en\ la\ colonia\ y\ cambie\ de\ comportamiento\ cuando\ tiene\ hambre.\r\n
+comment3.params=
+comment3.target=boolean\ getHungry()
+comment3.text=\r\n\ Obtiene\ el\ estado\ de\ hambre\ de\ la\ hormiga\ hambrienta.\r\n\ @return\ `true`\ si\ la\ hormiga\ est\u00E1\ hambrienta,\ `false`\ si\ no\ lo\ est\u00E1.\r\n
+numComments=4
