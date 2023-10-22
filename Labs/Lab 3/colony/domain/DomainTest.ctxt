@@ -15,4 +15,6 @@ comment6.params=
 comment6.target=void\ ShouldNotMoveGuardian()
 comment7.params=
 comment7.target=void\ ShouldMoveBee()
-numComments=8
+comment8.params=
+comment8.target=void\ ShouldNotMoveBee()
+numComments=9

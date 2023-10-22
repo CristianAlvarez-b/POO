@@ -71,4 +71,12 @@ public class DomainTest
         }
         assertTrue(colony.getEntity(3,3) == null);
     }
+    @Test
+    public void ShouldNotMoveBee(){
+        Bee bee1 = new Bee("juliana", colony, 3, 3);
+         for(int i=0; i<20; i++){
+            colony.ticTac();    
+        }
+        assertEquals(colony.getEntity(3,3), colony.getEntity(3,3));
+    }
 }
