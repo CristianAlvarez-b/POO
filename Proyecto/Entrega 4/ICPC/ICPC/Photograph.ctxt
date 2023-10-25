@@ -1,0 +1,24 @@
+#BlueJ class context
+comment0.target=Photograph
+comment0.text=\r\n\ Represents\ a\ photograph\ taken\ along\ the\ route\ of\ a\ flight\ within\ the\ Iceepeecee\ simulation.\r\n\r\n\ A\ photograph\ is\ created\ based\ on\ the\ given\ starting\ and\ ending\ coordinates\ of\ the\ flight,\r\n\ a\ specified\ theta\ angle,\ and\ a\ color.\ This\ class\ calculates\ the\ points\ perpendicular\ to\r\n\ the\ flight\ route\ and\ creates\ a\ PolygonShape\ to\ represent\ the\ photograph.\r\n\r\n\ @author\ Cristian\ Alvarez\ -\ Juliana\ Brice\u00F1o\r\n\ @version\ 1.0\r\n
+comment1.params=from\ to\ theta\ color
+comment1.target=Photograph(java.lang.Number[],\ java.lang.Number[],\ java.lang.Number,\ java.lang.String)
+comment1.text=\r\n\ Create\ a\ photograph\ with\ a\ specified\ starting\ and\ ending\ coordinates,\ theta\ angle,\ and\ color.\r\n\r\n\ @param\ from\ \ \ Coordinates\ of\ the\ starting\ point\ of\ the\ flight.\r\n\ @param\ to\ \ \ \ \ Coordinates\ of\ the\ ending\ point\ of\ the\ flight.\r\n\ @param\ theta\ \ The\ theta\ angle\ at\ which\ the\ photograph\ is\ taken.\r\n\ @param\ color\ \ The\ color\ of\ the\ photograph.\r\n
+comment2.params=puntoI\ puntoF\ x\ w
+comment2.target=java.lang.Number[][]\ calcularPuntosPerpendiculares(java.lang.Number[],\ java.lang.Number[],\ double,\ double)
+comment2.text=\r\n\ Calculates\ the\ coordinates\ of\ points\ that\ are\ perpendicular\ to\ the\ line\ segment\ defined\ by\ two\ points.\r\n\ The\ perpendicular\ points\ are\ determined\ based\ on\ specified\ distances\ 'x'\ and\ 'w'\ from\ the\ original\ line\ segment.\r\n\r\n\ @param\ puntoI\ The\ coordinates\ of\ the\ starting\ point\ of\ the\ line\ segment.\r\n\ @param\ puntoF\ The\ coordinates\ of\ the\ ending\ point\ of\ the\ line\ segment.\r\n\ @param\ x\ \ \ \ \ \ The\ distance\ 'x'\ from\ the\ starting\ point\ for\ the\ perpendicular\ points.\r\n\ @param\ w\ \ \ \ \ \ The\ distance\ 'w'\ from\ the\ ending\ point\ for\ the\ perpendicular\ points.\r\n\ @return\ An\ array\ of\ two-dimensional\ integer\ arrays\ representing\ the\ coordinates\ of\ the\ calculated\ points.\r\n\ \ \ \ \ \ \ \ \ The\ array\ contains\ four\ points\:\ P,\ Q,\ R,\ and\ S,\ in\ that\ order.\r\n\ \ \ \ \ \ \ \ \ -\ Point\ P\ is\ 'x'\ distance\ away\ from\ the\ starting\ point\ in\ the\ perpendicular\ direction.\r\n\ \ \ \ \ \ \ \ \ -\ Point\ Q\ is\ 'w'\ distance\ away\ from\ the\ ending\ point\ in\ the\ perpendicular\ direction.\r\n\ \ \ \ \ \ \ \ \ -\ Point\ R\ is\ 'x'\ distance\ away\ from\ the\ starting\ point\ in\ the\ opposite\ perpendicular\ direction.\r\n\ \ \ \ \ \ \ \ \ -\ Point\ S\ is\ 'w'\ distance\ away\ from\ the\ ending\ point\ in\ the\ opposite\ perpendicular\ direction.\r\n
+comment3.params=
+comment3.target=void\ makeVisible()
+comment3.text=\r\n\ Make\ this\ flight\ visible.\r\n
+comment4.params=
+comment4.target=void\ makeInvisible()
+comment4.text=\r\n\ Make\ this\ flight\ invisible.\r\n
+comment5.params=
+comment5.target=shapes.PolygonShape\ getPolygon()
+comment5.text=\r\n\ Get\ the\ polygon\ shape\ associated\ with\ this\ photograph.\r\n\r\n\ @return\ The\ polygon\ shape\ object\ representing\ the\ graphic\ representation\ of\ this\ photograph.\r\n
+comment6.params=
+comment6.target=java.lang.Number\ getTheta()
+comment6.text=\r\n\ Get\ the\ theta\ (angle)\ associated\ with\ this\ photograph.\r\n\r\n\ @return\ The\ theta\ value,\ in\ degrees,\ at\ which\ this\ photograph\ was\ taken.\r\n
+comment7.params=list
+comment7.target=int[]\ redondeo(java.lang.Number[])
+numComments=8
