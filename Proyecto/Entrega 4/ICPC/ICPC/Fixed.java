@@ -15,6 +15,7 @@ public class Fixed extends Island
     {
         super(matrix, color);
     }
+    
     @Override
     public void drawBorder(){
         if(border.size() != 0){

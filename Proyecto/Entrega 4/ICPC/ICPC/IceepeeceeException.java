@@ -13,5 +13,4 @@ public class IceepeeceeException extends Exception
     public IceepeeceeException(String mensaje) {
         super(mensaje);
     }
-    
 }

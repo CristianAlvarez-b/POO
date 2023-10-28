@@ -10,7 +10,7 @@ import java.util.*;
  * @author (Juliana Briceño & Cristian Alvarez)
  * @version (1.0)
  */
-public class PolygonShape {
+public class PolygonShape{
     private Number[] xPoints;
     private Number[] yPoints;
     private int numVertices;

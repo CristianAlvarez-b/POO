@@ -142,9 +142,13 @@ public class Iceepeecee
                 Flight flight = new Flat(color, from, to);
                 flights.put(color, flight);
                 this.ok = true; 
+            }else if(type == 'r'){
+                Flight flight = new Rebel(color, from, to);
+                flights.put(color, flight);
+                this.ok = true; 
             }else{
-                throw new IceepeeceeException("Unknow type.");     
-            }
+                throw new IceepeeceeException("Unknow type.");    
+            } 
         } else {
             this.ok = false;
             throw new IceepeeceeException("The key '" + color + "' already exists in the HashMap.");

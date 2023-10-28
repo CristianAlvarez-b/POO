@@ -16,6 +16,22 @@ public class Surprising extends Island
         super(matrix, color);
         drawBorder();
     }
+    @Override
+    public Number[][] getLocation(){
+        try
+        {
+            this.updateState();
+            Number[][] points = getPoints();
+            polygon.changePoints(points[0], points[1]); 
+            eraseBorder();
+            drawBorder();
+            return this.vertexMatrix;
+        }
+        catch (ICPC.IceepeeceeException ie)
+        {
+            return this.vertexMatrix;
+        }
+    }
     
     public void updateState() throws ICPC.IceepeeceeException {
         if(vertexMatrix.length <= 3){
@@ -29,6 +45,7 @@ public class Surprising extends Island
         }
         this.vertexMatrix = newMatrix;
     }
+    
     @Override
     public void drawBorder(){
         if(border.size() != 0){

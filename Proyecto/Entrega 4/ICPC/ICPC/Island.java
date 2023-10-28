@@ -56,12 +56,6 @@ public class Island
      * coordinates of its vertices.
      */
     public Number[][] getLocation() throws ICPC.IceepeeceeException{
-        if(this instanceof Surprising){
-           ((Surprising)this).updateState();
-           Number[][] points = getPoints();
-           polygon.changePoints(points[0], points[1]); 
-           return this.vertexMatrix;
-        }
         return this.vertexMatrix;
     }
     
