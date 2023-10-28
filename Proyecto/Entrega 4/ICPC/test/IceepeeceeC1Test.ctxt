@@ -1,9 +1,9 @@
 #BlueJ class context
 comment0.target=IceepeeceeC1Test
-comment0.text=\r\n\ The\ test\ class\ IceepeeceeC1Test.\r\n\r\n\ @author\ \ Cristian\ Alvarez\ -\ Juliana\ Brice\u00F1o\r\n\ @version\ 1.0\r\n
+comment0.text=\n\ The\ test\ class\ IceepeeceeC1Test.\n\n\ @author\ \ Cristian\ Alvarez\ -\ Juliana\ Brice\u00F1o\n\ @version\ 1.0\n
 comment1.params=
 comment1.target=IceepeeceeC1Test()
-comment1.text=\r\n\ Default\ constructor\ for\ test\ class\ IceepeeceeC1Test\r\n
+comment1.text=\n\ Default\ constructor\ for\ test\ class\ IceepeeceeC1Test\n
 comment10.params=
 comment10.target=void\ shouldNotAddFlightsRepeatKey()
 comment11.params=

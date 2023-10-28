@@ -1,4 +1,5 @@
-package ICPC;
+package test;
+import ICPC.*;
 import java.awt.*;
 import java.lang.Math;
 import java.util.*;
