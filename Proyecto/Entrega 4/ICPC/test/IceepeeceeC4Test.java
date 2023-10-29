@@ -159,7 +159,7 @@ public class IceepeeceeC4Test
         catch (ICPC.IceepeeceeException ie)
         {
             prueba.makeInvisible();
-            assertEquals("The flight already has one photo.", ie.getMessage());
+            assertEquals("El vuelo ya tiene una foto.", ie.getMessage());
         }
     }
     @Test
