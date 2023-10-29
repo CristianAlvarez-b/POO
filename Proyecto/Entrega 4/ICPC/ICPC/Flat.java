@@ -1,12 +1,6 @@
 package ICPC;
 import shapes.*;
 
-/**
- * Write a description of class normal here.
- * 
- * @author (your name) 
- * @version (a version number or a date)
- */
 public class Flat extends Flight
 {
     protected boolean photographed = false;
@@ -21,6 +15,10 @@ public class Flat extends Flight
         drawInit();
         makeVisible();
     }
+    /**
+     * Dibuja la flecha inicial del vuelo con base en las coordenadas del punto de inicio y final.
+     * Calcula la dirección y el tamaño de la flecha.
+     */
     private void drawInit() {
         // Coordenadas del punto de inicio (from)
         double xFrom = from[0].doubleValue();
