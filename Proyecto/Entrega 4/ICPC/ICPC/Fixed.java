@@ -3,8 +3,8 @@ import shapes.*;
 /**
  * Write a description of class normal here.
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author (Cristian Alvarez - Juliana Briceño) 
+ * @version (2.0)
  */
 public class Fixed extends Island
 {
@@ -16,6 +16,9 @@ public class Fixed extends Island
         super(matrix, color);
     }
     
+     /**
+     * Dibuja los bordes de la forma.
+     */
     @Override
     public void drawBorder(){
         if(border.size() != 0){

@@ -1,17 +1,16 @@
 package ICPC;
 import shapes.*;
-/**
- * Write a description of class normal here.
- * 
- * @author (your name) 
- * @version (a version number or a date)
- */
+
 public class Lazy extends Flight
 {
     protected boolean photographed = false;
     private PolygonShape shape;
     /**
-     * Constructor for objects of class normal
+     * Constructor para objetos de la clase Lazy.
+     * 
+     * @param color El color de la flecha del vuelo.
+     * @param from Las coordenadas del punto de inicio del vuelo.
+     * @param to Las coordenadas del punto final del vuelo.
      */
     public Lazy(String color, Number[] from, Number[] to)
     {
@@ -19,15 +18,27 @@ public class Lazy extends Flight
         drawInit();
         makeVisible();
     }
+    
+    /**
+     * Toma una foto del vuelo con la flecha. Solo se permite tomar una foto una vez.
+     * 
+     * @param theta El ángulo de la foto.
+     * @throws ICPC.IceepeeceeException Si se intenta tomar una segunda foto del vuelo.
+     */
     @Override
     public void makePhoto(Number theta) throws ICPC.IceepeeceeException{
         if(!photographed){
             super.makePhoto(theta);
             photographed = true;
         }else{
-            throw new IceepeeceeException("The flight already has one photo.");
+            throw new IceepeeceeException("El vuelo ya tiene una foto.");
         }
     }
+    
+    /**
+     * Dibuja la flecha inicial del vuelo con base en las coordenadas del punto de inicio y final.
+     * Calcula la dirección y el tamaño de la flecha.
+     */
     private void drawInit() {
         // Coordenadas del punto de inicio (from)
         double xFrom = from[0].doubleValue();

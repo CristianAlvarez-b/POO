@@ -1,11 +1,12 @@
 #BlueJ class context
 comment0.target=Lazy
-comment0.text=\r\n\ Write\ a\ description\ of\ class\ normal\ here.\r\n\ \r\n\ @author\ (your\ name)\ \r\n\ @version\ (a\ version\ number\ or\ a\ date)\r\n
 comment1.params=color\ from\ to
 comment1.target=Lazy(java.lang.String,\ java.lang.Number[],\ java.lang.Number[])
-comment1.text=\r\n\ Constructor\ for\ objects\ of\ class\ normal\r\n
+comment1.text=\r\n\ Constructor\ para\ objetos\ de\ la\ clase\ Lazy.\r\n\ \r\n\ @param\ color\ El\ color\ de\ la\ flecha\ del\ vuelo.\r\n\ @param\ from\ Las\ coordenadas\ del\ punto\ de\ inicio\ del\ vuelo.\r\n\ @param\ to\ Las\ coordenadas\ del\ punto\ final\ del\ vuelo.\r\n
 comment2.params=theta
 comment2.target=void\ makePhoto(java.lang.Number)
+comment2.text=\r\n\ Toma\ una\ foto\ del\ vuelo\ con\ la\ flecha.\ Solo\ se\ permite\ tomar\ una\ foto\ una\ vez.\r\n\ \r\n\ @param\ theta\ El\ \u00E1ngulo\ de\ la\ foto.\r\n\ @throws\ ICPC.IceepeeceeException\ Si\ se\ intenta\ tomar\ una\ segunda\ foto\ del\ vuelo.\r\n
 comment3.params=
 comment3.target=void\ drawInit()
+comment3.text=\r\n\ Dibuja\ la\ flecha\ inicial\ del\ vuelo\ con\ base\ en\ las\ coordenadas\ del\ punto\ de\ inicio\ y\ final.\r\n\ Calcula\ la\ direcci\u00F3n\ y\ el\ tama\u00F1o\ de\ la\ flecha.\r\n
 numComments=4
