@@ -1,0 +1,22 @@
+#BlueJ class context
+comment0.target=Complete
+comment1.params=name\ makeUp\ discount
+comment1.target=Complete(java.lang.String,\ int,\ int)
+comment1.text=\r\n\ Constructs\ a\ new\ complete\ custom\r\n\ @param\ name\ \r\n\ @param\ makeUp\r\n\ @param\ discount\ \r\n
+comment2.params=b
+comment2.target=void\ addBasic(Basic)
+comment2.text=\r\n\ Add\ a\ new\ basic\ piece\r\n\ @param\ b\r\n
+comment3.params=
+comment3.target=int\ price()
+comment3.text=\r\n\ \r\n
+comment4.params=type
+comment4.target=int\ price(java.lang.String)
+comment4.text=\r\n\ Calculates\ an\ estimate\ price\r\n\ For\ basics\ where\ the\ price\ cannot\ be\ known\ or\ has\ error,\ the\ first\ o\ last\ value\ is\ assumed\r\n\ @param\ type\ (first,\ last)\ \r\n\ @return\ \r\n\ @throws\ CostumeShopException\ COMPLETE_EMPTY,\ if\ it\ don't\ have\ basics.\ IMPOSSIBLE,\ if\ it\ can't\ be\ calculated\r\n
+comment5.params=makeUp
+comment5.target=int\ price(boolean)
+comment5.text=\r\n\ Calculates\ an\ estimate\ price\r\n\ For\ basics\ where\ the\ price\ cannot\ be\ known,\ if\ makeUp\ then\ the\ makeUp\ is\ assumed\r\n\ @param\ unknown\ \r\n\ @return\ \r\n\ @throws\ CostumeShopException\ COMPLETE_EMPTY,\ if\ it\ don't\ have\ basics.\ PRICE_UNKNOWN,\ if\ some\ basic\ is\ unknown\ and\ not\ makeUp.\ PRICE_ERROR,\ if\ some\ basic\ has\ error\r\n
+comment6.params=
+comment6.target=java.lang.String\ data()
+comment7.params=
+comment7.target=boolean\ isMakeUp()
+numComments=8
