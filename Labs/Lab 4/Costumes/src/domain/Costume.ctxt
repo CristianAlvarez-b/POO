@@ -1,0 +1,13 @@
+#BlueJ class context
+comment0.target=Costume
+comment0.text=\n\ The\ abstract\ Costume\ class\ represents\ a\ costume\ in\ a\ costume\ shop.\ Subclasses\ of\ this\ class\n\ should\ implement\ the\ price\ and\ data\ methods\ to\ provide\ specific\ functionality\ for\ different\ types\ of\ costumes.\n\ \n\ @author\ Juliana\ Brice\u00F1o\ &\ Cristian\ Alvarez\n\ @version\ 1.0\ 30-Oct-2023\n
+comment1.params=
+comment1.target=java.lang.String\ name()
+comment1.text=\n\ Returns\ the\ name\ of\ the\ costume.\n\ @return\ The\ name\ of\ the\ costume.\n
+comment2.params=
+comment2.target=int\ price()
+comment2.text=\n\ Returns\ the\ price\ of\ the\ costume.\n\ @return\ The\ price\ of\ the\ costume.\n\ @throws\ CostumeShopException\ if\ the\ price\ is\ not\ available\ or\ has\ an\ error.\n
+comment3.params=
+comment3.target=java.lang.String\ data()
+comment3.text=\n\ Returns\ a\ textual\ representation\ of\ the\ costume's\ data.\n\ @return\ A\ string\ representation\ of\ the\ costume's\ data.\n\ @throws\ CostumeShopException\ if\ the\ data\ is\ not\ complete.\n
+numComments=4

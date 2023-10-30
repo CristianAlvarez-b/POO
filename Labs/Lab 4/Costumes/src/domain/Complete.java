@@ -2,17 +2,22 @@ package domain;
  
 import java.util.ArrayList;
 
+/**
+ * The Complete class represents a complete costume in a costume shop.
+ * 
+ * @author Juliana Briceño & Cristian Alvarez
+ * @version 1.0 30-Oct-2023
+ */
 public class Complete extends Costume{
-   
-
+    
     private int makeUp;
     private ArrayList<Basic> pieces;
     
     /**
-     * Constructs a new complete custom
-     * @param name 
-     * @param makeUp
-     * @param discount 
+     * Constructs a new Complete costume with the given name, makeup value, and discount.
+     * @param name The name of the costume.
+     * @param makeUp The makeup value.
+     * @param discount The discount for the costume.
      */
     public Complete(String name, int makeUp, int discount){
         this.name=name;
@@ -23,16 +28,18 @@ public class Complete extends Costume{
 
 
      /**
-     * Add a new basic piece
-     * @param b
-     */   
+     * Add a new basic piece to the complete costume.
+     * @param b The Basic costume piece to add.
+     */ 
     public void addBasic(Basic b){
         pieces.add(b);
     }
        
  
     /**
-     * 
+     * Returns the price of the Complete costume after applying the discount.
+     * @return The discounted price of the costume.
+     * @throws CostumeShopException if it doesn't have basic pieces.
      */
     @Override
     public int price() throws CostumeShopException{
@@ -47,12 +54,12 @@ public class Complete extends Costume{
     }
     
     
-     /**
-     * Calculates an estimate price
-     * For basics where the price cannot be known or has error, the first o last value is assumed
-     * @param type (first, last) 
-     * @return 
-     * @throws CostumeShopException COMPLETE_EMPTY, if it don't have basics. IMPOSSIBLE, if it can't be calculated
+    /**
+     * Returns an estimated price for the Complete costume.
+     * For basics where the price cannot be known or has an error, the first or last value is assumed.
+     * @param type Either "first" or "last" to specify the type of estimate.
+     * @return The estimated price of the costume.
+     * @throws CostumeShopException if it doesn't have basic pieces or if the estimate is impossible.
      */
     public int price(String type) throws CostumeShopException{
         if(pieces.size() == 0){
@@ -105,11 +112,11 @@ public class Complete extends Costume{
     
     
      /**
-     * Calculates an estimate price
-     * For basics where the price cannot be known, if makeUp then the makeUp is assumed
-     * @param unknown 
-     * @return 
-     * @throws CostumeShopException COMPLETE_EMPTY, if it don't have basics. PRICE_UNKNOWN, if some basic is unknown and not makeUp. PRICE_ERROR, if some basic has error
+     * Returns an estimated price for the Complete costume.
+     * For basics where the price cannot be known, if makeup is available, the makeup price is assumed.
+     * @param makeUp A boolean value indicating whether makeup is available.
+     * @return The estimated price of the costume.
+     * @throws CostumeShopException if it doesn't have basic pieces, if some basic is unknown and not makeup, or if some basic has an error.
      */
     public int price(boolean makeUp) throws CostumeShopException{
         if(pieces.size() == 0){
@@ -135,6 +142,11 @@ public class Complete extends Costume{
         return price -= price*discount/100;
     } 
     
+    /**
+     * Returns a string representation of the Complete costume's data, including its basic pieces.
+     * @return A string representation of the costume's data.
+     * @throws CostumeShopException if the data is not complete.
+     */
     @Override
     public String data() throws CostumeShopException{
         StringBuffer answer=new StringBuffer();
@@ -145,6 +157,11 @@ public class Complete extends Costume{
         return answer.toString();
     } 
     
+    /**
+     * Checks if the costume has makeup.
+     * @return true if the costume has makeup, false otherwise.
+     * @throws CostumeShopException if the makeup value is invalid.
+     */
     public boolean isMakeUp() throws domain.CostumeShopException {
         if(this.makeUp > 0){
             return true;
