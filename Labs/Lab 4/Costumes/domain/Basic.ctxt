@@ -1,0 +1,13 @@
+#BlueJ class context
+comment0.target=Basic
+comment0.text=\n\ The\ Basic\ class\ represents\ a\ basic\ costume\ in\ a\ costume\ shop.\n\ \n\ @author\ Juliana\ Brice\u00F1o\ &\ Cristian\ Alvarez\n\ @version\ 1.0\ 30-Oct-2023\n
+comment1.params=name\ price\ discount
+comment1.target=Basic(java.lang.String,\ java.lang.Integer,\ int)
+comment1.text=\n\ Constructs\ a\ new\ Basic\ costume\ with\ the\ given\ name,\ price,\ and\ discount.\n\ @param\ name\ The\ name\ of\ the\ costume.\n\ @param\ price\ The\ price\ of\ the\ costume.\n\ @param\ discount\ The\ discount\ for\ the\ costume.\n
+comment2.params=
+comment2.target=int\ price()
+comment2.text=\n\ Returns\ the\ price\ of\ the\ Basic\ costume\ after\ applying\ the\ discount.\n\ @return\ The\ discounted\ price\ of\ the\ costume.\n\ @throws\ CostumeShopException\ if\ the\ price\ is\ not\ available\ or\ has\ an\ error.\n
+comment3.params=
+comment3.target=java.lang.String\ data()
+comment3.text=\n\ Returns\ a\ string\ representation\ of\ the\ Basic\ costume's\ data.\n\ @return\ A\ string\ representation\ of\ the\ costume's\ data.\n
+numComments=4

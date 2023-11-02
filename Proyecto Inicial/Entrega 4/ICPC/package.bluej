@@ -1,4 +1,5 @@
 #BlueJ package file
+<<<<<<< HEAD:Proyecto/Entrega 4/ICPC/package.bluej
 editor.fx.0.height=1057
 editor.fx.0.width=974
 editor.fx.0.x=953
@@ -12,6 +13,21 @@ package.editor.width=1780
 package.editor.x=0
 package.editor.y=0
 package.frame.height=1057
+=======
+editor.fx.0.height=739
+editor.fx.0.width=816
+editor.fx.0.x=45
+editor.fx.0.y=30
+objectbench.height=100
+objectbench.width=1912
+package.divider.horizontal=0.6
+package.divider.vertical=0.8899176954732511
+package.editor.height=858
+package.editor.width=1808
+package.editor.x=0
+package.editor.y=30
+package.frame.height=1066
+>>>>>>> e2af63ed780cdc61127629517ad161994a9d2145:Proyecto Inicial/Entrega 4/ICPC/package.bluej
 package.frame.width=1936
 package.numDependencies=0
 package.numTargets=3

@@ -1,0 +1,25 @@
+#BlueJ class context
+comment0.target=Complete
+comment0.text=\n\ The\ Complete\ class\ represents\ a\ complete\ costume\ in\ a\ costume\ shop.\n\ \n\ @author\ Juliana\ Brice\u00F1o\ &\ Cristian\ Alvarez\n\ @version\ 1.0\ 30-Oct-2023\n
+comment1.params=name\ makeUp\ discount
+comment1.target=Complete(java.lang.String,\ int,\ int)
+comment1.text=\n\ Constructs\ a\ new\ Complete\ costume\ with\ the\ given\ name,\ makeup\ value,\ and\ discount.\n\ @param\ name\ The\ name\ of\ the\ costume.\n\ @param\ makeUp\ The\ makeup\ value.\n\ @param\ discount\ The\ discount\ for\ the\ costume.\n
+comment2.params=b
+comment2.target=void\ addBasic(Basic)
+comment2.text=\n\ Add\ a\ new\ basic\ piece\ to\ the\ complete\ costume.\n\ @param\ b\ The\ Basic\ costume\ piece\ to\ add.\n
+comment3.params=
+comment3.target=int\ price()
+comment3.text=\n\ Returns\ the\ price\ of\ the\ Complete\ costume\ after\ applying\ the\ discount.\n\ @return\ The\ discounted\ price\ of\ the\ costume.\n\ @throws\ CostumeShopException\ if\ it\ doesn't\ have\ basic\ pieces.\n
+comment4.params=type
+comment4.target=int\ price(java.lang.String)
+comment4.text=\n\ Returns\ an\ estimated\ price\ for\ the\ Complete\ costume.\n\ For\ basics\ where\ the\ price\ cannot\ be\ known\ or\ has\ an\ error,\ the\ first\ or\ last\ value\ is\ assumed.\n\ @param\ type\ Either\ "first"\ or\ "last"\ to\ specify\ the\ type\ of\ estimate.\n\ @return\ The\ estimated\ price\ of\ the\ costume.\n\ @throws\ CostumeShopException\ if\ it\ doesn't\ have\ basic\ pieces\ or\ if\ the\ estimate\ is\ impossible.\n
+comment5.params=makeUp
+comment5.target=int\ price(boolean)
+comment5.text=\n\ Returns\ an\ estimated\ price\ for\ the\ Complete\ costume.\n\ For\ basics\ where\ the\ price\ cannot\ be\ known,\ if\ makeup\ is\ available,\ the\ makeup\ price\ is\ assumed.\n\ @param\ makeUp\ A\ boolean\ value\ indicating\ whether\ makeup\ is\ available.\n\ @return\ The\ estimated\ price\ of\ the\ costume.\n\ @throws\ CostumeShopException\ if\ it\ doesn't\ have\ basic\ pieces,\ if\ some\ basic\ is\ unknown\ and\ not\ makeup,\ or\ if\ some\ basic\ has\ an\ error.\n
+comment6.params=
+comment6.target=java.lang.String\ data()
+comment6.text=\n\ Returns\ a\ string\ representation\ of\ the\ Complete\ costume's\ data,\ including\ its\ basic\ pieces.\n\ @return\ A\ string\ representation\ of\ the\ costume's\ data.\n\ @throws\ CostumeShopException\ if\ the\ data\ is\ not\ complete.\n
+comment7.params=
+comment7.target=boolean\ isMakeUp()
+comment7.text=\n\ Checks\ if\ the\ costume\ has\ makeup.\n\ @return\ true\ if\ the\ costume\ has\ makeup,\ false\ otherwise.\n\ @throws\ CostumeShopException\ if\ the\ makeup\ value\ is\ invalid.\n
+numComments=8
