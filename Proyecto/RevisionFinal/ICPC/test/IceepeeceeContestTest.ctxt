@@ -1,0 +1,12 @@
+#BlueJ class context
+comment0.target=IceepeeceeContestTest
+comment0.text=\n\ The\ test\ class\ IceepeeceeContestTest.\n\n\ @author\ \ (your\ name)\n\ @version\ (a\ version\ number\ or\ a\ date)\n
+comment1.params=
+comment1.target=void\ ShouldSolve1()
+comment2.params=
+comment2.target=void\ ShouldSolve2()
+comment3.params=
+comment3.target=void\ ShouldSolveExact1()
+comment4.params=
+comment4.target=void\ ShouldSolveExact2()
+numComments=5

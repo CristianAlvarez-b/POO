@@ -1,0 +1,9 @@
+#BlueJ class context
+comment0.target=Flat
+comment1.params=color\ from\ to
+comment1.target=Flat(java.lang.String,\ java.lang.Number[],\ java.lang.Number[])
+comment1.text=\r\n\ Constructor\ for\ objects\ of\ class\ normal\r\n
+comment2.params=
+comment2.target=void\ drawInit()
+comment2.text=\r\n\ Dibuja\ la\ flecha\ inicial\ del\ vuelo\ con\ base\ en\ las\ coordenadas\ del\ punto\ de\ inicio\ y\ final.\r\n\ Calcula\ la\ direcci\u00F3n\ y\ el\ tama\u00F1o\ de\ la\ flecha.\r\n
+numComments=3

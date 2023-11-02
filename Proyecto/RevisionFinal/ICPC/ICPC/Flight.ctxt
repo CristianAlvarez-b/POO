@@ -1,0 +1,22 @@
+#BlueJ class context
+comment0.target=Flight
+comment0.text=\r\n\ Represents\ the\ graphic\ representation\ of\ the\ route\ of\ a\ flight\ within\ the\ Iceepeecee\ simulation.\r\n\r\n\ A\ flight\ is\ defined\ by\ its\ color,\ starting\ and\ ending\ coordinates,\ and\ can\ have\ a\ photograph\ associated\ with\ it.\r\n\ This\ class\ provides\ methods\ to\ manipulate\ the\ visibility\ of\ the\ flight,\ take\ photographs\ along\ the\ route,\r\n\ and\ retrieve\ information\ about\ the\ flight\ and\ its\ associated\ photograph.\r\n\r\n\ @author\ Juliana\ Brice\u00F1o\ &\ Cristian\ Alvarez\r\n\ @version\ 1.0\r\n
+comment1.params=color\ from\ to
+comment1.target=Flight(java.lang.String,\ java.lang.Number[],\ java.lang.Number[])
+comment1.text=\r\n\ Create\ a\ flight\ with\ a\ specified\ color,\ starting,\ and\ ending\ coordinates.\r\n\r\n\ @param\ color\ The\ color\ of\ the\ flight.\r\n\ @param\ from\ \ Coordinates\ of\ the\ starting\ point\ of\ the\ flight.\r\n\ @param\ to\ \ \ \ Coordinates\ of\ the\ ending\ point\ of\ the\ flight.\r\n
+comment2.params=
+comment2.target=void\ makeVisible()
+comment2.text=\r\n\ Make\ this\ flight\ and\ its\ associated\ photograph\ visible.\r\n
+comment3.params=
+comment3.target=void\ makeInvisible()
+comment3.text=\r\n\ Make\ this\ flight\ and\ its\ associated\ photograph\ invisible.\r\n
+comment4.params=
+comment4.target=java.lang.Number[][]\ getLocation()
+comment4.text=\r\n\ Get\ the\ location\ of\ the\ flight\ represented\ as\ starting\ and\ ending\ coordinates.\r\n\r\n\ @return\ An\ array\ containing\ the\ starting\ and\ ending\ coordinates\ of\ the\ flight.\r\n
+comment5.params=theta
+comment5.target=void\ makePhoto(java.lang.Number)
+comment5.text=\r\n\ Capture\ a\ photograph\ along\ the\ flight's\ route\ with\ a\ specified\ theta\ angle.\r\n\ The\ photograph\ is\ associated\ with\ the\ flight.\r\n\r\n\ @param\ theta\ The\ angle\ at\ which\ the\ photograph\ is\ taken.\r\n
+comment6.params=
+comment6.target=Photograph\ getPhotograph()
+comment6.text=\r\n\ Get\ the\ photograph\ associated\ with\ the\ flight.\r\n\r\n\ @return\ The\ Photograph\ object\ associated\ with\ the\ flight,\ or\ null\ if\ no\ photograph\ has\ been\ taken.\r\n
+numComments=7

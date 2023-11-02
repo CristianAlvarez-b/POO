@@ -1,0 +1,27 @@
+#BlueJ class context
+comment0.target=IceepeeceeC2Test
+comment0.text=\r\n\ The\ test\ class\ IceepeeceeTest.\r\n\r\n\ @author\ \ Cristian\ Alvarez\ -\ Juliana\ Brice\u00F1o\r\n\ @version\ 1.0\r\n
+comment1.params=
+comment1.target=IceepeeceeC2Test()
+comment1.text=\r\n\ Default\ constructor\ for\ test\ class\ IceepeeceeTest\r\n
+comment10.params=
+comment10.target=void\ shouldUselessFlights()
+comment11.params=
+comment11.target=void\ shouldNotUselessFlights()
+comment2.params=
+comment2.target=void\ shouldIceepeecee()
+comment3.params=
+comment3.target=void\ shouldPhotograph()
+comment4.params=
+comment4.target=void\ shouldConsultIslands()
+comment5.params=
+comment5.target=void\ shouldNotConsultIslands()
+comment6.params=
+comment6.target=void\ shouldConsultFlights()
+comment7.params=
+comment7.target=void\ shouldNotConsultFlights()
+comment8.params=
+comment8.target=void\ shouldObservedIslands()
+comment9.params=
+comment9.target=void\ shouldNotObservedIslands()
+numComments=12

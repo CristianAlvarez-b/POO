@@ -1,0 +1,16 @@
+#BlueJ class context
+comment0.target=IceepeeceeContest
+comment0.text=\r\n\ Write\ a\ description\ of\ class\ IceepeeceeContest\ here.\r\n\ \r\n\ @author\ (your\ name)\ \r\n\ @version\ (a\ version\ number\ or\ a\ date)\r\n
+comment1.params=islands\ flights
+comment1.target=java.lang.Number\ solve(java.lang.Number[][][],\ java.lang.Number[][][])
+comment2.params=islands\ fligths
+comment2.target=void\ simulate(java.lang.Number[][][],\ java.lang.Number[][][])
+comment3.params=islands\ fligths
+comment3.target=double\ solveExact(double[][][],\ double[][][])
+comment4.params=a\ b
+comment4.target=double\ dotProd(IceepeeceeContest.Point,\ IceepeeceeContest.Point)
+comment5.params=a\ b
+comment5.target=double\ crossProd(IceepeeceeContest.Point,\ IceepeeceeContest.Point)
+comment6.params=a1\ a2\ b1\ b2
+comment6.target=boolean\ lineSegIntersection(IceepeeceeContest.Point,\ IceepeeceeContest.Point,\ IceepeeceeContest.Point,\ IceepeeceeContest.Point)
+numComments=7

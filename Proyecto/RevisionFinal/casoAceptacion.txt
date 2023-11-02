@@ -1,0 +1,74 @@
+Se prueba el contest para ver el funcionamiento de las fotografias, las funciones de islas observables,
+el constructor masivo, el finish del simulador
+
+{{{20,30},{50,50},{10,50}},{{40,20},{60,10},{75,20},{60,30}},{{45,60},{55,55},{60,60},{55,65}}}
+{{{0,30,20},{78,70,5}},{{55,0,20},{70,60,10}}}
+
+
+Usamos el constructor de iceepeecee con un tamaño de 400x400
+Usamos el addIsland type para crear distintos tipos de islas
+
+island Surprising: 
+'s'
+"blue"
+{{90, 80}, {120, 70}, {105, 90}, {85, 90}, {60, 60}}
+
+island Fixed
+'f'
+"yellow"
+{{150, 100}, {170, 100}, {160, 120}}  
+
+island normal
+'n'
+"red"
+{{140, 150}, {160, 150}, {160, 170}, {140, 170}}  
+
+'n'
+"orange"
+{{200, 80}, {220, 80}, {220, 100}, {200, 100}}
+
+Probamos la funcion de  islandLocation para ver el comportamiento de las surprinsig islands (3 veces) 
+"blue"
+
+Probamos la restricccion de tratar de eliminar una fixed island 
+"yellow"
+
+Probamos eliminar una isla normal 
+"orange"
+
+Utilizamos la funcion islands para comprobar que se elimino correctamente. 
+
+Usamos el addFlight type para crear distintos tipos de vuelos
+
+flight Lazy
+'l'
+"red"
+{80, 30, 90}
+{170, 75, 50}
+
+flight Rebel
+'r'
+"blue"
+{135, 50, 175}
+{175, 130, 195} 
+
+flight Flat
+'f'
+"green"
+{140, 125, 185}
+{215, 165, 205}
+
+Probamos que el vuelo flat este en la misma altura con flightLocation
+"green"
+
+Hacemos un photograph a todos los vuelos con un angulo de 50
+
+Ahora hacemos un photograph al vuelo Lazy para comprobar que solo puede hacer una foto
+"red"
+
+Usamos la funcion de flightCamara para ver que rebel todo una foto con un angulo diferente de 50
+"blue"
+
+
+
+
