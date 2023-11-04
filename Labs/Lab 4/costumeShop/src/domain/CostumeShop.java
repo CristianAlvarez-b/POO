@@ -109,7 +109,7 @@ public class CostumeShop{
      */
     public LinkedList<Costume> select(String prefix) throws CostumeShopException{
         try {
-            LinkedList<Costume> answers = new LinkedList<>();
+            LinkedList<Costume> answers = null; //Aqui NewLinked
             prefix = prefix.toUpperCase();
             for (int i = 0; i < costumes.size(); i++) {
                 if (costumes.get(i).name().toUpperCase().startsWith(prefix)) {
@@ -118,7 +118,6 @@ public class CostumeShop{
             }
             return answers;
         }catch (Exception e){
-            Log.record(e);
             throw new CostumeShopException(CostumeShopException.SEARCH_ERROR);
         }
     }

@@ -214,6 +214,7 @@ public class CostumeShopGUI extends JFrame{
                 try {
                     actionAdd();
                 } catch (CostumeShopException e) {
+                    Log.record(e);
                     JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
@@ -234,6 +235,7 @@ public class CostumeShopGUI extends JFrame{
                 try {
                     actionSearch();
                 } catch (Exception e) {
+                    Log.record(e);
                     JOptionPane.showMessageDialog(null, e.getMessage());
                 }
             }
@@ -242,6 +244,7 @@ public class CostumeShopGUI extends JFrame{
                 try {
                     actionSearch();
                 } catch (Exception e) {
+                    Log.record(e);
                     JOptionPane.showMessageDialog(null, e.getMessage());
                 }
             }
@@ -250,6 +253,7 @@ public class CostumeShopGUI extends JFrame{
                 try {
                     actionSearch();
                 } catch (Exception e) {
+                    Log.record(e);
                     JOptionPane.showMessageDialog(null, e.getMessage());
                 }
             }
