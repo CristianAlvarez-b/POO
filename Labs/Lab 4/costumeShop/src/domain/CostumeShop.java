@@ -64,6 +64,9 @@ public class CostumeShop{
     */
     public void addBasic(String name, String price, String discount) throws CostumeShopException {
         try{
+            if(Integer.parseInt(discount) < 0 || Integer.parseInt(discount) > 100){
+                throw new CostumeShopException(CostumeShopException.DISCOUNT_ERROR);
+            }
             Integer prices = Integer.parseInt(price);
             if(prices < 0){
                 prices = 0;
@@ -72,7 +75,10 @@ public class CostumeShop{
             costumes.add(nc);
             basics.put(name.toUpperCase(),nc);
         }catch(Exception e){
-            throw new CostumeShopException(CostumeShopException.PRICE_ERROR);
+            if(e instanceof NumberFormatException){
+                throw new CostumeShopException(CostumeShopException.PRICE_ERROR);
+            }
+            throw e;
         }
     }
     

@@ -94,4 +94,14 @@ public class CostumeShopTest {
         Basic b = new Basic("Camisa blanca", 1000, 0);
         assertEquals(b.data(), "Camisa blanca. Precio:1000.Descuento0");
     }
+    @Test
+    public void shouldNotAddBasicWithNegativeDiscount(){
+        try{
+            CostumeShop c = new CostumeShop();
+            c.addBasic("Zapato", "2000", "-40");
+            fail("threw exception");
+        }catch (CostumeShopException e){
+            assertEquals(e.getMessage(), CostumeShopException.DISCOUNT_ERROR);
+        }
+    }
 }
