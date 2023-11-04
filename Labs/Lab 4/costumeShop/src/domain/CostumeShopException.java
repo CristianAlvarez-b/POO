@@ -16,6 +16,7 @@ public class CostumeShopException extends Exception
     public static final String IMPOSSIBLE = "No se puede calcular el precio estimado";
     public static final String MAKEUP_EMPTY = "MakeUp no puede ser falso";
     public static final String NAME_ALREADY_EXISTS = "El nombre no puede repetirse";
+    public static final String DISCOUNT_ERROR = "Hay un error en el descuento";
     /**
      * Constructor for objects of class Exception
      */

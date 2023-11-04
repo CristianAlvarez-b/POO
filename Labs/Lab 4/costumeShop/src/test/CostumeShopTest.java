@@ -30,19 +30,34 @@ public class CostumeShopTest {
         }catch (CostumeShopException e){
             fail("threw exception");
         }
-
-
     }
     @Test
     public void shouldNotAddBasic(){
         try {
             CostumeShop c = new CostumeShop();
-            c.addBasic("Zapato", "0", "10");
+            c.addBasic("Zapato", null, "10");
             fail("threw exception");
         } catch (CostumeShopException e) {
             assertEquals(e.getMessage(), CostumeShopException.PRICE_ERROR);
         }
     }
+    @Test
+    public void shouldAddBasicWithNegativePrice() throws CostumeShopException {
+        try{
+            CostumeShop c = new CostumeShop();
+            c.addBasic("Zapato", "-1000", "10");
+            assertEquals(c.data(c.getCostumes()),  "4 disfraces\n" +
+                    ">Camisa. Precio:5000.Descuento10\n" +
+                    ">Pantalon. Precio:10000.Descuento20\n" +
+                    ">Zorro. Maquillaje 2000. Descuento: 0\n" +
+                    "\tCamisa. Precio:5000.Descuento10\n" +
+                    "\tPantalon. Precio:10000.Descuento20\n" +
+                    ">Zapato. Precio:0.Descuento10\n");
+        }catch (CostumeShopException e){
+            fail("threw exception");
+        }
+    }
+
     @Test
     public void shouldAddComplete(){
         try {

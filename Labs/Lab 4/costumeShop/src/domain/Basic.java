@@ -15,6 +15,7 @@ public class Basic extends Costume{
     public int price() throws CostumeShopException{
        if (price == null) throw new CostumeShopException(CostumeShopException.PRICE_EMPTY);
        if (price < 1) throw new CostumeShopException(CostumeShopException.PRICE_ERROR);
+       if(discount > 100 || discount < 0) throw new CostumeShopException(CostumeShopException.DISCOUNT_ERROR);
        return price -= price * discount/100;
     }    
 

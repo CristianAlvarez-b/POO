@@ -62,10 +62,18 @@ public class CostumeShop{
      * @param price
      * @param discount
     */
-    public void addBasic(String name, String price, String discount){ 
-        Basic nc=new Basic(name,Integer.parseInt(price),Integer.parseInt(discount));
-        costumes.add(nc);
-        basics.put(name.toUpperCase(),nc); 
+    public void addBasic(String name, String price, String discount) throws CostumeShopException {
+        try{
+            Integer prices = Integer.parseInt(price);
+            if(prices < 0){
+                prices = 0;
+            }
+            Basic nc=new Basic(name, prices,Integer.parseInt(discount));
+            costumes.add(nc);
+            basics.put(name.toUpperCase(),nc);
+        }catch(Exception e){
+            throw new CostumeShopException(CostumeShopException.PRICE_ERROR);
+        }
     }
     
     /**
