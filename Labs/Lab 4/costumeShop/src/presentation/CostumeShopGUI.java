@@ -214,7 +214,7 @@ public class CostumeShopGUI extends JFrame{
                 try {
                     actionAdd();
                 } catch (CostumeShopException e) {
-                    JOptionPane.showMessageDialog(null, "Nombre del disfraz ya existente.");
+                    JOptionPane.showMessageDialog(null, e.getMessage());
                 }
             }
         });
