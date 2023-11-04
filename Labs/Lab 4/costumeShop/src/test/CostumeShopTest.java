@@ -104,4 +104,14 @@ public class CostumeShopTest {
             assertEquals(e.getMessage(), CostumeShopException.DISCOUNT_ERROR);
         }
     }
+    @Test
+    public void shouldNotAddBasicWithUpperDiscount(){
+        try{
+            CostumeShop c = new CostumeShop();
+            c.addBasic("Zapato", "2000", "108");
+            fail("threw exception");
+        }catch (CostumeShopException e){
+            assertEquals(e.getMessage(), CostumeShopException.DISCOUNT_ERROR);
+        }
+    }
 }
