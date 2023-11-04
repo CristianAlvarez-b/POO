@@ -214,7 +214,7 @@ public class CostumeShopGUI extends JFrame{
                 try {
                     actionAdd();
                 } catch (CostumeShopException e) {
-                    JOptionPane.showMessageDialog(null, e.getMessage());
+                    JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -231,18 +231,28 @@ public class CostumeShopGUI extends JFrame{
         /*Search*/
         textSearch.getDocument().addDocumentListener(new DocumentListener(){
             public void changedUpdate(DocumentEvent ev){
-                actionSearch();
+                try {
+                    actionSearch();
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, e.getMessage());
+                }
             }
            
             public void insertUpdate(DocumentEvent ev){
-                actionSearch();
+                try {
+                    actionSearch();
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, e.getMessage());
+                }
             }
             
             public void removeUpdate(DocumentEvent ev){
-                actionSearch();
+                try {
+                    actionSearch();
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, e.getMessage());
+                }
             }
-            
-
         });
     }    
 
@@ -259,7 +269,7 @@ public class CostumeShopGUI extends JFrame{
         }
     }
 
-    private void actionSearch(){
+    private void actionSearch() throws CostumeShopException {
         String patronBusqueda=textSearch.getText();
         String answer = "";
         if(patronBusqueda.length() > 0) {

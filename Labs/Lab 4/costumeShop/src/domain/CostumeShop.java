@@ -107,15 +107,20 @@ public class CostumeShop{
      * @param  
      * @return 
      */
-    public LinkedList<Costume> select(String prefix){
-        LinkedList <Costume> answers=null;
-        prefix=prefix.toUpperCase();
-        for(int i=0;i<costumes.size();i++){
-            if(costumes.get(i).name().toUpperCase().startsWith(prefix)){
-                answers.add(costumes.get(i));
-            }   
+    public LinkedList<Costume> select(String prefix) throws CostumeShopException{
+        try {
+            LinkedList<Costume> answers = new LinkedList<>();
+            prefix = prefix.toUpperCase();
+            for (int i = 0; i < costumes.size(); i++) {
+                if (costumes.get(i).name().toUpperCase().startsWith(prefix)) {
+                    answers.add(costumes.get(i));
+                }
+            }
+            return answers;
+        }catch (Exception e){
+            Log.record(e);
+            throw new CostumeShopException(CostumeShopException.SEARCH_ERROR);
         }
-        return answers;
     }
 
 
@@ -145,7 +150,7 @@ public class CostumeShop{
      * @param prefix
      * @return  
      */ 
-    public String search(String prefix){
+    public String search(String prefix) throws CostumeShopException {
         return data(select(prefix));
     }
     
