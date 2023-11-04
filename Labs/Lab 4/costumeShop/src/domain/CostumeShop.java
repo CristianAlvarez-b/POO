@@ -17,13 +17,13 @@ public class CostumeShop{
     /**
      * Create a CostumeShop
      */
-    public CostumeShop(){
+    public CostumeShop() throws CostumeShopException {
         costumes = new LinkedList<Costume>();
         basics = new HashMap<String,Basic>();
         addSome();
     }
 
-    private void addSome(){
+    private void addSome() throws CostumeShopException {
         String [][] basics = {{"Camisa","5000","10"},
                               {"Pantalon","10000","20"}};
         for (String [] c: basics){
@@ -35,7 +35,12 @@ public class CostumeShop{
         }
     }
 
-
+    public HashMap getBasics(){
+        return basics;
+    }
+    public LinkedList getCostumes(){
+        return costumes;
+    }
     /**
      * Consult a costume
      * @param name
@@ -67,9 +72,14 @@ public class CostumeShop{
      * Add a new Complete costume
      * @param name 
      * @param makeUp
-     * @param basics
+     * @param theBasics
     */
-    public void addComplete(String name, String makeUp, String discount, String theBasics){ 
+    public void addComplete(String name, String makeUp, String discount, String theBasics) throws CostumeShopException {
+        for (Costume costume : costumes) {
+            if (costume.name().equalsIgnoreCase(name)) {
+                throw new CostumeShopException(CostumeShopException.NAME_ALREADY_EXISTS);
+            }
+        }
         Complete c = new Complete(name,Integer.parseInt(makeUp),Integer.parseInt(discount));
         String [] aBasics= theBasics.split("\n");
         for (String b : aBasics){

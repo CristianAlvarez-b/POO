@@ -26,12 +26,14 @@ public class Complete extends Costume{
      * Add a new basic piece
      * @param b
      */   
-    public void addBasic(Basic b){
-        pieces.add(b);
+    public void addBasic(Basic b){ pieces.add(b);
     }
        
     public ArrayList getPieces(){
         return this.pieces;
+    }
+    public String getName(){
+        return this.name;
     }
     /**
      * 

@@ -24,4 +24,6 @@ public class Basic extends Costume{
     public String data(){
         return name+". Precio:" +price+".Descuento"+discount;
     }
+
+    public String getName(){ return this.name;}
 }

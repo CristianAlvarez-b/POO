@@ -39,7 +39,7 @@ public class CostumeShopGUI extends JFrame{
     
 
     
-    private CostumeShopGUI(){
+    private CostumeShopGUI() throws CostumeShopException {
         shop=new CostumeShop();
         prepareElements();
         prepareActions();
@@ -211,7 +211,11 @@ public class CostumeShopGUI extends JFrame{
         /*Add*/
         buttonAdd.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ev){
-                actionAdd();                    
+                try {
+                    actionAdd();
+                } catch (CostumeShopException e) {
+                    JOptionPane.showMessageDialog(null, "Nombre del disfraz ya existente.");
+                }
             }
         });
         
@@ -247,7 +251,7 @@ public class CostumeShopGUI extends JFrame{
         textDetails.setText(shop.toString());
     }
     
-    private void  actionAdd(){
+    private void  actionAdd() throws CostumeShopException {
         if (basics.getText().trim().equals("")){
             shop.addBasic(name.getText(),prices.getText(),discount.getText());
         }else{ 
@@ -264,7 +268,7 @@ public class CostumeShopGUI extends JFrame{
         textResults.setText(answer);
     } 
     
-   public static void main(String args[]){
+   public static void main(String args[]) throws CostumeShopException {
        CostumeShopGUI gui=new CostumeShopGUI();
        gui.setVisible(true);
    }    

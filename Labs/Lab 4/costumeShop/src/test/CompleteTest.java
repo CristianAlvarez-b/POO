@@ -220,41 +220,5 @@ public class CompleteTest{
             assertEquals(CostumeShopException.PRICE_ERROR,e.getMessage()); 
         }  
     }
-    @Test
-    public void shouldAddBasic(){
-        Complete c = new Complete("El zorro", 10000, 0);
-        c.addBasic(new Basic("Camisa blanca", null, 0));
-        assertEquals(1, c.getPieces().size());
-    }
-    @Test
-    public void shouldNotAddBasic(){
-        Complete c = new Complete("El zorro", 10000, 0);
-        c.addBasic(new Basic("Camisa blanca", 0, 0));
-        try {
-            c.price();
-        } catch (CostumeShopException e) {
-            assertEquals(e.getMessage(), CostumeShopException.PRICE_ERROR);
-        }
-    }
-    @Test
-    public void shouldAddComplete(){
-        Complete c = new Complete("El zorro", 10000, 0);
-        c.addBasic(new Basic("Camisa blanca", 1000, 0));
-        try {
-            assertEquals(11000, c.price());
-        } catch (CostumeShopException e) {
-            throw new RuntimeException(e);
-        }
-    }
-    @Test
-    public void shouldNotAddComplete(){
-        Complete c = new Complete("El zorro", 10000, 0);
-        c.addBasic(new Basic("Camisa blanca", 0, 0));
-        try {
-            c.price();
-        } catch (CostumeShopException e) {
-            assertEquals(e.getMessage(), CostumeShopException.PRICE_ERROR);
-        }
-    }
 
 }

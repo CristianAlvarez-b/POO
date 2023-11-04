@@ -1,4 +1,4 @@
-package domain;    
+package presentation;
 
 import java.util.logging.Logger;
 import java.util.logging.FileHandler;
