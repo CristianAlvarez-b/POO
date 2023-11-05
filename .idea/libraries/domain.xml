@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="domain">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Labs/Lab 4/costumeShop/src/out/test/costumeShop/domain/hamcrest-core.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Labs/Lab 4/costumeShop/src/out/test/costumeShop/domain/junit-4.12.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Labs/Lab 4/costumeShop/src/out/test/costumeShop/domain/junit.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

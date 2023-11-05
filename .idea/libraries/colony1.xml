@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="colony1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Labs/Lab 3/colony/colony.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
