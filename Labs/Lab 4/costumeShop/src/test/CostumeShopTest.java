@@ -43,11 +43,11 @@ public class CostumeShopTest {
         }
     }
     @Test
-    public void shouldAddBasicWithNegativePrice() throws CostumeShopException {
+    public void shouldAddBasicWithNegativePrice(){
         try{
             CostumeShop c = new CostumeShop();
             c.addBasic("Zapato", "-1000", "10");
-            assertEquals(c.data(c.getCostumes()),  "4 disfraces\n" +
+            assertEquals(c.toString(),  "4 disfraces\n" +
                     ">Camisa. Precio:5000.Descuento10\n" +
                     ">Pantalon. Precio:10000.Descuento20\n" +
                     ">Zorro. Maquillaje 2000. Descuento: 0\n" +

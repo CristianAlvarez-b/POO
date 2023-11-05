@@ -99,6 +99,9 @@ public class CostumeShop{
                 throw new CostumeShopException(CostumeShopException.NAME_ALREADY_EXISTS);
             }
         }
+        if(Integer.parseInt(discount) < 0 || Integer.parseInt(discount) > 100){
+            throw new CostumeShopException(CostumeShopException.DISCOUNT_ERROR);
+        }
         Complete c = new Complete(name,Integer.parseInt(makeUp),Integer.parseInt(discount));
         String [] aBasics= theBasics.split("\n");
         for (String b : aBasics){

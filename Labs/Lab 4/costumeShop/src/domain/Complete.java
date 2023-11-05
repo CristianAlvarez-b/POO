@@ -30,23 +30,6 @@ public class Complete extends Costume{
     }
 
     /**
-     * Get the list of basic pieces in the complete costume.
-     *
-     * @return The list of basic pieces.
-     */
-    public ArrayList getPieces(){
-        return this.pieces;
-    }
-
-    /**
-     * Get the name of the complete costume.
-     *
-     * @return The name of the complete costume.
-     */
-    public String getName(){
-        return this.name;
-    }
-    /**
      * Calculates the price of the complete costume, considering makeup and basic pieces.
      *
      * @return The total price of the complete costume.
