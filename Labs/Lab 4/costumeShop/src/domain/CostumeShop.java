@@ -63,6 +63,11 @@ public class CostumeShop{
      * @param discount
     */
     public void addBasic(String name, String price, String discount) throws CostumeShopException {
+        for (Costume costume : costumes) {
+            if (costume.name().equalsIgnoreCase(name)) {
+                throw new CostumeShopException(CostumeShopException.NAME_ALREADY_EXISTS);
+            }
+        }
         try{
             if(Integer.parseInt(discount) < 0 || Integer.parseInt(discount) > 100){
                 throw new CostumeShopException(CostumeShopException.DISCOUNT_ERROR);

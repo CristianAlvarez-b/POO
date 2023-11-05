@@ -80,6 +80,16 @@ public class CostumeShopTest {
         }
     }
     @Test
+    public void shouldNotAddBasicNameAlreadyExists(){
+        try {
+            CostumeShop c = new CostumeShop();
+            c.addBasic("Camisa", "10000", "10");
+            fail("Threw Exception");
+        } catch (CostumeShopException e) {
+            assertEquals(e.getMessage(), CostumeShopException.NAME_ALREADY_EXISTS);
+        }
+    }
+    @Test
     public void shouldDataComplete(){
         Complete c = new Complete("El zorro", 10000, 0);
         c.addBasic(new Basic("Camisa blanca", 1000, 0));
