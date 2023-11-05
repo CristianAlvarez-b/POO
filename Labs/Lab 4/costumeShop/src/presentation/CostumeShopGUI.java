@@ -236,7 +236,7 @@ public class CostumeShopGUI extends JFrame{
                     actionSearch();
                 } catch (Exception e) {
                     Log.record(e);
-                    JOptionPane.showMessageDialog(null, e.getMessage());
+                    JOptionPane.showMessageDialog(null, "No possible search","Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
            
@@ -245,7 +245,7 @@ public class CostumeShopGUI extends JFrame{
                     actionSearch();
                 } catch (Exception e) {
                     Log.record(e);
-                    JOptionPane.showMessageDialog(null, e.getMessage());
+                    JOptionPane.showMessageDialog(null, "No possible search","Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
             
@@ -254,7 +254,7 @@ public class CostumeShopGUI extends JFrame{
                     actionSearch();
                 } catch (Exception e) {
                     Log.record(e);
-                    JOptionPane.showMessageDialog(null, e.getMessage());
+                    JOptionPane.showMessageDialog(null, "No possible search","Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -273,14 +273,34 @@ public class CostumeShopGUI extends JFrame{
         }
     }
 
-    private void actionSearch() throws CostumeShopException {
-        String patronBusqueda=textSearch.getText();
+    private void actionSearch() {
+        String patronBusqueda = textSearch.getText();
         String answer = "";
-        if(patronBusqueda.length() > 0) {
-            answer = shop.search(patronBusqueda);
+
+        if (patronBusqueda.length() > 0) {
+            LinkedList<Costume> searchResults;
+            try {
+                searchResults = shop.select(patronBusqueda);
+
+                if (searchResults.isEmpty()) {
+                    answer = "No se encontraron resultados para la búsqueda: " + patronBusqueda;
+                } else {
+                    answer = "Resultados de la búsqueda:\n";
+                    for (Costume costume : searchResults) {
+                        answer += ">> " + costume.data() + "\n";
+                    }
+                }
+            } catch (CostumeShopException e) {
+                Log.record(e);
+                answer = "Error al realizar la búsqueda: " + e.getMessage();
+            } catch (Exception e) {
+                Log.record(e);
+                answer = "Error inesperado al realizar la búsqueda.";
+            }
         }
+
         textResults.setText(answer);
-    } 
+    }
     
    public static void main(String args[]) throws CostumeShopException {
        CostumeShopGUI gui=new CostumeShopGUI();

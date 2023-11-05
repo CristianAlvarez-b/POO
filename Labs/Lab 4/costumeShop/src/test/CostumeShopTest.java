@@ -7,6 +7,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.security.spec.ECField;
 import java.util.LinkedList;
 
 
@@ -104,6 +105,7 @@ public class CostumeShopTest {
             assertEquals(e.getMessage(), CostumeShopException.DISCOUNT_ERROR);
         }
     }
+
     @Test
     public void shouldNotAddBasicWithUpperDiscount(){
         try{
@@ -112,6 +114,17 @@ public class CostumeShopTest {
             fail("threw exception");
         }catch (CostumeShopException e){
             assertEquals(e.getMessage(), CostumeShopException.DISCOUNT_ERROR);
+        }
+    }
+
+    @Test
+    public void shouldCSearch(){
+        try{
+            CostumeShop c = new CostumeShop();
+            c.addComplete("Iguana", "10000", "10", "Camisa\nPantalon");
+            assertNotNull(c.search("I"));
+        }catch (CostumeShopException e){
+            fail("threw exception");
         }
     }
 }
