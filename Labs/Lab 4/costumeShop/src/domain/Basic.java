@@ -28,13 +28,27 @@ public class Basic extends Costume{
        if (price == null) throw new CostumeShopException(CostumeShopException.PRICE_EMPTY);
        if (price < 1) throw new CostumeShopException(CostumeShopException.PRICE_ERROR);
        return price -= price * discount/100;
-    }    
-
+    }
+    /**
+     * Get the discount percentage for the basic costume.
+     *
+     * @return The discount percentage.
+     */
     public int getDiscount(){
         return this.discount;
     }
+    /**
+     * Generate a string representation of the basic costume, including name, price, and discount.
+     *
+     * @return A string representation of the basic costume.
+     */
     public String data(){
         return name+". Precio:" +price+".Descuento"+discount;
     }
-    public String getName(){ return this.name;}
+
+    /**
+     * Get the name of the basic costume.
+     *
+     * @return The name of the basic costume.
+     */
 }

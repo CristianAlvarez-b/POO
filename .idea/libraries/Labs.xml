@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Labs">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Labs/ALVAREZ-BRICEÑO-LAB03.zip!/" />
+      <root url="jar://$PROJECT_DIR$/Labs/ALVAREZ-BRICEÑO-LAB02.zip!/" />
+      <root url="jar://$PROJECT_DIR$/Labs/ALVAREZ-BRICEÑO-G01.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
