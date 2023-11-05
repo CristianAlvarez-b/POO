@@ -1,18 +1,18 @@
-package domain;  
- 
+package domain;
+
 import java.util.ArrayList;
 
 public class Complete extends Costume{
-   
+
 
     private int makeUp;
     private ArrayList<Basic> pieces;
-    
+
     /**
      * Constructs a new complete custom
-     * @param name 
+     * @param name
      * @param makeUp
-     * @param discount 
+     * @param discount
      */
     public Complete(String name, int makeUp, int discount){
         this.name=name;
@@ -25,18 +25,32 @@ public class Complete extends Costume{
      /**
      * Add a new basic piece
      * @param b
-     */   
+     */
     public void addBasic(Basic b){ pieces.add(b);
     }
-       
+
+    /**
+     * Get the list of basic pieces in the complete costume.
+     *
+     * @return The list of basic pieces.
+     */
     public ArrayList getPieces(){
         return this.pieces;
     }
+
+    /**
+     * Get the name of the complete costume.
+     *
+     * @return The name of the complete costume.
+     */
     public String getName(){
         return this.name;
     }
     /**
-     * 
+     * Calculates the price of the complete costume, considering makeup and basic pieces.
+     *
+     * @return The total price of the complete costume.
+     * @throws CostumeShopException If there is an error in the price calculation or the costume is empty.
      */
     @Override
     public int price() throws CostumeShopException{
@@ -49,13 +63,13 @@ public class Complete extends Costume{
         }
         return price -= price*discount/100;
     }
-    
-    
+
+
      /**
      * Calculates an estimate price
      * For basics where the price cannot be known or has error, the first o last value is assumed
-     * @param type (first, last) 
-     * @return 
+     * @param type (first, last)
+     * @return
      * @throws CostumeShopException COMPLETE_EMPTY, if it don't have basics. IMPOSSIBLE, if it can't be calculated
      */
     public int price(String type) throws CostumeShopException{
@@ -105,14 +119,14 @@ public class Complete extends Costume{
             throw new CostumeShopException(CostumeShopException.UNKNOWN_TYPE);
         }
         return price -= price*discount/100;
-    }   
-    
-    
+    }
+
+
      /**
      * Calculates an estimate price
      * For basics where the price cannot be known, if makeUp then the makeUp is assumed
-     * @param unknown 
-     * @return 
+     * @param makeUp
+     * @return
      * @throws CostumeShopException COMPLETE_EMPTY, if it don't have basics. PRICE_UNKNOWN, if some basic is unknown and not makeUp. PRICE_ERROR, if some basic has error
      */
     public int price(boolean makeUp) throws CostumeShopException{
@@ -137,8 +151,14 @@ public class Complete extends Costume{
             throw new CostumeShopException(CostumeShopException.MAKEUP_EMPTY);
         }
         return price -= price*discount/100;
-    } 
-    
+    }
+
+    /**
+     * Generate a string representation of the complete costume, including makeup, discount, and basic pieces.
+     *
+     * @return A string representation of the complete costume.
+     * @throws CostumeShopException If there is an error generating the data.
+     */
     @Override
     public String data() throws CostumeShopException{
         StringBuffer answer=new StringBuffer();
@@ -147,8 +167,14 @@ public class Complete extends Costume{
             answer.append("\n\t"+b.data());
         }
         return answer.toString();
-    } 
-    
+    }
+
+    /**
+     * Check if the complete costume has makeup.
+     *
+     * @return True if the complete costume has makeup, otherwise false.
+     * @throws CostumeShopException If there is an error in checking makeup.
+     */
     public boolean isMakeUp() throws domain.CostumeShopException {
         if(this.makeUp > 0){
             return true;
