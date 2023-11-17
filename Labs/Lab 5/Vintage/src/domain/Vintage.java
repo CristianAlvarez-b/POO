@@ -8,7 +8,6 @@ public class Vintage {
     private char[][][] board;
     private int[] jewels;
     private int turn;
-    private final String POSSIBLE_CHARS = "rbavolm";
 
     public Vintage(int row, int column) {
         board = new char[row][column][2];
@@ -16,8 +15,8 @@ public class Vintage {
         jewels = new int[]{0,0};
         turn = 0;
     }
-    public void play(int row1, int column1, int row2, int column2) throws VintageException {
-        if (isValidPosition(row1, column1) && isValidPosition(row2, column2)) {
+    public boolean play(int row1, int column1, int row2, int column2) throws VintageException {
+        if (isValidMove(row1,column1,row2,column2)) {
             turn += 1;
             // Intercambiar los valores en las posiciones especificadas
             char temp = board[row1][column1][0];
@@ -26,10 +25,41 @@ public class Vintage {
 
             validateConsecutiveGems();
 
+            return verifyGame();
+
         } else {
             throw new VintageException(VintageException.INVALID_MOVE);
         }
     }
+
+    private boolean verifyGame(){
+        boolean gameOver = true;
+        for (int row = 0; row < board.length && gameOver; row++){
+            for (int column = 0; column < board[0].length && gameOver; column++){
+                if (board[row][column][1] != 'n'){
+                    gameOver = false;
+                }
+            }
+        }
+        return gameOver;
+    }
+
+    private boolean isValidMove(int row1, int column1, int row2, int column2)throws VintageException{
+        if (isValidPosition(row1, column1) && isValidPosition(row2, column2)){
+            // Verificar si las posiciones están alrededor (arriba, abajo, o en cualquier diagonal)
+            int rowDifference = Math.abs(row2 - row1);
+            int columnDifference = Math.abs(column2 - column1);
+            // Las posiciones están alrededor si la diferencia en filas y columnas es de 1 o menos
+            if (rowDifference <= 1 && columnDifference <= 1) {
+                return true;
+            } else {
+                throw new VintageException(VintageException.INVALID_MOVE);
+            }
+        }else {
+            throw new VintageException(VintageException.INVALID_MOVE);
+        }
+    }
+
     private void validateConsecutiveGems() {
         int punctuation = validateRows() + validateColumns() + validateMainDiagonal()+
                 validateSecondaryDiagonal();
@@ -209,57 +239,6 @@ public class Vintage {
         }
     }
 
-//    private void validateAndRemoveConsecutive(int row, int column) {
-//        char currentGem = board[row][column][0];
-//        int consecutiveCount = 1;
-//
-//        // Verificar horizontalmente hacia la derecha
-//        consecutiveCount += countConsecutiveGems(row, column, 0, 1, currentGem);
-//
-//        // Verificar horizontalmente hacia la izquierda
-//        consecutiveCount += countConsecutiveGems(row, column, 0, -1, currentGem);
-//
-//        // Verificar verticalmente hacia abajo
-//        consecutiveCount += countConsecutiveGems(row, column, 1, 0, currentGem);
-//
-//        // Verificar verticalmente hacia arriba
-//        consecutiveCount += countConsecutiveGems(row, column, -1, 0, currentGem);
-//
-//        // Verificar en diagonal hacia abajo y a la derecha
-//        consecutiveCount += countConsecutiveGems(row, column, 1, 1, currentGem);
-//
-//        // Verificar en diagonal hacia arriba y a la izquierda
-//        consecutiveCount += countConsecutiveGems(row, column, -1, -1, currentGem);
-//
-//        // Verificar en diagonal hacia arriba y a la derecha
-//        consecutiveCount += countConsecutiveGems(row, column, -1, 1, currentGem);
-//
-//        // Verificar en diagonal hacia abajo y a la izquierda
-//        consecutiveCount += countConsecutiveGems(row, column, 1, -1, currentGem);
-//
-//        // Si hay 3 o más gemas consecutivas, eliminarlas
-//        if (consecutiveCount >= 3) {
-//            removeConsecutiveGems(row, column);
-//        }
-//    }
-//    private void removeConsecutiveGems(int startRow, int startColumn) {
-//        char targetGem = board[startRow][startColumn][0];
-//
-//        // Eliminar gemas consecutivas en la misma fila
-//        for (int j = startColumn; j < board[0].length && board[startRow][j][0] == targetGem; j++) {
-//            board[startRow][j][0] = 't'; // Cambiar el valor de la gema por 'n'
-//            board[startRow][j][1] = 'n'; // Cambiar el valor del fondo por 'n'
-//        }
-//
-//        // Eliminar gemas consecutivas en la misma columna
-//        for (int i = startRow; i < board.length && board[i][startColumn][0] == targetGem; i++) {
-//            board[i][startColumn][0] = 't'; // Cambiar el valor de la gema por 'n'
-//            board[i][startColumn][1] = 'n'; // Cambiar el valor del fondo por 'n'
-//        }
-//
-//        // Hacer que las gemas caigan desde arriba en la columna
-//        dropJewel(startColumn);
-//    }
 
     private void dropJewel() {
         for (int column = 0; column < board[0].length; column++){
@@ -282,26 +261,12 @@ public class Vintage {
         }
         if (color == 'w'){
             Random random = new Random();
+            String POSSIBLE_CHARS = "rbavolm";
             int randomIndex = random.nextInt(POSSIBLE_CHARS.length());
             color = POSSIBLE_CHARS.charAt(randomIndex); // Nueva gema
         }
         return color;
     }
-
-//    private int countConsecutiveGems(int startRow, int startColumn, int rowDirection, int columnDirection, char targetGem) {
-//        int count = 0;
-//        int currentRow = startRow + rowDirection;
-//        int currentColumn = startColumn + columnDirection;
-//
-//        while (isValidPosition(currentRow, currentColumn) && board[currentRow][currentColumn][0] == targetGem) {
-//            count++;
-//            currentRow += rowDirection;
-//            currentColumn += columnDirection;
-//        }
-//
-//        return count;
-//    }
-
 
     private boolean isValidPosition(int row, int column) {
         return row >= 0 && row < board.length && column >= 0 && column < board[0].length;
