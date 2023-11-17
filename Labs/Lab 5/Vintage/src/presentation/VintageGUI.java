@@ -9,6 +9,7 @@ import domain.Vintage;
 import domain.VintageException;
 
 public class VintageGUI extends JFrame{
+
     private JMenuBar menuBar;
     private JMenu menu;
     private JPanel mainPanel;
@@ -31,7 +32,61 @@ public class VintageGUI extends JFrame{
         prepareActions();
     }
     private void prepareElements() {
-        prepareInitialScreen();
+        prepareScreens();
+        //prepareConfigScreen();
+    }
+
+    private void prepareScreens(){
+        cardLayout = new CardLayout();
+        cardPanel = new JPanel(cardLayout);
+        setTitle("Vintage");
+
+        // Crear pantalla inicial con dos botones
+        JPanel initialPanel = createInitialPanel();
+        cardPanel.add(initialPanel, "initial");
+
+        // Crear pantalla principal con el juego
+        JPanel gamePanel = createGamePanel();
+        cardPanel.add(gamePanel, "game");
+
+        // Configurar el contenido principal
+        mainPanel = new JPanel(new BorderLayout());
+        mainPanel.add(cardPanel, BorderLayout.CENTER);
+        setContentPane(mainPanel);
+    }
+
+    private JPanel createInitialPanel() {
+        JPanel initialPanel = new JPanel(new BorderLayout());
+
+        // Crear un panel para los botones con un GridLayout centrado
+        JPanel buttonPanel = new JPanel(new GridLayout(3, 1));
+
+        JButton button1 = new JButton("Iniciar juego");
+        JButton button2 = new JButton("Continuar juego");
+        JButton button3 = new JButton("Salir");
+
+        button1.addActionListener(e -> cardLayout.show(cardPanel, "game"));
+        button2.addActionListener(e -> abrirArchivo());
+        button3.addActionListener(e -> confirmarCierre());
+
+        buttonPanel.add(button1);
+        buttonPanel.add(button2);
+        buttonPanel.add(button3);
+
+        // Crear un panel para la imagen con un BorderLayout
+        JPanel imagePanel = new JPanel(new BorderLayout());
+
+        ImageIcon imagen = new ImageIcon("C:\\Users\\Equipo\\OneDrive\\Escritorio\\POOB\\Labs\\Lab 5\\ImagesGUI\\Vintage.jpg");
+        JLabel imageLabel = new JLabel("Bienvenido a Vintage Jewelry", imagen, JLabel.CENTER);
+        imagePanel.add(imageLabel, BorderLayout.CENTER);
+
+        // Agregar los paneles al panel principal
+        initialPanel.add(imagePanel, BorderLayout.CENTER);
+        initialPanel.add(buttonPanel, BorderLayout.SOUTH);
+
+        return initialPanel;
+    }
+    private JPanel createGamePanel(){
         setTitle("Vintage");
         turn = true;
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -43,17 +98,7 @@ public class VintageGUI extends JFrame{
         // Crear el panel principal con BorderLayout
         mainPanel = new JPanel(new BorderLayout());
         setContentPane(mainPanel);
-        cardPanel.add(mainPanel, "game");
 
-        // Agrega el cardPanel a la ventana principal
-        add(cardPanel);
-
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(800, 600);
-        setLocationRelativeTo(null);
-
-        // Muestra la pantalla de inicio al iniciar la aplicación
-        cardLayout.show(cardPanel, "start");
         // Agregar elementos a la pantalla principal
         addTopPanel();
         addMiddlePanel();
@@ -61,37 +106,8 @@ public class VintageGUI extends JFrame{
         prepareElementsBoard();
         prepareElementsMenu();
         addPlayerLabels();
+        return mainPanel;
     }
-    private void prepareInitialScreen(){
-        cardLayout = new CardLayout();
-        cardPanel = new JPanel(cardLayout);
-        JPanel startPanel = new JPanel(new BorderLayout());
-        JLabel titleLabel = new JLabel("VintageJewel");
-        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        startPanel.add(titleLabel, BorderLayout.NORTH);
-
-        JButton newGameButton = new JButton("New Game");
-        newGameButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                cardLayout.show(cardPanel, "game");
-            }
-        });
-        startPanel.add(newGameButton, BorderLayout.CENTER);
-
-        JButton continueButton = new JButton("Continue");
-        continueButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Agrega la lógica para continuar el juego si es necesario
-            }
-        });
-        startPanel.add(continueButton, BorderLayout.SOUTH);
-
-        // Agrega el panel de inicio al cardPanel
-        cardPanel.add(startPanel, "start");
-    }
-
     private void addPlayerLabels() {
         JPanel playerLabelsPanel = new JPanel(new GridLayout());
         String turnos = "J1";
@@ -248,7 +264,10 @@ public class VintageGUI extends JFrame{
             // Intercambiar las joyas entre las dos celdas
             //swapCells(selectedRow, selectedCol, row, col);
             try {
-                vintage.play(selectedRow, selectedCol, row, col);
+                boolean gameOver = vintage.play(selectedRow, selectedCol, row, col);
+                if(gameOver){
+                    //pantallaFinal
+                }
                 refresh();
             }
             catch (VintageException e){
