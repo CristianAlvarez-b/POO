@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
+import java.sql.PreparedStatement;
 import java.util.*;
 import java.io.File;
 import domain.Vintage;
@@ -52,9 +53,9 @@ public class VintageGUI extends JFrame{
         cardPanel.add(configurePanel, "initConfig");
         JPanel configureSpecificPanel = configuracionesPersonalizadas();
         cardPanel.add(configureSpecificPanel, "personConfig");
+
         JPanel gamePanel = createGamePanel();
         cardPanel.add(gamePanel, "game");
-
         // Configurar el contenido principal
         mainPanel = new JPanel(new BorderLayout());
         mainPanel.add(cardPanel, BorderLayout.CENTER);
@@ -62,6 +63,15 @@ public class VintageGUI extends JFrame{
     }
 
     private JPanel createInitialPanel() {
+        vintage = new Vintage(8,8);
+        setTitle("Vintage");
+        turn = true;
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int width = screenSize.width / 2;
+        int height = screenSize.height / 2;
+        setSize(width, height);
+        setLocationRelativeTo(null);
+
         JPanel initialPanel = new JPanel(new BorderLayout());
 
         // Crear un panel para los botones con un GridLayout centrado
@@ -144,22 +154,21 @@ public class VintageGUI extends JFrame{
         JPanel configuracionesPanel = new JPanel(new GridLayout(1, 3));
 
         // Panel para el JColorChooser de la joya 1
-        JPanel colorChooserPanel1 = crearColorChooserPanel("Color Joya 1:");
+        JPanel colorChooserPanel1 = crearColorChooserPanel("Color Joya 1:", 0);
 
         // Panel para el JColorChooser de la joya 2
-        JPanel colorChooserPanel2 = crearColorChooserPanel("Color Joya 2:");
+        JPanel colorChooserPanel2 = crearColorChooserPanel("Color Joya 2:", 1);
 
-        JPanel colorChooserPanel3 = crearColorChooserPanel("Color Joya 3:");
+        JPanel colorChooserPanel3 = crearColorChooserPanel("Color Joya 3:", 2);
 
-        JPanel colorChooserPanel4 = crearColorChooserPanel("Color Joya 4:");
+        JPanel colorChooserPanel4 = crearColorChooserPanel("Color Joya 4:", 3);
 
-        JPanel colorChooserPanel5 = crearColorChooserPanel("Color Joya 5:");
+        JPanel colorChooserPanel5 = crearColorChooserPanel("Color Joya 5:", 4);
 
-        JPanel colorChooserPanel6 = crearColorChooserPanel("Color Joya 6:");
+        JPanel colorChooserPanel6 = crearColorChooserPanel("Color Joya 6:", 5);
 
-        JPanel colorChooserPanel7 = crearColorChooserPanel("Color Joya 7:");
+        JPanel colorChooserPanel7 = crearColorChooserPanel("Color Joya 7:", 6);
 
-        // Continuar con paneles para las joyas 3 a 7...
 
         // Panel para el JTextField doble y textos explicativos
         JPanel textFieldPanel = new JPanel(new BorderLayout());
@@ -208,29 +217,27 @@ public class VintageGUI extends JFrame{
         return mainPanel;
     }
 
-    private JPanel crearColorChooserPanel(String label) {
+    private JPanel crearColorChooserPanel(String label, int joya) {
         JPanel colorChooserPanel = new JPanel(new BorderLayout());
         JLabel colorChooserLabel = new JLabel(label);
         JButton colorChooserButton = new JButton("Seleccionar Color");
         colorChooserButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                elegirColor();
+                elegirColor(joya);
             }
         });
+
         colorChooserPanel.add(colorChooserLabel, BorderLayout.NORTH);
         colorChooserPanel.add(colorChooserButton, BorderLayout.CENTER);
         return colorChooserPanel;
     }
 
-    private void elegirColor() {
+    private void elegirColor(int joya) {
         JColorChooser colorChooser = new JColorChooser();
         Color colorElegido = JColorChooser.showDialog(this, "Seleccionar Color", Color.BLACK);
-
         if (colorElegido != null) {
-            // Agregar el color elegido al array coloresPersonalizados
-            for (int i = 0; i < coloresPersonalizados.length; i++) {
-                    coloresPersonalizados[i] = colorElegido;
-            }
+            coloresPersonalizados[joya] = colorElegido;
+
         }
     }
 
@@ -245,14 +252,6 @@ public class VintageGUI extends JFrame{
         dispose();
     }
     private JPanel createGamePanel() {
-        vintage = new Vintage(8,8);
-        setTitle("Vintage");
-        turn = true;
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int width = screenSize.width / 2;
-        int height = screenSize.height / 2;
-        setSize(width, height);
-        setLocationRelativeTo(null);
 
         // Crear el panel principal con BorderLayout
         mainPanel = new JPanel(new BorderLayout());
@@ -262,8 +261,7 @@ public class VintageGUI extends JFrame{
         addTopPanel();  // Agregar el panel superior con el título y las puntuaciones
         addMiddlePanel();  // Agregar el panel central con el tablero
         addBottomPanel();  // Agregar el panel inferior con los botones
-        prepareElementsBoard();  // Preparar el tablero
-        //addPlayerLabels();  // Agregar las etiquetas de los jugadores
+        prepareElementsBoard();
         return mainPanel;
     }
 
