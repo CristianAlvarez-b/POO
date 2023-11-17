@@ -20,9 +20,8 @@ public class VintageGUI extends JFrame{
     private Jewel[][] jewels;
     private boolean turn;
     private char[][][] boardMatrix;
-    private char[] player1Jewels = {'r', 'b', 'a', 'v', 'o'}; // Ejemplo, reemplazar con las joyas reales del jugador 1
     private Vintage vintage;
-
+    private static Color[] coloresPersonalizados = {Color.RED, Color.BLUE, Color.YELLOW, Color.GREEN, Color.ORANGE, new Color(128, 0, 128), Color.WHITE, Color.CYAN};
     private int selectedRow = -1;
     private int selectedCol = -1;
     private CardLayout cardLayout;
@@ -32,7 +31,9 @@ public class VintageGUI extends JFrame{
         prepareActions();
     }
     private void prepareElements() {
+
         prepareScreens();
+        prepareElementsMenu();
         //prepareConfigScreen();
     }
 
@@ -44,8 +45,13 @@ public class VintageGUI extends JFrame{
         // Crear pantalla inicial con dos botones
         JPanel initialPanel = createInitialPanel();
         cardPanel.add(initialPanel, "initial");
-
+        JPanel continuePanel = createContinuePanel();
+        cardPanel.add(continuePanel, "continue");
         // Crear pantalla principal con el juego
+        JPanel configurePanel = configuracionesIniciales();
+        cardPanel.add(configurePanel, "initConfig");
+        JPanel configureSpecificPanel = configuracionesPersonalizadas();
+        cardPanel.add(configureSpecificPanel, "personConfig");
         JPanel gamePanel = createGamePanel();
         cardPanel.add(gamePanel, "game");
 
@@ -65,8 +71,8 @@ public class VintageGUI extends JFrame{
         JButton button2 = new JButton("Continuar juego");
         JButton button3 = new JButton("Salir");
 
-        button1.addActionListener(e -> cardLayout.show(cardPanel, "game"));
-        button2.addActionListener(e -> abrirArchivo());
+        button1.addActionListener(e -> cardLayout.show(cardPanel, "initConfig"));
+        button2.addActionListener(e -> cardLayout.show(cardPanel, "continue"));
         button3.addActionListener(e -> confirmarCierre());
 
         buttonPanel.add(button1);
@@ -86,7 +92,163 @@ public class VintageGUI extends JFrame{
 
         return initialPanel;
     }
-    private JPanel createGamePanel(){
+    private JPanel createContinuePanel(){
+        JPanel continuePanel = new JPanel(new BorderLayout());
+
+        // Crear un panel para los botones con un GridLayout centrado
+        JPanel buttonPanel = new JPanel(new GridLayout(3, 1));
+
+        JButton button1 = new JButton("Slot 1");
+        JButton button2 = new JButton("Slot 2");
+        JButton button3 = new JButton("Back");
+
+        button1.addActionListener(e -> abrirArchivo());
+        button2.addActionListener(e -> abrirArchivo());
+        button3.addActionListener(e -> cardLayout.show(cardPanel, "initial"));
+
+        buttonPanel.add(button1);
+        buttonPanel.add(button2);
+        buttonPanel.add(button3);
+        continuePanel.add(buttonPanel, BorderLayout.CENTER);
+        return continuePanel;
+    }
+    private JPanel configuracionesIniciales(){
+        JPanel configuracionesPanel = new JPanel(new BorderLayout());
+
+        // Crear un panel para los botones con un GridLayout centrado
+        JPanel buttonPanel = new JPanel(new GridLayout(2, 1));
+
+        JButton defaultButton = new JButton("Default");
+        JButton personalizadaButton = new JButton("Personalizada");
+
+        // Asociar ActionListener a los botones según sea necesario
+        defaultButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                configuracionesDefalut();
+            }
+        });
+        personalizadaButton.addActionListener(e -> cardLayout.show(cardPanel, "personConfig"));
+
+        buttonPanel.add(defaultButton);
+        buttonPanel.add(personalizadaButton);
+
+        // Agregar el panel de botones al centro de la pantalla de configuraciones
+        configuracionesPanel.add(buttonPanel, BorderLayout.CENTER);
+
+        return configuracionesPanel;
+    }
+    private void configuracionesDefalut(){
+        cardLayout.show(cardPanel, "game");
+    }
+    private JPanel configuracionesPersonalizadas() {
+        JPanel configuracionesPanel = new JPanel(new GridLayout(1, 3));
+
+        // Panel para el JColorChooser de la joya 1
+        JPanel colorChooserPanel1 = crearColorChooserPanel("Color Joya 1:");
+
+        // Panel para el JColorChooser de la joya 2
+        JPanel colorChooserPanel2 = crearColorChooserPanel("Color Joya 2:");
+
+        JPanel colorChooserPanel3 = crearColorChooserPanel("Color Joya 3:");
+
+        JPanel colorChooserPanel4 = crearColorChooserPanel("Color Joya 4:");
+
+        JPanel colorChooserPanel5 = crearColorChooserPanel("Color Joya 5:");
+
+        JPanel colorChooserPanel6 = crearColorChooserPanel("Color Joya 6:");
+
+        JPanel colorChooserPanel7 = crearColorChooserPanel("Color Joya 7:");
+
+        // Continuar con paneles para las joyas 3 a 7...
+
+        // Panel para el JTextField doble y textos explicativos
+        JPanel textFieldPanel = new JPanel(new BorderLayout());
+        JLabel filasLabel = new JLabel("Filas del tablero:");
+        JLabel columnasLabel = new JLabel("Columnas del tablero:");
+        JTextField filasTextField = new JTextField();
+        JTextField columnasTextField = new JTextField();
+        textFieldPanel.add(filasLabel, BorderLayout.NORTH);
+        textFieldPanel.add(filasTextField, BorderLayout.CENTER);
+        textFieldPanel.add(columnasLabel, BorderLayout.WEST);
+        textFieldPanel.add(columnasTextField, BorderLayout.EAST);
+
+        // Panel de botones
+        JPanel botonesPanel = new JPanel(new FlowLayout());
+        JButton aplicarButton = new JButton("Aplicar");
+        JButton cancelarButton = new JButton("Cancelar");
+        aplicarButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                aplicarConfiguracion();
+            }
+        });
+        cancelarButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                cerrarVentana();
+            }
+        });
+        botonesPanel.add(aplicarButton);
+        botonesPanel.add(cancelarButton);
+
+        configuracionesPanel.add(colorChooserPanel1);
+        configuracionesPanel.add(colorChooserPanel2);
+        configuracionesPanel.add(colorChooserPanel3);
+        configuracionesPanel.add(colorChooserPanel4);
+        configuracionesPanel.add(colorChooserPanel5);
+        configuracionesPanel.add(colorChooserPanel6);
+        configuracionesPanel.add(colorChooserPanel7);
+
+
+        configuracionesPanel.add(textFieldPanel);
+
+        // Panel principal
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.add(configuracionesPanel, BorderLayout.CENTER);
+        mainPanel.add(botonesPanel, BorderLayout.SOUTH);
+
+        return mainPanel;
+    }
+
+    private JPanel crearColorChooserPanel(String label) {
+        JPanel colorChooserPanel = new JPanel(new BorderLayout());
+        JLabel colorChooserLabel = new JLabel(label);
+        JButton colorChooserButton = new JButton("Seleccionar Color");
+        colorChooserButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                elegirColor();
+            }
+        });
+        colorChooserPanel.add(colorChooserLabel, BorderLayout.NORTH);
+        colorChooserPanel.add(colorChooserButton, BorderLayout.CENTER);
+        return colorChooserPanel;
+    }
+
+    private void elegirColor() {
+        JColorChooser colorChooser = new JColorChooser();
+        Color colorElegido = JColorChooser.showDialog(this, "Seleccionar Color", Color.BLACK);
+
+        if (colorElegido != null) {
+            // Agregar el color elegido al array coloresPersonalizados
+            for (int i = 0; i < coloresPersonalizados.length; i++) {
+                if (coloresPersonalizados[i] == null) {
+                    coloresPersonalizados[i] = colorElegido;
+                    break;
+                }
+            }
+        }
+    }
+
+    private void aplicarConfiguracion() {
+        // Implementa la lógica para aplicar la configuración personalizada
+        JOptionPane.showMessageDialog(this, "Configuración personalizada aplicada");
+        cardLayout.show(cardPanel, "game");
+    }
+
+    private void cerrarVentana() {
+        // Cierra la ventana de configuraciones personalizadas
+        dispose();
+    }
+    private JPanel createGamePanel() {
+        vintage = new Vintage(8,8);
         setTitle("Vintage");
         turn = true;
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -100,32 +262,14 @@ public class VintageGUI extends JFrame{
         setContentPane(mainPanel);
 
         // Agregar elementos a la pantalla principal
-        addTopPanel();
-        addMiddlePanel();
-        addBottomPanel();
-        prepareElementsBoard();
-        prepareElementsMenu();
-        addPlayerLabels();
+        addTopPanel();  // Agregar el panel superior con el título y las puntuaciones
+        addMiddlePanel();  // Agregar el panel central con el tablero
+        addBottomPanel();  // Agregar el panel inferior con los botones
+        prepareElementsBoard();  // Preparar el tablero
+        //addPlayerLabels();  // Agregar las etiquetas de los jugadores
         return mainPanel;
     }
-    private void addPlayerLabels() {
-        JPanel playerLabelsPanel = new JPanel(new GridLayout());
-        String turnos = "J1";
-        // Panel para "Joyas J1"
-        player1Label = new JLabel("Joyas J1:");
-        for (char jewel : player1Jewels) {
-            player1Label.add(new Jewel());
-        }
-        playerLabelsPanel.add(player1Label);
 
-        // Panel para "Joyas J2"
-        player2Label = new JLabel("Joyas J2");
-        playerLabelsPanel.add(player2Label);
-
-        turno = new JLabel("turno de: " + turnos);
-        playerLabelsPanel.add(turno);
-        mainPanel.add(playerLabelsPanel, BorderLayout.SOUTH);
-    }
     private void prepareActions(){
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
@@ -167,7 +311,7 @@ public class VintageGUI extends JFrame{
         });
     }
     private void prepareElementsBoard() {
-        vintage = new Vintage(8,8);
+
         boardMatrix = vintage.getBoard();
         boardPanel = new JPanel(new GridLayout(boardMatrix.length, boardMatrix[0].length));
         jewels = new Jewel[boardMatrix.length][boardMatrix[0].length];
@@ -192,28 +336,28 @@ public class VintageGUI extends JFrame{
 
         switch (colorChar[0]) {
             case 'r':
-                jewel.setJewelColor(Color.RED);
+                jewel.setJewelColor(coloresPersonalizados[0]);
                 break;
             case 'b':
-                jewel.setJewelColor(Color.BLUE);
+                jewel.setJewelColor(coloresPersonalizados[1]);
                 break;
             case 'a':
-                jewel.setJewelColor(Color.YELLOW);
+                jewel.setJewelColor(coloresPersonalizados[2]);
                 break;
             case 'v':
-                jewel.setJewelColor(Color.GREEN);
+                jewel.setJewelColor(coloresPersonalizados[3]);
                 break;
             case 'o':
-                jewel.setJewelColor(Color.ORANGE);
+                jewel.setJewelColor(coloresPersonalizados[4]);
                 break;
             case 'm':
-                jewel.setJewelColor(new Color(128, 0, 128)); // Color morado
+                jewel.setJewelColor(coloresPersonalizados[5]); // Color morado
                 break;
             case 'l':
-                jewel.setJewelColor(Color.WHITE);
+                jewel.setJewelColor(coloresPersonalizados[6]);
                 break;
             case 't':
-                jewel.setJewelColor(Color.CYAN);
+                jewel.setJewelColor(coloresPersonalizados[7]);
                 break;
         }
         switch (colorChar[1]){
@@ -249,6 +393,7 @@ public class VintageGUI extends JFrame{
             turno.setText ("turno de: J2");
             this.turn = true;
         }
+        actualizarPuntuaciones();
     }
 
 
@@ -330,11 +475,34 @@ public class VintageGUI extends JFrame{
     }
     private void addTopPanel() {
         // Crear un panel para la parte superior
-        JPanel topPanel = new JPanel();
-        JLabel titleLabel = new JLabel("Vintage Jewelry");
-        topPanel.add(titleLabel);
+        JPanel topPanel = new JPanel(new BorderLayout());
 
-        // Agregar el panel a la parte superior de la pantalla principal
+        // Agregar el título
+        JLabel titleLabel = new JLabel("Vintage Jewelry", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        topPanel.add(titleLabel, BorderLayout.NORTH);
+
+        // Agregar las puntuaciones debajo del título
+        JPanel scorePanel = new JPanel(new GridLayout(1, 2));
+        int puntuacion_J1 = vintage.getJewels()[0];
+        int puntuacion_J2 = vintage.getJewels()[1];
+        player1Label = new JLabel("Joyas J1: " + puntuacion_J1);
+        player2Label = new JLabel("Joyas J2: " + puntuacion_J2);
+        String turnos;
+        if(turn){
+            turnos = "J1";
+            turn = false;
+        }else{
+            turnos = "J2";
+            turn = true;
+        }
+        turno = new JLabel("turno de: " + turnos);
+        scorePanel.add(turno);
+        scorePanel.add(player1Label);
+        scorePanel.add(player2Label);
+        topPanel.add(scorePanel, BorderLayout.CENTER);
+
+        // Agregar el panel superior a la parte superior de la pantalla principal
         mainPanel.add(topPanel, BorderLayout.NORTH);
     }
 
@@ -349,14 +517,19 @@ public class VintageGUI extends JFrame{
     private void addBottomPanel() {
         // Crear un panel para la parte inferior
         JPanel bottomPanel = new JPanel();
-        JLabel scoreLabel = new JLabel("Puntuación: Jugador 1");
-        JLabel scoreLabel2 = new JLabel("Puntuación: Jugador 2");
-        JLabel turno = new JLabel("turno de: ");
-        bottomPanel.add(scoreLabel);
-        bottomPanel.add(scoreLabel2);
-        bottomPanel.add(turno);
 
-        // Agregar el panel a la parte inferior de la pantalla principal
+        // Agregar los botones "Finalizar" y "Resetear"
+        JButton finalizarButton = new JButton("Finalizar");
+        JButton resetearButton = new JButton("Resetear");
+
+        // Agregar ActionListener a los botones según sea necesario
+        finalizarButton.addActionListener(e -> finalizarAccion());
+        resetearButton.addActionListener(e -> resetearAccion());
+
+        bottomPanel.add(finalizarButton);
+        bottomPanel.add(resetearButton);
+
+        // Agregar el panel inferior a la parte inferior de la pantalla principal
         mainPanel.add(bottomPanel, BorderLayout.SOUTH);
     }
 
@@ -368,7 +541,13 @@ public class VintageGUI extends JFrame{
             JOptionPane.showMessageDialog(this, "Funcionalidad Abrir en construcción. Archivo seleccionado: " + selectedFile.getName());
         }
     }
+    private void actualizarPuntuaciones() {
+        int puntuacion_J1 = vintage.getJewels()[0];
+        int puntuacion_J2 = vintage.getJewels()[1];
 
+        player1Label.setText("Joyas J1: " + puntuacion_J1);
+        player2Label.setText("Joyas J2: " + puntuacion_J2);
+    }
     private void salvarArchivo() {
         JFileChooser fileChooser = new JFileChooser();
         int result = fileChooser.showSaveDialog(this);
@@ -386,6 +565,23 @@ public class VintageGUI extends JFrame{
             dispose();
             }
         }
+    private void finalizarAccion() {
+        int opcion = JOptionPane.showConfirmDialog(this, "¿Seguro que quieres finaliar el juego?", "Confirmar finalizar",
+                JOptionPane.YES_NO_OPTION);
+        if (opcion == JOptionPane.YES_OPTION) {
+            cardLayout.show(cardPanel, "initial");
+        }
+    }
+
+
+    private void resetearAccion() {
+        int opcion = JOptionPane.showConfirmDialog(this, "¿Seguro que quieres salir?", "Confirmar cierre",
+                JOptionPane.YES_NO_OPTION);
+        if (opcion == JOptionPane.YES_OPTION) {
+            // Si el usuario elige "Sí", cerrar la aplicación
+
+        }
+    }
     private void prepareElementsMenu() {
         // Crear la barra de menú
         menuBar = new JMenuBar();
