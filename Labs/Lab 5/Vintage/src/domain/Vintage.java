@@ -8,6 +8,7 @@ public class Vintage {
     private char[][][] board;
     private int[] jewels;
     private int turn;
+    private final String POSSIBLE_CHARS = "rbavolm";
 
     public Vintage(int row, int column) {
         board = new char[row][column][2];
@@ -261,34 +262,45 @@ public class Vintage {
 //    }
 
     private void dropJewel() {
-//        for (int column = 0; column < board[0].length; column++){
-//            for (int row = board.length-1; row >= 0 ; row--){
-//                if ()
-//            }
-//        }
-//
-//        // Generar nueva gema en la parte superior de la columna
-//        Random random = new Random();
-//        String possibleChars = "rbavolm";
-//        int randomIndex = random.nextInt(possibleChars.length());
-//        board[0][column][0] = possibleChars.charAt(randomIndex); // Nueva gema
-//        board[0][column][1] = 'c'; // Nuevo fondo
-//    }
-}
-
-    private int countConsecutiveGems(int startRow, int startColumn, int rowDirection, int columnDirection, char targetGem) {
-        int count = 0;
-        int currentRow = startRow + rowDirection;
-        int currentColumn = startColumn + columnDirection;
-
-        while (isValidPosition(currentRow, currentColumn) && board[currentRow][currentColumn][0] == targetGem) {
-            count++;
-            currentRow += rowDirection;
-            currentColumn += columnDirection;
+        for (int column = 0; column < board[0].length; column++){
+            for (int row = board.length-1; row >= 0 ; row--){
+                if (board[row][column][0] == 'w'){
+                    board[row][column][0] = fillJewel(row,column);
+                }
+            }
         }
 
-        return count;
     }
+
+    private char fillJewel(int row, int column){
+        char color = 'w';
+        for (int r = row-1; color=='w' && r>=0; r--){
+            if (board[r][column][0] != color){
+                color = board[r][column][0];
+                board[r][column][0] = 'w';
+            }
+        }
+        if (color == 'w'){
+            Random random = new Random();
+            int randomIndex = random.nextInt(POSSIBLE_CHARS.length());
+            color = POSSIBLE_CHARS.charAt(randomIndex); // Nueva gema
+        }
+        return color;
+    }
+
+//    private int countConsecutiveGems(int startRow, int startColumn, int rowDirection, int columnDirection, char targetGem) {
+//        int count = 0;
+//        int currentRow = startRow + rowDirection;
+//        int currentColumn = startColumn + columnDirection;
+//
+//        while (isValidPosition(currentRow, currentColumn) && board[currentRow][currentColumn][0] == targetGem) {
+//            count++;
+//            currentRow += rowDirection;
+//            currentColumn += columnDirection;
+//        }
+//
+//        return count;
+//    }
 
 
     private boolean isValidPosition(int row, int column) {
