@@ -264,7 +264,10 @@ public class VintageGUI extends JFrame{
             // Intercambiar las joyas entre las dos celdas
             //swapCells(selectedRow, selectedCol, row, col);
             try {
-                vintage.play(selectedRow, selectedCol, row, col);
+                boolean gameOver = vintage.play(selectedRow, selectedCol, row, col);
+                if(gameOver){
+                    //pantallaFinal
+                }
                 refresh();
             }
             catch (VintageException e){

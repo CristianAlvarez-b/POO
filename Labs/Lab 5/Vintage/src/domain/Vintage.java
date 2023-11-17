@@ -295,18 +295,6 @@ public class Vintage {
         return board;
     }
 
-    public static void main(String[] args) {
-        int rows = 5;
-        int columns = 5;
-        Vintage vintage = new Vintage(rows, columns);
-        vintage.printBoard();
-        try{
-        vintage.play(0,0,1,1);
-        }catch (VintageException e){
-            JOptionPane.showMessageDialog(null, e.getMessage());
-        }
-        vintage.printBoard();
-    }
 }
 
 
