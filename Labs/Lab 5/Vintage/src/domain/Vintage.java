@@ -261,19 +261,20 @@ public class Vintage {
 //    }
 
     private void dropJewel() {
-        for (int column = 0; column < board[0].length; column++){
-            for (int row = board.length-1; row >= 0 ; row--){
-                if ()
-            }
-        }
-
-        // Generar nueva gema en la parte superior de la columna
-        Random random = new Random();
-        String possibleChars = "rbavolm";
-        int randomIndex = random.nextInt(possibleChars.length());
-        board[0][column][0] = possibleChars.charAt(randomIndex); // Nueva gema
-        board[0][column][1] = 'c'; // Nuevo fondo
-    }
+//        for (int column = 0; column < board[0].length; column++){
+//            for (int row = board.length-1; row >= 0 ; row--){
+//                if ()
+//            }
+//        }
+//
+//        // Generar nueva gema en la parte superior de la columna
+//        Random random = new Random();
+//        String possibleChars = "rbavolm";
+//        int randomIndex = random.nextInt(possibleChars.length());
+//        board[0][column][0] = possibleChars.charAt(randomIndex); // Nueva gema
+//        board[0][column][1] = 'c'; // Nuevo fondo
+//    }
+}
 
     private int countConsecutiveGems(int startRow, int startColumn, int rowDirection, int columnDirection, char targetGem) {
         int count = 0;
