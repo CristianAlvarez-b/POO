@@ -29,7 +29,7 @@ public class VintageTest {
     @Test
     public void shouldNotCreateVintageIncorrectSize(){
         try{
-            Vintage vintage = new Vintage(-2,6);
+            new Vintage(-2,6);
             fail();
         }catch (VintageException e){
             assertEquals(e.getMessage(), VintageException.INVALID_SIZE);
@@ -45,9 +45,11 @@ public class VintageTest {
             };
             vintage.setBoard(tablero);
             vintage.play(0,0,0,1);
-            String tableroesperado = "Tablero:\n" +
-                    "[b, c] [r, c] \n" +
-                    "[v, c] [o, c] \n";
+            String tableroesperado = """
+                    Tablero:
+                    [b, c] [r, c]\s
+                    [v, c] [o, c]\s
+                    """;
             assertEquals(tableroesperado, vintage.toString());
         } catch (VintageException e) {
             fail();
@@ -106,7 +108,7 @@ public class VintageTest {
             int turnbefore = vintage.getTurn();
             vintage.play(0,0,0,1);
             int turnafter = vintage.getTurn();
-            assertFalse(turnafter == turnbefore);
+            assertNotEquals(turnafter, turnbefore);
         } catch (VintageException e) {
             fail();
         }
