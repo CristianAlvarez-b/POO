@@ -2,9 +2,6 @@ package presentation;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.event.*;
-import java.sql.PreparedStatement;
-import java.util.*;
 import java.io.*;
 import javax.swing.border.LineBorder;
 import java.io.File;
@@ -13,19 +10,15 @@ import domain.VintageException;
 
 public class VintageGUI extends JFrame{
 
-    private JMenuBar menuBar;
-    private JMenu menu;
     private JPanel mainPanel;
     private JPanel boardPanel;
     private JLabel player1Label;
     private JLabel player2Label;
     private JLabel turno;
-    private boolean tablero;
-    private Jewel[][] jewels;
     private boolean turn;
     private char[][][] boardMatrix;
     private Vintage vintage;
-    private Color[] coloresPersonalizados = {Color.RED, Color.BLUE, Color.YELLOW, Color.GREEN, Color.ORANGE, new Color(128, 0, 128), Color.cyan, Color.CYAN};
+    private  Color[] coloresPersonalizados = {Color.RED, Color.BLUE, Color.YELLOW, Color.GREEN, Color.ORANGE, Color.GRAY, Color.cyan, Color.CYAN};
     private int row = 8;
     private int column = 8;
     private int selectedRow = -1;
@@ -71,7 +64,6 @@ public class VintageGUI extends JFrame{
 
     private JPanel createInitialPanel() {
         setTitle("Vintage");
-        boolean turn = false;
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int width = screenSize.width / 2;
         int height = screenSize.height / 2;
@@ -182,13 +174,11 @@ public class VintageGUI extends JFrame{
         backButton.setBackground(Color.white);
 
         // Asociar ActionListener a los botones según sea necesario
-        defaultButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    configuracionesDefalut();
-                } catch (VintageException ex) {
-                    throw new RuntimeException(ex);
-                }
+        defaultButton.addActionListener(e -> {
+            try {
+                configuracionesDefalut();
+            } catch (VintageException ex) {
+                throw new RuntimeException(ex);
             }
         });
         personalizadaButton.addActionListener(e -> cardLayout.show(cardPanel, "personConfig"));
@@ -208,7 +198,6 @@ public class VintageGUI extends JFrame{
         if (opcion == JOptionPane.NO_OPTION) {
             cardLayout.show(cardPanel, "initial");
         }else{
-            this.tablero = true;
             prepareElementsBoard();
             cardLayout.show(cardPanel, "game");
         }
@@ -242,20 +231,14 @@ public class VintageGUI extends JFrame{
         JPanel botonesPanel = new JPanel(new FlowLayout());
         JButton aplicarButton = new JButton("Aplicar");
         JButton cancelarButton = new JButton("Cancelar");
-        aplicarButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    aplicarConfiguracion();
-                } catch (VintageException ex) {
-                    throw new RuntimeException(ex);
-                }
+        aplicarButton.addActionListener(e -> {
+            try {
+                aplicarConfiguracion();
+            } catch (VintageException ex) {
+                throw new RuntimeException(ex);
             }
         });
-        cancelarButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                cancelar();
-            }
-        });
+        cancelarButton.addActionListener(e -> cancelar());
         botonesPanel.add(aplicarButton);
         botonesPanel.add(cancelarButton);
 
@@ -295,11 +278,9 @@ public class VintageGUI extends JFrame{
         JPanel colorChooserPanel = new JPanel(new BorderLayout());
         JLabel colorChooserLabel = new JLabel(label);
         JButton colorChooserButton = new JButton("Seleccionar Color");
-        colorChooserButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                elegirColor(joya);
-                colorChooserButton.setBackground(coloresPersonalizados[joya]);
-            }
+        colorChooserButton.addActionListener(e -> {
+            elegirColor(joya);
+            colorChooserButton.setBackground(coloresPersonalizados[joya]);
         });
 
         colorChooserPanel.add(colorChooserLabel, BorderLayout.NORTH);
@@ -333,12 +314,7 @@ public class VintageGUI extends JFrame{
         trophyLabel.setHorizontalAlignment(JLabel.CENTER);
 
         JButton volverButton = new JButton("Volver al Menú Principal");
-        volverButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                cardLayout.show(cardPanel, "initial");
-            }
-        });
+        volverButton.addActionListener(e -> cardLayout.show(cardPanel, "initial"));
         winnerPanel.add(mensajeLabel, BorderLayout.NORTH);
         winnerPanel.add(trophyLabel, BorderLayout.CENTER);
         winnerPanel.add(volverButton, BorderLayout.SOUTH);
@@ -348,12 +324,12 @@ public class VintageGUI extends JFrame{
     private void aplicarConfiguracion() throws VintageException {
         // Implementa la lógica para aplicar la configuración personalizada
         JOptionPane.showMessageDialog(this, "Configuración personalizada aplicada");
-        this.tablero = true;
 
         // Obtener el valor seleccionado del desplegable
         String selectedDimension = (String) dimensionComboBox.getSelectedItem();
 
         // Dividir la cadena para obtener filas y columnas
+        assert selectedDimension != null;
         String[] dimensions = selectedDimension.split("x");
         int selectedRows = Integer.parseInt(dimensions[0]);
         int selectedColumns = Integer.parseInt(dimensions[1]);
@@ -398,34 +374,24 @@ public class VintageGUI extends JFrame{
         prepareActionsMenu();
     }
     private void prepareActionsMenu() {
-        ActionListener salirListener = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                confirmarCierre();
-            }
-        };
+        ActionListener salirListener = e -> confirmarCierre();
         JMenuItem salirMenuItem = getJMenuBar().getMenu(0).getItem(5);
         salirMenuItem.addActionListener(salirListener);
 
         // Asociar oyentes para las opciones Nuevo, Abrir y Salvar
-        getJMenuBar().getMenu(0).getItem(0).addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                // Acción Nuevo
-                cardLayout.show(cardPanel, "initConfig");
-            }
+        getJMenuBar().getMenu(0).getItem(0).addActionListener(e -> {
+            // Acción Nuevo
+            cardLayout.show(cardPanel, "initConfig");
         });
 
-        getJMenuBar().getMenu(0).getItem(2).addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                // Acción Abrir
-                abrirArchivo();
-            }
+        getJMenuBar().getMenu(0).getItem(2).addActionListener(e -> {
+            // Acción Abrir
+            abrirArchivo();
         });
 
-        getJMenuBar().getMenu(0).getItem(3).addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                // Acción Salvar
-                salvarArchivo();
-            }
+        getJMenuBar().getMenu(0).getItem(3).addActionListener(e -> {
+            // Acción Salvar
+            salvarArchivo();
         });
     }
     private void prepareElementsBoard() throws VintageException {
@@ -435,7 +401,7 @@ public class VintageGUI extends JFrame{
             // Si el tablero aún no se ha creado, crearlo y agregarlo al mainPanel
             boardMatrix = vintage.getBoard();
             boardPanel = new JPanel(new GridLayout(boardMatrix.length, boardMatrix[0].length));
-            jewels = new Jewel[boardMatrix.length][boardMatrix[0].length];
+            Jewel[][] jewels = new Jewel[boardMatrix.length][boardMatrix[0].length];
 
             for (int i = 0; i < boardMatrix.length; i++) {
                 for (int j = 0; j < boardMatrix[0].length; j++) {
@@ -459,7 +425,7 @@ public class VintageGUI extends JFrame{
         }
     }
 
-    private void setColorFromChar(Jewel jewel, char colorChar[]) {
+    private void setColorFromChar(Jewel jewel, char[] colorChar) {
         Color lightBrown = new Color(222, 184, 135, 80);
 
         switch (colorChar[0]) {
@@ -561,8 +527,8 @@ public class VintageGUI extends JFrame{
 
 
     private class CellClickListener extends MouseAdapter {
-        private int row;
-        private int col;
+        private final int row;
+        private final int col;
 
         public CellClickListener(int row, int col) {
             this.row = row;
@@ -576,7 +542,7 @@ public class VintageGUI extends JFrame{
     }
 
 
-    public class Jewel extends JPanel {
+    public static class Jewel extends JPanel {
         private Color jewelColor;
         private Color backgroundColor;
         private int shape; // 0: Círculo, 1: Triángulo, 2: Cuadrado, 3: Pentágono, 4: Hexágono, 5: Heptágono
@@ -836,10 +802,10 @@ public class VintageGUI extends JFrame{
     }
     private void prepareElementsMenu() {
         // Crear la barra de menú
-        menuBar = new JMenuBar();
+        JMenuBar menuBar = new JMenuBar();
 
         // Crear el menú Archivo
-        menu = new JMenu("Menu");
+        JMenu menu = new JMenu("Menu");
 
         // Crear las opciones del menú
         JMenuItem nuevoMenuItem = new JMenuItem("Nuevo");
@@ -870,7 +836,7 @@ public class VintageGUI extends JFrame{
         setJMenuBar(menuBar);
     }
 
-    public static void main(String args[]) throws VintageException {
+    public static void main(String[] args) throws VintageException {
         VintageGUI gui=new VintageGUI();
         gui.setVisible(true);
     }
