@@ -33,17 +33,17 @@ public class VintageGUI extends JFrame{
     private JComboBox<String> dimensionComboBox;
     private CardLayout cardLayout;
     private JPanel cardPanel;
-    private VintageGUI(){
+    private VintageGUI() throws VintageException {
         prepareElements();
         prepareActions();
     }
-    private void prepareElements() {
+    private void prepareElements() throws VintageException {
 
         prepareScreens();
         prepareElementsMenu();
     }
 
-    private void prepareScreens(){
+    private void prepareScreens() throws VintageException {
         cardLayout = new CardLayout();
         cardPanel = new JPanel(cardLayout);
         setTitle("Vintage");
@@ -184,7 +184,11 @@ public class VintageGUI extends JFrame{
         // Asociar ActionListener a los botones según sea necesario
         defaultButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                configuracionesDefalut();
+                try {
+                    configuracionesDefalut();
+                } catch (VintageException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         });
         personalizadaButton.addActionListener(e -> cardLayout.show(cardPanel, "personConfig"));
@@ -198,7 +202,7 @@ public class VintageGUI extends JFrame{
 
         return configuracionesPanel;
     }
-    private void configuracionesDefalut(){
+    private void configuracionesDefalut() throws VintageException {
         int opcion = JOptionPane.showConfirmDialog(this, "La configuración inicial tiene un tamaño de tablero de 8x8 y colores de gemas predefinidos, ¿quieres continuar?", "Confirmar finalizar",
                 JOptionPane.YES_NO_OPTION);
         if (opcion == JOptionPane.NO_OPTION) {
@@ -240,7 +244,11 @@ public class VintageGUI extends JFrame{
         JButton cancelarButton = new JButton("Cancelar");
         aplicarButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                aplicarConfiguracion();
+                try {
+                    aplicarConfiguracion();
+                } catch (VintageException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         });
         cancelarButton.addActionListener(new ActionListener() {
@@ -337,7 +345,7 @@ public class VintageGUI extends JFrame{
 
         return winnerPanel;
     }
-    private void aplicarConfiguracion() {
+    private void aplicarConfiguracion() throws VintageException {
         // Implementa la lógica para aplicar la configuración personalizada
         JOptionPane.showMessageDialog(this, "Configuración personalizada aplicada");
         this.tablero = true;
@@ -366,7 +374,7 @@ public class VintageGUI extends JFrame{
             cardLayout.show(cardPanel, "initial");
         }
     }
-    private JPanel createGamePanel() {
+    private JPanel createGamePanel() throws VintageException {
 
         // Crear el panel principal con BorderLayout
         mainPanel = new JPanel(new BorderLayout());
@@ -420,7 +428,7 @@ public class VintageGUI extends JFrame{
             }
         });
     }
-    private void prepareElementsBoard() {
+    private void prepareElementsBoard() throws VintageException {
 
         if (boardPanel == null) {
             vintage = new Vintage(row,column);
@@ -469,7 +477,7 @@ public class VintageGUI extends JFrame{
                 break;
             case 'v':
                 jewel.setJewelColor(coloresPersonalizados[3]);
-                jewel.setShape(3);
+                jewel.setShape(0);
                 break;
             case 'o':
                 jewel.setJewelColor(coloresPersonalizados[4]);
@@ -587,9 +595,6 @@ public class VintageGUI extends JFrame{
             this.jewelColor = jewelColor;
         }
 
-        public Color getBackgroundColor() {
-            return backgroundColor;
-        }
 
         public void setBackgroundColor(Color backgroundColor) {
             this.backgroundColor = backgroundColor;
@@ -680,7 +685,13 @@ public class VintageGUI extends JFrame{
 
         // Agregar ActionListener a los botones según sea necesario
         finalizarButton.addActionListener(e -> finalizarAccion());
-        resetearButton.addActionListener(e -> resetearAccion());
+        resetearButton.addActionListener(e -> {
+            try {
+                resetearAccion();
+            } catch (VintageException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
 
         bottomPanel.add(finalizarButton);
         bottomPanel.add(resetearButton);
@@ -730,7 +741,11 @@ public class VintageGUI extends JFrame{
                     int jewels2 = Integer.parseInt(jewelsData[2]);
 
                     // Actualizar el estado del juego
-                    vintage = new Vintage(rows, cols);
+                    try {
+                        vintage = new Vintage(rows, cols);
+                    } catch (VintageException e) {
+                        throw new RuntimeException(e);
+                    }
                     vintage.setBoard(newBoard);
                     vintage.setJewels(new int[]{jewels1, jewels2});
 
@@ -808,7 +823,7 @@ public class VintageGUI extends JFrame{
     }
 
 
-    private void resetearAccion() {
+    private void resetearAccion() throws VintageException{
         int opcion = JOptionPane.showConfirmDialog(this, "¿Seguro que quieres resetear?", "Confirmar cierre",
                 JOptionPane.YES_NO_OPTION);
         if (opcion == JOptionPane.YES_OPTION) {
@@ -855,7 +870,7 @@ public class VintageGUI extends JFrame{
         setJMenuBar(menuBar);
     }
 
-    public static void main(String args[]){
+    public static void main(String args[]) throws VintageException {
         VintageGUI gui=new VintageGUI();
         gui.setVisible(true);
     }

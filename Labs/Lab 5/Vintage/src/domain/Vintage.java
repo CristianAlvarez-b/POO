@@ -1,6 +1,7 @@
 package domain;
 import javax.swing.*;
 import java.awt.*;
+import java.util.Arrays;
 import java.util.Random;
 
 public class Vintage {
@@ -9,7 +10,10 @@ public class Vintage {
     private int[] jewels;
     private int turn;
 
-    public Vintage(int row, int column) {
+    public Vintage(int row, int column) throws VintageException{
+        if(row < 0 || column < 0){
+            throw new VintageException(VintageException.INVALID_SIZE);
+        }
         board = new char[row][column][2];
         fillBoardWithRandomChars();
         jewels = new int[]{0,0};
@@ -298,7 +302,49 @@ private int traverseDiagonalLeftToRight() {
         return board;
     }
     public int[] getJewels(){return jewels;}
+    public int getTurn(){
+        return turn;
+    }
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder();
 
+        // Detalles sobre el tablero
+        result.append("Tablero:\n");
+        for (char[][] row : board) {
+            for (char[] gem : row) {
+                result.append("[");
+                for (char color : gem) {
+                    result.append(color).append(", ");
+                }
+                result.setLength(result.length() - 2); // Remove the trailing comma and space
+                result.append("] ");
+            }
+            result.append("\n");
+        }
+        return result.toString();
+    }
+    public static void main(String[] args) {
+        try {
+            // Crea un objeto Vintage con un tablero de 3 filas y 3 columnas
+            Vintage vintageGame = new Vintage(3, 3);
+
+            // Imprime el estado inicial del tablero
+            System.out.println("Estado inicial del tablero:");
+            System.out.println(vintageGame);
+
+            // Realiza algunos movimientos para probar el juego
+            vintageGame.play(0, 0, 0, 1);
+            vintageGame.play(1, 1, 1, 2);
+
+            // Imprime el estado del tablero después de los movimientos
+            System.out.println("Estado del tablero después de los movimientos:");
+            System.out.println(vintageGame);
+
+        } catch (VintageException e) {
+            e.printStackTrace();
+        }
+    }
 }
 
 
