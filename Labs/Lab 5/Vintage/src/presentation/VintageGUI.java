@@ -20,6 +20,7 @@ public class VintageGUI extends JFrame{
     private JLabel turno;
     private Jewel[][] jewels;
     private boolean turn;
+    private boolean tablero = false;
     private char[][][] boardMatrix;
     private Vintage vintage;
     private Color[] coloresPersonalizados = {Color.RED, Color.BLUE, Color.YELLOW, Color.GREEN, Color.ORANGE, new Color(128, 0, 128), Color.WHITE, Color.CYAN};
@@ -35,7 +36,6 @@ public class VintageGUI extends JFrame{
 
         prepareScreens();
         prepareElementsMenu();
-        //prepareConfigScreen();
     }
 
     private void prepareScreens(){
@@ -63,7 +63,7 @@ public class VintageGUI extends JFrame{
     }
 
     private JPanel createInitialPanel() {
-        vintage = new Vintage(8,8);
+        vintage = new Vintage(10,10);
         setTitle("Vintage");
         turn = true;
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -148,38 +148,43 @@ public class VintageGUI extends JFrame{
         return configuracionesPanel;
     }
     private void configuracionesDefalut(){
+        this.tablero = true;
+        prepareElementsBoard();
         cardLayout.show(cardPanel, "game");
     }
     private JPanel configuracionesPersonalizadas() {
-        JPanel configuracionesPanel = new JPanel(new GridLayout(1, 3));
+        JPanel configuracionesPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
 
-        // Panel para el JColorChooser de la joya 1
-        JPanel colorChooserPanel1 = crearColorChooserPanel("Color Joya 1:", 0);
+        // Panel para el JColorChooser de las joyas
+        JPanel colorChooserPanel = new JPanel(new GridLayout(2, 4, 10, 10)); // Añadí espacio entre las celdas (10 píxeles)
+        JButton chooseColorButton = new JButton("Seleccionar Color");
+        chooseColorButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                elegirColor(7); // 7 representa el botón "Seleccionar Color"
+                chooseColorButton.setBackground(coloresPersonalizados[7]);
+            }
+        });
 
-        // Panel para el JColorChooser de la joya 2
-        JPanel colorChooserPanel2 = crearColorChooserPanel("Color Joya 2:", 1);
+        for (int i = 0; i < 7; i++) {
+            JPanel jewelColorPanel = crearColorChooserPanel("Color Joya " + (i + 1) + ":", i);
+            colorChooserPanel.add(jewelColorPanel);
+        }
 
-        JPanel colorChooserPanel3 = crearColorChooserPanel("Color Joya 3:", 2);
+        // Añadí más espacio entre las celdas para que ocupen más pantalla
+        colorChooserPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        JPanel colorChooserPanel4 = crearColorChooserPanel("Color Joya 4:", 3);
+        // Panel para mostrar el color seleccionado
+        JPanel selectedColorPanel = new JPanel(new FlowLayout());
+        selectedColorPanel.add(chooseColorButton);
 
-        JPanel colorChooserPanel5 = crearColorChooserPanel("Color Joya 5:", 4);
-
-        JPanel colorChooserPanel6 = crearColorChooserPanel("Color Joya 6:", 5);
-
-        JPanel colorChooserPanel7 = crearColorChooserPanel("Color Joya 7:", 6);
-
-
-        // Panel para el JTextField doble y textos explicativos
-        JPanel textFieldPanel = new JPanel(new BorderLayout());
-        JLabel filasLabel = new JLabel("Filas del tablero:");
-        JLabel columnasLabel = new JLabel("Columnas del tablero:");
-        JTextField filasTextField = new JTextField();
-        JTextField columnasTextField = new JTextField();
-        textFieldPanel.add(filasLabel, BorderLayout.NORTH);
-        textFieldPanel.add(filasTextField, BorderLayout.CENTER);
-        textFieldPanel.add(columnasLabel, BorderLayout.WEST);
-        textFieldPanel.add(columnasTextField, BorderLayout.EAST);
+        // Panel para elegir filas y columnas
+        JPanel dimensionsPanel = new JPanel(new FlowLayout());
+        JLabel dimensionLabel = new JLabel("Dimensiones del tablero:");
+        String[] dimensionOptions = {"6x6" ,"7x7", "8x8", "9x9", "10x10", "11x11"};
+        JComboBox<String> dimensionComboBox = new JComboBox<>(dimensionOptions);
+        dimensionsPanel.add(dimensionLabel);
+        dimensionsPanel.add(dimensionComboBox);
 
         // Panel de botones
         JPanel botonesPanel = new JPanel(new FlowLayout());
@@ -198,24 +203,37 @@ public class VintageGUI extends JFrame{
         botonesPanel.add(aplicarButton);
         botonesPanel.add(cancelarButton);
 
-        configuracionesPanel.add(colorChooserPanel1);
-        configuracionesPanel.add(colorChooserPanel2);
-        configuracionesPanel.add(colorChooserPanel3);
-        configuracionesPanel.add(colorChooserPanel4);
-        configuracionesPanel.add(colorChooserPanel5);
-        configuracionesPanel.add(colorChooserPanel6);
-        configuracionesPanel.add(colorChooserPanel7);
+        // Configuración para el colorChooserPanel
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        configuracionesPanel.add(colorChooserPanel, gbc);
 
+        // Configuración para el selectedColorPanel
+        gbc.gridy = 1;
+        gbc.gridwidth = 1;
+        configuracionesPanel.add(selectedColorPanel, gbc);
 
-        configuracionesPanel.add(textFieldPanel);
+        // Configuración para el dimensionsPanel
+        gbc.gridx = 2;
+        gbc.gridy = 0;
+        gbc.gridwidth = 1;
+        configuracionesPanel.add(dimensionsPanel, gbc);
+
+        // Configuración para el botonesPanel
+        gbc.gridy = 1;
+        configuracionesPanel.add(botonesPanel, gbc);
 
         // Panel principal
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.add(configuracionesPanel, BorderLayout.CENTER);
-        mainPanel.add(botonesPanel, BorderLayout.SOUTH);
 
         return mainPanel;
     }
+
+
+
 
     private JPanel crearColorChooserPanel(String label, int joya) {
         JPanel colorChooserPanel = new JPanel(new BorderLayout());
@@ -224,6 +242,7 @@ public class VintageGUI extends JFrame{
         colorChooserButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 elegirColor(joya);
+                colorChooserButton.setBackground(coloresPersonalizados[joya]);
             }
         });
 
@@ -244,6 +263,8 @@ public class VintageGUI extends JFrame{
     private void aplicarConfiguracion() {
         // Implementa la lógica para aplicar la configuración personalizada
         JOptionPane.showMessageDialog(this, "Configuración personalizada aplicada");
+        this.tablero = true;
+        prepareElementsBoard();
         cardLayout.show(cardPanel, "game");
     }
 
@@ -306,25 +327,31 @@ public class VintageGUI extends JFrame{
         });
     }
     private void prepareElementsBoard() {
+        if (boardPanel == null) {
+            // Si el tablero aún no se ha creado, crearlo y agregarlo al mainPanel
+            boardMatrix = vintage.getBoard();
+            boardPanel = new JPanel(new GridLayout(boardMatrix.length, boardMatrix[0].length));
+            jewels = new Jewel[boardMatrix.length][boardMatrix[0].length];
 
-        boardMatrix = vintage.getBoard();
-        boardPanel = new JPanel(new GridLayout(boardMatrix.length, boardMatrix[0].length));
-        jewels = new Jewel[boardMatrix.length][boardMatrix[0].length];
+            for (int i = 0; i < boardMatrix.length; i++) {
+                for (int j = 0; j < boardMatrix[0].length; j++) {
+                    Jewel jewel = new Jewel();
+                    jewels[i][j] = jewel;
+                    jewel.addMouseListener(new CellClickListener(i, j));
+                    boardPanel.add(jewel);
 
-        for (int i = 0; i < boardMatrix.length; i++) {
-            for (int j = 0; j < boardMatrix[0].length; j++) {
-                Jewel jewel = new Jewel();
-                jewels[i][j] = jewel;
-                jewel.addMouseListener(new CellClickListener(i, j));
-                boardPanel.add(jewel);
-
-                // Configurar el color de las joyas y el fondo según la matriz
-                setColorFromChar(jewel, boardMatrix[i][j]);
+                    // Configurar el color de las joyas y el fondo según la matriz
+                    setColorFromChar(jewel, boardMatrix[i][j]);
+                }
             }
-        }
 
-        mainPanel.add(boardPanel, BorderLayout.CENTER);
+            mainPanel.add(boardPanel, BorderLayout.CENTER);
+        } else {
+            // Si el tablero ya está creado, simplemente refresca su contenido
+            refresh();
+        }
     }
+
 
     private void setColorFromChar(Jewel jewel, char colorChar[]) {
         Color lightBrown = new Color(222, 184, 135);
@@ -401,8 +428,6 @@ public class VintageGUI extends JFrame{
             boardPanel.getComponent(row * boardMatrix[0].length + col).setBackground(Color.YELLOW);
             // Marcar la celda seleccionada
         } else {
-            // Intercambiar las joyas entre las dos celdas
-            //swapCells(selectedRow, selectedCol, row, col);
             try {
                 boolean gameOver = vintage.play(selectedRow, selectedCol, row, col);
                 if(gameOver){
@@ -573,7 +598,9 @@ public class VintageGUI extends JFrame{
         int opcion = JOptionPane.showConfirmDialog(this, "¿Seguro que quieres resetear?", "Confirmar cierre",
                 JOptionPane.YES_NO_OPTION);
         if (opcion == JOptionPane.YES_OPTION) {
-            vintage = new Vintage(8, 8);
+            vintage = null;
+            boardMatrix = null;
+            vintage = new Vintage(10, 10);
             refresh();
         }
     }
