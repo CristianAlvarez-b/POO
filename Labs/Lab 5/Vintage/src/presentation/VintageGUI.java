@@ -309,9 +309,9 @@ public class VintageGUI extends JFrame{
     private JPanel createWinnerPanel() {
         String ganador;
         if(vintage.getJewels()[0] > vintage.getJewels()[1]){
-            ganador = "J1";
+            ganador = "Jugador 1";
         }else{
-            ganador = "J2";
+            ganador = "Jugador 2";
         }
         JPanel winnerPanel = new JPanel();
         winnerPanel.setLayout(new BorderLayout());
@@ -497,10 +497,10 @@ public class VintageGUI extends JFrame{
         boardPanel.revalidate(); // Asegurar que el panel se redibuje correctamente
         boardPanel.repaint();    // Forzar la repintura del panel
         if(turn){
-            turno.setText ("turno de: J1");
+            turno.setText ("turno de: Jugador 1");
             this.turn = false;
         }else{
-            turno.setText ("turno de: J2");
+            turno.setText ("turno de: Jugador 2");
             this.turn = true;
         }
         actualizarPuntuaciones();
@@ -621,14 +621,14 @@ public class VintageGUI extends JFrame{
         JPanel scorePanel = new JPanel(new GridLayout(1, 2));
         int puntuacion_J1 = 0;
         int puntuacion_J2 = 0;
-        player1Label = new JLabel("Joyas J1: " + puntuacion_J1);
-        player2Label = new JLabel("Joyas J2: " + puntuacion_J2);
+        player1Label = new JLabel("Joyas Jugador 1: " + puntuacion_J1);
+        player2Label = new JLabel("Joyas Jugador 2: " + puntuacion_J2);
         String turnos;
         if(turn){
-            turnos = "J1";
+            turnos = "Jugador 1";
             turn = false;
         }else{
-            turnos = "J2";
+            turnos = "Jugador 2";
             turn = true;
         }
         turno = new JLabel("turno de: " + turnos);
