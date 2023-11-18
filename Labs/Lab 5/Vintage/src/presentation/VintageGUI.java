@@ -69,7 +69,7 @@ public class VintageGUI extends JFrame{
 
     private JPanel createInitialPanel() {
         setTitle("Vintage");
-        turn = false;
+        boolean turn = false;
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int width = screenSize.width / 2;
         int height = screenSize.height / 2;
@@ -81,9 +81,28 @@ public class VintageGUI extends JFrame{
         // Crear un panel para los botones con un GridLayout centrado
         JPanel buttonPanel = new JPanel(new GridLayout(3, 1));
 
-        JButton button1 = new JButton("Iniciar juego");
-        JButton button2 = new JButton("Continuar juego");
-        JButton button3 = new JButton("Salir");
+        // Cargar las imágenes para los botones
+        ImageIcon startIcon = new ImageIcon("C:\\Users\\Equipo\\OneDrive\\Escritorio\\POOB\\Labs\\Lab 5\\ImagesGUI\\NG.png");
+        ImageIcon continueIcon = new ImageIcon("ruta\\del\\icono\\continuar.png");
+        ImageIcon exitIcon = new ImageIcon("ruta\\del\\icono\\salir.png");
+        ImageIcon resizedStartIcon = new ImageIcon(startIcon.getImage().getScaledInstance(850, 50, Image.SCALE_SMOOTH));
+        ImageIcon resizedContinueIcon = new ImageIcon(continueIcon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH));
+        ImageIcon resizedExitIcon = new ImageIcon(exitIcon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH));
+
+        JButton button1 = new JButton(resizedStartIcon);
+        button1.setBackground(Color.WHITE);
+        JButton button2 = new JButton(resizedContinueIcon);
+        JButton button3 = new JButton("Salir", exitIcon);
+
+        // Establecer el texto debajo de los iconos
+        button1.setVerticalTextPosition(SwingConstants.BOTTOM);
+        button1.setHorizontalTextPosition(SwingConstants.CENTER);
+
+        button2.setVerticalTextPosition(SwingConstants.BOTTOM);
+        button2.setHorizontalTextPosition(SwingConstants.CENTER);
+
+        button3.setVerticalTextPosition(SwingConstants.BOTTOM);
+        button3.setHorizontalTextPosition(SwingConstants.CENTER);
 
         button1.addActionListener(e -> cardLayout.show(cardPanel, "initConfig"));
         button2.addActionListener(e -> cardLayout.show(cardPanel, "continue"));
@@ -476,19 +495,20 @@ public class VintageGUI extends JFrame{
             // No hay celda seleccionada, seleccionar la actual
             selectedRow = row;
             selectedCol = col;
-            boardPanel.getComponent(row * boardMatrix[0].length + col).setBackground(Color.YELLOW);
             // Marcar la celda seleccionada
+            boardPanel.getComponent(row * boardMatrix[0].length + col).setBackground(Color.YELLOW);
         } else {
             try {
                 boolean gameOver = vintage.play(selectedRow, selectedCol, row, col);
-                if(gameOver){
+                if (gameOver) {
                     cardLayout.show(cardPanel, "gameOver");
                 }
                 refresh();
-            }
-            catch (VintageException e){
+            } catch (VintageException e) {
                 JOptionPane.showMessageDialog(null, e.getMessage());
             }
+            // Desmarcar la celda seleccionada después de realizar la acción
+            boardPanel.getComponent(selectedRow * boardMatrix[0].length + selectedCol).setBackground(null);
             selectedRow = -1;
             selectedCol = -1;
         }
