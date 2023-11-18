@@ -24,6 +24,8 @@ public class VintageGUI extends JFrame{
     private char[][][] boardMatrix;
     private Vintage vintage;
     private Color[] coloresPersonalizados = {Color.RED, Color.BLUE, Color.YELLOW, Color.GREEN, Color.ORANGE, new Color(128, 0, 128), Color.WHITE, Color.CYAN};
+    private int row = 8;
+    private int column = 8;
     private int selectedRow = -1;
     private int selectedCol = -1;
     private CardLayout cardLayout;
@@ -53,9 +55,11 @@ public class VintageGUI extends JFrame{
         cardPanel.add(configurePanel, "initConfig");
         JPanel configureSpecificPanel = configuracionesPersonalizadas();
         cardPanel.add(configureSpecificPanel, "personConfig");
-
         JPanel gamePanel = createGamePanel();
         cardPanel.add(gamePanel, "game");
+        JPanel winnerPanel = createWinnerPanel();
+        cardPanel.add(winnerPanel, "gameOver");
+
         // Configurar el contenido principal
         mainPanel = new JPanel(new BorderLayout());
         mainPanel.add(cardPanel, BorderLayout.CENTER);
@@ -63,7 +67,7 @@ public class VintageGUI extends JFrame{
     }
 
     private JPanel createInitialPanel() {
-        vintage = new Vintage(10,10);
+        vintage = new Vintage(row,column);
         setTitle("Vintage");
         turn = true;
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -259,7 +263,35 @@ public class VintageGUI extends JFrame{
 
         }
     }
+    private JPanel createWinnerPanel() {
+        String ganador;
+        if(vintage.getJewels()[0] > vintage.getJewels()[1]){
+            ganador = "J1";
+        }else{
+            ganador = "J2";
+        }
+        JPanel winnerPanel = new JPanel();
+        winnerPanel.setLayout(new BorderLayout());
 
+        JLabel mensajeLabel = new JLabel("¡Felicidades, " + ganador + "! Eres el ganador.");
+        mensajeLabel.setHorizontalAlignment(JLabel.CENTER);
+
+        JButton volverButton = new JButton("Volver al Menú Principal");
+        volverButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                vintage = null;
+                boardMatrix = null;
+                refresh();
+                cardLayout.show(cardPanel, "initial");
+            }
+        });
+
+        winnerPanel.add(mensajeLabel, BorderLayout.CENTER);
+        winnerPanel.add(volverButton, BorderLayout.SOUTH);
+
+        return winnerPanel;
+    }
     private void aplicarConfiguracion() {
         // Implementa la lógica para aplicar la configuración personalizada
         JOptionPane.showMessageDialog(this, "Configuración personalizada aplicada");
@@ -431,7 +463,7 @@ public class VintageGUI extends JFrame{
             try {
                 boolean gameOver = vintage.play(selectedRow, selectedCol, row, col);
                 if(gameOver){
-                    //pantallaFinal
+                    cardLayout.show(cardPanel, "gameOver");
                 }
                 refresh();
             }
@@ -600,7 +632,7 @@ public class VintageGUI extends JFrame{
         if (opcion == JOptionPane.YES_OPTION) {
             vintage = null;
             boardMatrix = null;
-            vintage = new Vintage(10, 10);
+            vintage = new Vintage(row, column);
             refresh();
         }
     }
