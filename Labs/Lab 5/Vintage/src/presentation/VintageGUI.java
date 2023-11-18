@@ -18,7 +18,7 @@ public class VintageGUI extends JFrame{
     private boolean turn;
     private char[][][] boardMatrix;
     private Vintage vintage;
-    private  Color[] coloresPersonalizados = {Color.RED, Color.BLUE, Color.YELLOW, Color.GREEN, Color.ORANGE, Color.GRAY, Color.cyan, Color.CYAN};
+    private  Color[] coloresPersonalizados = {Color.RED, Color.BLUE, Color.YELLOW, Color.GREEN, Color.ORANGE, new Color(147, 15, 194, 255), Color.cyan, new Color(222, 184, 135, 80),Color.BLACK};
     private int row = 8;
     private int column = 8;
     private int selectedRow = -1;
@@ -198,6 +198,7 @@ public class VintageGUI extends JFrame{
         if (opcion == JOptionPane.NO_OPTION) {
             cardLayout.show(cardPanel, "initial");
         }else{
+            resetColoresDefault();
             prepareElementsBoard();
             cardLayout.show(cardPanel, "game");
         }
@@ -207,11 +208,17 @@ public class VintageGUI extends JFrame{
         GridBagConstraints gbc = new GridBagConstraints();
 
         // Panel para el JColorChooser de las joyas
-        JPanel colorChooserPanel = new JPanel(new GridLayout(2, 4, 10, 10)); // Añadí espacio entre las celdas (10 píxeles)
+        JPanel colorChooserPanel = new JPanel(new GridLayout(3, 4, 10, 10)); // Añadí espacio entre las celdas (10 píxeles)
         for (int i = 0; i < 7; i++) {
             JPanel jewelColorPanel = crearColorChooserPanel("Color Joya " + (i + 1) + ":", i);
             colorChooserPanel.add(jewelColorPanel);
         }
+
+        JPanel boardColorPanel = crearColorChooserPanel("Color principal del Tablero"  + ":", 7);
+        colorChooserPanel.add(boardColorPanel);
+        JPanel boardColorPanel2 = crearColorChooserPanel("Color secundario del Tablero"  + ":", 8);
+        colorChooserPanel.add(boardColorPanel2);
+
 
         // Añadí más espacio entre las celdas para que ocupen más pantalla
         colorChooserPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -273,7 +280,6 @@ public class VintageGUI extends JFrame{
 
 
 
-
     private JPanel crearColorChooserPanel(String label, int joya) {
         JPanel colorChooserPanel = new JPanel(new BorderLayout());
         JLabel colorChooserLabel = new JLabel(label);
@@ -287,13 +293,17 @@ public class VintageGUI extends JFrame{
         colorChooserPanel.add(colorChooserButton, BorderLayout.CENTER);
         return colorChooserPanel;
     }
-
     private void elegirColor(int joya) {
         JColorChooser colorChooser = new JColorChooser();
         Color colorElegido = JColorChooser.showDialog(this, "Seleccionar Color", Color.BLACK);
         if (colorElegido != null) {
-            coloresPersonalizados[joya] = colorElegido;
-
+            if (joya == 7 || joya == 8) {
+                // Establecer la opacidad al 80%
+                int alpha = 80;
+                coloresPersonalizados[joya] = new Color(colorElegido.getRed(), colorElegido.getGreen(), colorElegido.getBlue(), alpha);
+            } else {
+                coloresPersonalizados[joya] = colorElegido;
+            }
         }
     }
     private JPanel createWinnerPanel() {
@@ -464,10 +474,10 @@ public class VintageGUI extends JFrame{
         }
         switch (colorChar[1]){
             case 'c':
-                jewel.setBackgroundColor(lightBrown);
+                jewel.setBackgroundColor(coloresPersonalizados[7]);
                 break;
             case 'n':
-                jewel.setBackgroundColor(new Color(0, 0, 0, 120));
+                jewel.setBackgroundColor(coloresPersonalizados[8]);
                 break;
         }
     }
@@ -834,6 +844,12 @@ public class VintageGUI extends JFrame{
 
         // Establecer la barra de menú en la ventana
         setJMenuBar(menuBar);
+    }
+    private void resetColoresDefault(){
+        this.coloresPersonalizados = new Color[]{
+                Color.RED, Color.BLUE, Color.YELLOW, Color.GREEN, Color.ORANGE,
+                new Color(147, 15, 194, 255), Color.CYAN, new Color(222, 184, 135, 80), Color.BLACK
+        };
     }
 
     public static void main(String[] args) throws VintageException {
