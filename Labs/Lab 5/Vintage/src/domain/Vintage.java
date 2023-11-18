@@ -265,7 +265,6 @@ private int traverseDiagonalLeftToRight() {
         }
 
     }
-
     private char fillJewel(int row, int column){
         char color = 'w';
         for (int r = row-1; color=='w' && r>=0; r--){
@@ -323,27 +322,6 @@ private int traverseDiagonalLeftToRight() {
             result.append("\n");
         }
         return result.toString();
-    }
-    public static void main(String[] args) {
-        try {
-            // Crea un objeto Vintage con un tablero de 3 filas y 3 columnas
-            Vintage vintageGame = new Vintage(3, 3);
-
-            // Imprime el estado inicial del tablero
-            System.out.println("Estado inicial del tablero:");
-            System.out.println(vintageGame);
-
-            // Realiza algunos movimientos para probar el juego
-            vintageGame.play(0, 0, 0, 1);
-            vintageGame.play(1, 1, 1, 2);
-
-            // Imprime el estado del tablero después de los movimientos
-            System.out.println("Estado del tablero después de los movimientos:");
-            System.out.println(vintageGame);
-
-        } catch (VintageException e) {
-            e.printStackTrace();
-        }
     }
 }
 
