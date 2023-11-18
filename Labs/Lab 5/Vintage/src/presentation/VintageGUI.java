@@ -78,21 +78,33 @@ public class VintageGUI extends JFrame{
 
         JPanel initialPanel = new JPanel(new BorderLayout());
 
-        // Crear un panel para los botones con un GridLayout centrado
-        JPanel buttonPanel = new JPanel(new GridLayout(3, 1));
+        // Crear un panel para la imagen con un BorderLayout
+        JPanel imagePanel = new JPanel(new BorderLayout());
+
+        ImageIcon imagen = new ImageIcon("ImagesGUI/Vintage.jpg");
+        JLabel imageLabel = new JLabel("Bienvenido a Vintage Jewelry", imagen, JLabel.CENTER);
+        imagePanel.add(imageLabel, BorderLayout.CENTER);
+
+        // Agregar el panel de imagen al centro del panel principal
+        initialPanel.add(imagePanel, BorderLayout.CENTER);
+
+        // Crear un panel para los botones con un BorderLayout
+        JPanel buttonPanel = new JPanel(new BorderLayout());
 
         // Cargar las imágenes para los botones
-        ImageIcon startIcon = new ImageIcon("C:\\Users\\Equipo\\OneDrive\\Escritorio\\POOB\\Labs\\Lab 5\\ImagesGUI\\NG.png");
-        ImageIcon continueIcon = new ImageIcon("ruta\\del\\icono\\continuar.png");
-        ImageIcon exitIcon = new ImageIcon("ruta\\del\\icono\\salir.png");
-        ImageIcon resizedStartIcon = new ImageIcon(startIcon.getImage().getScaledInstance(850, 50, Image.SCALE_SMOOTH));
-        ImageIcon resizedContinueIcon = new ImageIcon(continueIcon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH));
-        ImageIcon resizedExitIcon = new ImageIcon(exitIcon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH));
+        ImageIcon startIcon = new ImageIcon("ImagesGUI/NG.png");
+        ImageIcon continueIcon = new ImageIcon("ImagesGUI/continue.png");
+        ImageIcon exitIcon = new ImageIcon("ImagesGUI/exit.jpg");
+        ImageIcon resizedStartIcon = new ImageIcon(startIcon.getImage().getScaledInstance(300, 75, Image.SCALE_SMOOTH));
+        ImageIcon resizedContinueIcon = new ImageIcon(continueIcon.getImage().getScaledInstance(300, 75, Image.SCALE_SMOOTH));
+        ImageIcon resizedExitIcon = new ImageIcon(exitIcon.getImage().getScaledInstance(300, 75, Image.SCALE_SMOOTH));
 
         JButton button1 = new JButton(resizedStartIcon);
-        button1.setBackground(Color.WHITE);
+        button1.setBackground(Color.BLACK);
         JButton button2 = new JButton(resizedContinueIcon);
-        JButton button3 = new JButton("Salir", exitIcon);
+        button2.setBackground(Color.BLACK);
+        JButton button3 = new JButton(resizedExitIcon);
+        button3.setBackground(Color.RED);
 
         // Establecer el texto debajo de los iconos
         button1.setVerticalTextPosition(SwingConstants.BOTTOM);
@@ -108,23 +120,17 @@ public class VintageGUI extends JFrame{
         button2.addActionListener(e -> cardLayout.show(cardPanel, "continue"));
         button3.addActionListener(e -> confirmarCierre());
 
-        buttonPanel.add(button1);
-        buttonPanel.add(button2);
-        buttonPanel.add(button3);
+        // Agregar los botones al panel de botones
+        buttonPanel.add(button1, BorderLayout.WEST);
+        buttonPanel.add(button2, BorderLayout.CENTER);
+        buttonPanel.add(button3, BorderLayout.EAST);
 
-        // Crear un panel para la imagen con un BorderLayout
-        JPanel imagePanel = new JPanel(new BorderLayout());
-
-        ImageIcon imagen = new ImageIcon("C:\\Users\\Equipo\\OneDrive\\Escritorio\\POOB\\Labs\\Lab 5\\ImagesGUI\\Vintage.jpg");
-        JLabel imageLabel = new JLabel("Bienvenido a Vintage Jewelry", imagen, JLabel.CENTER);
-        imagePanel.add(imageLabel, BorderLayout.CENTER);
-
-        // Agregar los paneles al panel principal
-        initialPanel.add(imagePanel, BorderLayout.CENTER);
+        // Agregar el panel de botones al sur del panel principal
         initialPanel.add(buttonPanel, BorderLayout.SOUTH);
 
         return initialPanel;
     }
+
     private JPanel createContinuePanel(){
         JPanel continuePanel = new JPanel(new BorderLayout());
 
@@ -220,7 +226,7 @@ public class VintageGUI extends JFrame{
         });
         cancelarButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                cerrarVentana();
+                cancelar();
             }
         });
         botonesPanel.add(aplicarButton);
@@ -295,7 +301,7 @@ public class VintageGUI extends JFrame{
         JLabel mensajeLabel = new JLabel("<html><center><h1>¡Felicidades, " + ganador + "!</h1><p>Eres el ganador.</p></center></html>");
         mensajeLabel.setHorizontalAlignment(JLabel.CENTER);
 
-        ImageIcon trophyIcon = new ImageIcon("C:\\Users\\Equipo\\OneDrive\\Escritorio\\POOB\\Labs\\Lab 5\\ImagesGUI\\trophy.jpg"); // Reemplaza "trophy.png" con la ruta de tu imagen de trofeo
+        ImageIcon trophyIcon = new ImageIcon("ImagesGUI/trophy.jpg"); // Reemplaza "trophy.png" con la ruta de tu imagen de trofeo
         JLabel trophyLabel = new JLabel(trophyIcon);
         trophyLabel.setHorizontalAlignment(JLabel.CENTER);
 
@@ -334,9 +340,8 @@ public class VintageGUI extends JFrame{
         cardLayout.show(cardPanel, "game");
     }
 
-    private void cerrarVentana() {
-        // Cierra la ventana de configuraciones personalizadas
-        dispose();
+    private void cancelar() {
+        cardLayout.show(cardPanel, "init");
     }
     private JPanel createGamePanel() {
 
@@ -374,7 +379,7 @@ public class VintageGUI extends JFrame{
         getJMenuBar().getMenu(0).getItem(0).addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // Acción Nuevo
-                JOptionPane.showMessageDialog(VintageGUI.this, "Funcionalidad Nuevo en construcción");
+                cardLayout.show(cardPanel, "initConfig");
             }
         });
 
