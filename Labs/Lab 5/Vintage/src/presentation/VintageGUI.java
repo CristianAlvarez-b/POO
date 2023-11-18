@@ -24,7 +24,7 @@ public class VintageGUI extends JFrame{
     private boolean turn;
     private char[][][] boardMatrix;
     private Vintage vintage;
-    private Color[] coloresPersonalizados = {Color.RED, Color.BLUE, Color.YELLOW, Color.GREEN, Color.ORANGE, new Color(128, 0, 128), Color.WHITE, Color.CYAN};
+    private Color[] coloresPersonalizados = {Color.RED, Color.BLUE, Color.YELLOW, Color.GREEN, Color.ORANGE, new Color(128, 0, 128), Color.cyan, Color.CYAN};
     private int row = 8;
     private int column = 8;
     private int selectedRow = -1;
