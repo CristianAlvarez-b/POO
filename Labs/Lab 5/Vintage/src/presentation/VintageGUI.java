@@ -5,6 +5,7 @@ import javax.swing.*;
 import javax.swing.event.*;
 import java.sql.PreparedStatement;
 import java.util.*;
+import java.io.*;
 import javax.swing.border.LineBorder;
 import java.io.File;
 import domain.Vintage;
@@ -138,9 +139,17 @@ public class VintageGUI extends JFrame{
         // Crear un panel para los botones con un GridLayout centrado
         JPanel buttonPanel = new JPanel(new GridLayout(3, 1));
 
-        JButton button1 = new JButton("Slot 1");
-        JButton button2 = new JButton("Slot 2");
-        JButton button3 = new JButton("Back");
+        ImageIcon startIcon = new ImageIcon("ImagesGUI/save.png");
+        ImageIcon continueIcon = new ImageIcon("ImagesGUI/save.png");
+        ImageIcon backIcon = new ImageIcon("ImagesGUI/back.png");
+        ImageIcon resizedStartIcon = new ImageIcon(startIcon.getImage().getScaledInstance(700, 200, Image.SCALE_SMOOTH));
+        ImageIcon resizedContinueIcon = new ImageIcon(continueIcon.getImage().getScaledInstance(700, 150, Image.SCALE_SMOOTH));
+        ImageIcon resizedExitIcon = new ImageIcon(backIcon.getImage().getScaledInstance(935, 170, Image.SCALE_SMOOTH));
+
+        JButton button1 = new JButton("Slot 1", resizedStartIcon);
+        JButton button2 = new JButton("Slot 2", resizedContinueIcon);
+        JButton button3 = new JButton( resizedExitIcon);
+
 
         button1.addActionListener(e -> abrirArchivo());
         button2.addActionListener(e -> abrirArchivo());
@@ -513,6 +522,7 @@ public class VintageGUI extends JFrame{
             this.turn = true;
         }
         actualizarPuntuaciones();
+        prepareActionsMenu();
     }
 
 
@@ -682,11 +692,59 @@ public class VintageGUI extends JFrame{
     private void abrirArchivo() {
         JFileChooser fileChooser = new JFileChooser();
         int result = fileChooser.showOpenDialog(this);
+
         if (result == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
-            JOptionPane.showMessageDialog(this, "Funcionalidad Abrir en construcción. Archivo seleccionado: " + selectedFile.getName());
+
+            try (BufferedReader reader = new BufferedReader(new FileReader(selectedFile))) {
+                // Leer las dimensiones del tablero
+                String dimensionsLine = reader.readLine();
+                String[] dimensions = dimensionsLine.split(",");
+
+                if (dimensions.length == 2) {
+                    int rows = Integer.parseInt(dimensions[0]);
+                    int cols = Integer.parseInt(dimensions[1]);
+
+                    // Crear un nuevo tablero con las dimensiones leídas
+                    char[][][] newBoard = new char[rows][cols][2];
+
+                    // Leer la información del tablero
+                    for (int row = 0; row < rows; row++) {
+                        String rowLine = reader.readLine();
+                        String[] jewelsInfo = rowLine.split(" ");
+
+                        for (int col = 0; col < cols; col++) {
+                            String[] jewelData = jewelsInfo[col].split(",");
+                            char jewelColor = jewelData[0].charAt(0);
+                            char jewelState = jewelData[1].charAt(0);
+
+                            newBoard[row][col][0] = jewelColor;
+                            newBoard[row][col][1] = jewelState;
+                        }
+                    }
+
+                    // Leer información de las joyas
+                    String jewelsLine = reader.readLine();
+                    String[] jewelsData = jewelsLine.split(",");
+                    int jewels1 = Integer.parseInt(jewelsData[1]);
+                    int jewels2 = Integer.parseInt(jewelsData[2]);
+
+                    // Actualizar el estado del juego
+                    vintage = new Vintage(rows, cols);
+                    vintage.setBoard(newBoard);
+                    vintage.setJewels(new int[]{jewels1, jewels2});
+
+                    JOptionPane.showMessageDialog(this, "Archivo abierto exitosamente.");
+                } else {
+                    JOptionPane.showMessageDialog(this, "Formato de archivo incorrecto.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (IOException | NumberFormatException e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Error al abrir el archivo.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
+
     private void actualizarPuntuaciones() {
         int puntuacion_J1 = vintage.getJewels()[0];
         int puntuacion_J2 = vintage.getJewels()[1];
@@ -697,9 +755,39 @@ public class VintageGUI extends JFrame{
     private void salvarArchivo() {
         JFileChooser fileChooser = new JFileChooser();
         int result = fileChooser.showSaveDialog(this);
+
         if (result == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
-            JOptionPane.showMessageDialog(this, "Funcionalidad Salvar en construcción. Archivo seleccionado: " + selectedFile.getName());
+
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(selectedFile))) {
+                // Guardar las dimensiones del tablero
+                int rows = vintage.getBoard().length;
+                int cols = vintage.getBoard()[0].length;
+                writer.write(rows + "," + cols);
+                writer.newLine();
+
+                // Guardar el estado del juego en formato de texto plano
+                char[][][] board = vintage.getBoard();
+                int[] jewels = vintage.getJewels();
+
+                // Guardar información del tablero
+                for (int row = 0; row < rows; row++) {
+                    for (int col = 0; col < cols; col++) {
+                        char jewelColor = board[row][col][0];
+                        char jewelState = board[row][col][1];
+                        writer.write(jewelColor + "," + jewelState + " ");
+                    }
+                    writer.newLine();
+                }
+
+                // Guardar información de las joyas
+                writer.write("Jewels: " + jewels[0] + "," + jewels[1]);
+
+                JOptionPane.showMessageDialog(this, "Archivo guardado exitosamente.");
+            } catch (IOException e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Error al guardar el archivo.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
     private void confirmarCierre() {

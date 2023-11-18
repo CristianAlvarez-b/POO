@@ -245,7 +245,12 @@ private int traverseDiagonalLeftToRight() {
         }
     }
 
-
+    public void setBoard(char[][][] board){
+        this.board = board;
+    }
+    public void setJewels(int[] jewels){
+        this.jewels = jewels;
+    }
     private void dropJewel() {
         for (int column = 0; column < board[0].length; column++){
             for (int row = board.length-1; row >= 0 ; row--){
