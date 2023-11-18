@@ -294,7 +294,7 @@ public class VintageGUI extends JFrame{
         return colorChooserPanel;
     }
     private void elegirColor(int joya) {
-        JColorChooser colorChooser = new JColorChooser();
+        new JColorChooser();
         Color colorElegido = JColorChooser.showDialog(this, "Seleccionar Color", Color.BLACK);
         if (colorElegido != null) {
             if (joya == 7 || joya == 8) {
@@ -436,8 +436,6 @@ public class VintageGUI extends JFrame{
     }
 
     private void setColorFromChar(Jewel jewel, char[] colorChar) {
-        Color lightBrown = new Color(222, 184, 135, 80);
-
         switch (colorChar[0]) {
             case 'r':
                 jewel.setJewelColor(coloresPersonalizados[0]);
