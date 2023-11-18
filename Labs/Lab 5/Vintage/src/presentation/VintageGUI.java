@@ -401,11 +401,11 @@ public class VintageGUI extends JFrame{
         } else {
             // Si el tablero ya está creado, simplemente refresca su contenido
             vintage = null;
-            vintage = new Vintage(row, column);
+            boardPanel = null;
+            prepareElements();
             refresh();
         }
     }
-
 
     private void setColorFromChar(Jewel jewel, char colorChar[]) {
         Color lightBrown = new Color(222, 184, 135);
@@ -448,8 +448,9 @@ public class VintageGUI extends JFrame{
 
 
     private void refresh() {
-        Component[] components = boardPanel.getComponents();
+
         boardMatrix = vintage.getBoard(); // Actualizar el estado del tablero
+        Component[] components = boardPanel.getComponents();
 
         for (int i = 0; i < boardMatrix.length; i++) {
             for (int j = 0; j < boardMatrix[0].length; j++) {
