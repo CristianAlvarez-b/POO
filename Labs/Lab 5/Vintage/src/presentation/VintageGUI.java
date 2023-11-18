@@ -18,9 +18,9 @@ public class VintageGUI extends JFrame{
     private JLabel player1Label;
     private JLabel player2Label;
     private JLabel turno;
+    private boolean tablero;
     private Jewel[][] jewels;
     private boolean turn;
-    private boolean tablero = false;
     private char[][][] boardMatrix;
     private Vintage vintage;
     private Color[] coloresPersonalizados = {Color.RED, Color.BLUE, Color.YELLOW, Color.GREEN, Color.ORANGE, new Color(128, 0, 128), Color.WHITE, Color.CYAN};
@@ -69,7 +69,7 @@ public class VintageGUI extends JFrame{
 
     private JPanel createInitialPanel() {
         setTitle("Vintage");
-        turn = true;
+        turn = false;
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int width = screenSize.width / 2;
         int height = screenSize.height / 2;
@@ -651,6 +651,7 @@ public class VintageGUI extends JFrame{
         if (opcion == JOptionPane.YES_OPTION) {
             vintage = null;
             boardMatrix = null;
+            turn = true;
             vintage = new Vintage(row, column);
             refresh();
         }
