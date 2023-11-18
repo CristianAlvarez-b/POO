@@ -61,8 +61,8 @@ public class Vintage {
     }
 
     private void validateConsecutiveGems() {
-        int punctuation = validateRows() + validateColumns() + validateMainDiagonal()+
-                validateSecondaryDiagonal();
+        int punctuation = validateRows() + validateColumns() + traverseDiagonalLeftToRight()+
+                traverseDiagonalRightToLeft();
         if (turn%2 == 1){
             jewels[0] += punctuation;
         }else {
@@ -137,122 +137,80 @@ public class Vintage {
         dropJewel();
         return punctuation;
     }
-    private int validateMainDiagonal() {
-        int rows = board.length;
-        int columns = board[0].length;
-        int punctuation = 0;
 
-        for (int row = 2; row < rows; row++){
-            char validateColor = board[row][0][0];
-            int[][] toEliminate = {{row,0}};
-            for (int i = 1; i <= row; i++){
-                char currentGem = board[row-i][i][0];
-                if (validateColor == currentGem){
-                    int[] currentPosition = {row-i,i};
-                    toEliminate = agregarFila(toEliminate,currentPosition);
-                }else {
-                    if(toEliminate.length >= 3){
-                        punctuation += toEliminate.length;
-                        eliminateGems(toEliminate);
-                    }else {
-                        toEliminate = new int[][]{{row-i,i}};
-                        validateColor = board[row-i][i][0];
-                    }
+private int traverseDiagonalLeftToRight() {
+    int rows = board.length;
+    int columns = board[0].length;
+    int punctuation = 0;
+
+    for (int k = 0; k < rows + columns - 1; k++) {
+        int startRow = Math.max(0, k - columns + 1);
+        int count = Math.min(k + 1, Math.min(rows, columns - startRow));
+        char validateColor = board[startRow][0][0];
+        int[][] toEliminate = {{startRow,0}};
+
+        for (int j = 0; j < count; j++) {
+            int row = startRow + j;
+            int col = Math.min(columns - 1, Math.max(0, k - startRow - j));
+            char currentGem = board[row][col][0];
+            if (validateColor == currentGem) {
+                int[] currentPosition = {row, col};
+                toEliminate = agregarFila(toEliminate, currentPosition);
+            } else {
+                if (toEliminate.length >= 3) {
+                    punctuation += toEliminate.length;
+                    eliminateGems(toEliminate);
+                } else {
+                    toEliminate = new int[][]{{row, col}};
+                    validateColor = board[row][col][0];
                 }
             }
-            // Verificar puntaje para la última fila
-            if(toEliminate.length >= 3){
-                punctuation += toEliminate.length;
-                eliminateGems(toEliminate);
-            }
+
         }
-
-
-        for (int row = rows-3; row > 0; row--){
-            char validateColor = board[row][columns-1][0];
-            int[][] toEliminate = {{row,columns-1}};
-            for (int i = 1; i < rows-row; i++){
-                char currentGem = board[row+i][columns-1-i][0];
-                if (validateColor == currentGem){
-                    int[] currentPosition = {row+i,columns-1-i};
-                    toEliminate = agregarFila(toEliminate,currentPosition);
-                }else {
-                    if(toEliminate.length >= 3){
-                        punctuation += toEliminate.length;
-                        eliminateGems(toEliminate);
-                    }else {
-                        toEliminate = new int[][]{{row+i,columns-1-i}};
-                        validateColor = board[row+i][columns-1-i][0];
-                    }
-                }
-            }
-            // Verificar puntaje para la última fila
-            if(toEliminate.length >= 3){
-                punctuation += toEliminate.length;
-                eliminateGems(toEliminate);
-            }
+        if (toEliminate.length >= 3) {
+            punctuation += toEliminate.length;
+            eliminateGems(toEliminate);
         }
-
-        dropJewel();
-        return punctuation;
     }
+    dropJewel();
+    return punctuation;
+}
 
-    private int validateSecondaryDiagonal() {
+    private int traverseDiagonalRightToLeft() {
         int rows = board.length;
         int columns = board[0].length;
         int punctuation = 0;
 
-        for (int row = rows-3; row >= 0; row--){
-            char validateColor = board[row][0][0];
-            int[][] toEliminate = {{row,0}};
-            for (int i = 1; i < rows-row; i++){
-                char currentGem = board[row+i][i][0];
-                if (validateColor == currentGem){
-                    int[] currentPosition = {row+i,i};
-                    toEliminate = agregarFila(toEliminate,currentPosition);
-                }else {
-                    if(toEliminate.length >= 3){
+
+        for (int k = 0; k < rows + columns - 1; k++) {
+            int startRow = Math.max(0, k - columns + 1);
+            int count = Math.min(k + 1, Math.min(rows, columns - startRow));
+            char validateColor = board[startRow][columns - 1][0];
+            int[][] toEliminate = {{startRow,columns - 1}};
+
+            for (int j = 0; j < count; j++) {
+                int row = startRow + j;
+                int col = Math.min(columns - 1, Math.max(0, k - startRow - j));
+                char currentGem = board[row][col][0];
+
+                if (validateColor == currentGem) {
+                    int[] currentPosition = {row, col};
+                    toEliminate = agregarFila(toEliminate, currentPosition);
+                } else {
+                    if (toEliminate.length >= 3) {
                         punctuation += toEliminate.length;
                         eliminateGems(toEliminate);
-                    }else {
-                        toEliminate = new int[][]{{row+i,i}};
-                        validateColor = board[row+i][i][0];
+                    } else {
+                        toEliminate = new int[][]{{row, col}};
+                        validateColor = board[row][col][0];
                     }
                 }
             }
-            // Verificar puntaje para la última fila
-            if(toEliminate.length >= 3){
+            if (toEliminate.length >= 3) {
                 punctuation += toEliminate.length;
                 eliminateGems(toEliminate);
             }
         }
-
-
-        for (int row = 2; row < rows-1; row++){
-            char validateColor = board[row][columns-1][0];
-            int[][] toEliminate = {{row,columns-1}};
-            for (int i = 1; i <= row; i++){
-                char currentGem = board[row-i][columns-1-i][0];
-                if (validateColor == currentGem){
-                    int[] currentPosition = {row-i,columns-1-i};
-                    toEliminate = agregarFila(toEliminate,currentPosition);
-                }else {
-                    if(toEliminate.length >= 3){
-                        punctuation += toEliminate.length;
-                        eliminateGems(toEliminate);
-                    }else {
-                        toEliminate = new int[][]{{row-i,columns-1-i}};
-                        validateColor = board[row-i][columns-1-i][0];
-                    }
-                }
-            }
-            // Verificar puntaje para la última fila
-            if(toEliminate.length >= 3){
-                punctuation += toEliminate.length;
-                eliminateGems(toEliminate);
-            }
-        }
-
         dropJewel();
         return punctuation;
     }
