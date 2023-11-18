@@ -28,6 +28,7 @@ public class VintageGUI extends JFrame{
     private int column = 8;
     private int selectedRow = -1;
     private int selectedCol = -1;
+    private JComboBox<String> dimensionComboBox;
     private CardLayout cardLayout;
     private JPanel cardPanel;
     private VintageGUI(){
@@ -67,7 +68,6 @@ public class VintageGUI extends JFrame{
     }
 
     private JPanel createInitialPanel() {
-        vintage = new Vintage(row,column);
         setTitle("Vintage");
         turn = true;
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -186,7 +186,7 @@ public class VintageGUI extends JFrame{
         JPanel dimensionsPanel = new JPanel(new FlowLayout());
         JLabel dimensionLabel = new JLabel("Dimensiones del tablero:");
         String[] dimensionOptions = {"6x6" ,"7x7", "8x8", "9x9", "10x10", "11x11"};
-        JComboBox<String> dimensionComboBox = new JComboBox<>(dimensionOptions);
+        dimensionComboBox = new JComboBox<>(dimensionOptions);
         dimensionsPanel.add(dimensionLabel);
         dimensionsPanel.add(dimensionComboBox);
 
@@ -273,8 +273,12 @@ public class VintageGUI extends JFrame{
         JPanel winnerPanel = new JPanel();
         winnerPanel.setLayout(new BorderLayout());
 
-        JLabel mensajeLabel = new JLabel("¡Felicidades, " + ganador + "! Eres el ganador.");
+        JLabel mensajeLabel = new JLabel("<html><center><h1>¡Felicidades, " + ganador + "!</h1><p>Eres el ganador.</p></center></html>");
         mensajeLabel.setHorizontalAlignment(JLabel.CENTER);
+
+        ImageIcon trophyIcon = new ImageIcon("C:\\Users\\Equipo\\OneDrive\\Escritorio\\POOB\\Labs\\Lab 5\\ImagesGUI\\trophy.jpg"); // Reemplaza "trophy.png" con la ruta de tu imagen de trofeo
+        JLabel trophyLabel = new JLabel(trophyIcon);
+        trophyLabel.setHorizontalAlignment(JLabel.CENTER);
 
         JButton volverButton = new JButton("Volver al Menú Principal");
         volverButton.addActionListener(new ActionListener() {
@@ -286,8 +290,8 @@ public class VintageGUI extends JFrame{
                 cardLayout.show(cardPanel, "initial");
             }
         });
-
-        winnerPanel.add(mensajeLabel, BorderLayout.CENTER);
+        winnerPanel.add(mensajeLabel, BorderLayout.NORTH);
+        winnerPanel.add(trophyLabel, BorderLayout.CENTER);
         winnerPanel.add(volverButton, BorderLayout.SOUTH);
 
         return winnerPanel;
@@ -296,6 +300,20 @@ public class VintageGUI extends JFrame{
         // Implementa la lógica para aplicar la configuración personalizada
         JOptionPane.showMessageDialog(this, "Configuración personalizada aplicada");
         this.tablero = true;
+
+        // Obtener el valor seleccionado del desplegable
+        String selectedDimension = (String) dimensionComboBox.getSelectedItem();
+
+        // Dividir la cadena para obtener filas y columnas
+        String[] dimensions = selectedDimension.split("x");
+        int selectedRows = Integer.parseInt(dimensions[0]);
+        int selectedColumns = Integer.parseInt(dimensions[1]);
+
+        // Asignar los valores a los atributos
+        this.row = selectedRows;
+        this.column = selectedColumns;
+
+        // Actualizar el tablero
         prepareElementsBoard();
         cardLayout.show(cardPanel, "game");
     }
@@ -359,7 +377,9 @@ public class VintageGUI extends JFrame{
         });
     }
     private void prepareElementsBoard() {
+
         if (boardPanel == null) {
+            vintage = new Vintage(row,column);
             // Si el tablero aún no se ha creado, crearlo y agregarlo al mainPanel
             boardMatrix = vintage.getBoard();
             boardPanel = new JPanel(new GridLayout(boardMatrix.length, boardMatrix[0].length));
@@ -380,6 +400,8 @@ public class VintageGUI extends JFrame{
             mainPanel.add(boardPanel, BorderLayout.CENTER);
         } else {
             // Si el tablero ya está creado, simplemente refresca su contenido
+            vintage = null;
+            vintage = new Vintage(row, column);
             refresh();
         }
     }
@@ -426,8 +448,8 @@ public class VintageGUI extends JFrame{
 
 
     private void refresh() {
-        boardMatrix = vintage.getBoard(); // Actualizar el estado del tablero
         Component[] components = boardPanel.getComponents();
+        boardMatrix = vintage.getBoard(); // Actualizar el estado del tablero
 
         for (int i = 0; i < boardMatrix.length; i++) {
             for (int j = 0; j < boardMatrix[0].length; j++) {
@@ -437,7 +459,6 @@ public class VintageGUI extends JFrame{
                 setColorFromChar(jewel, boardMatrix[i][j]);
             }
         }
-
         boardPanel.revalidate(); // Asegurar que el panel se redibuje correctamente
         boardPanel.repaint();    // Forzar la repintura del panel
         if(turn){
@@ -536,8 +557,8 @@ public class VintageGUI extends JFrame{
 
         // Agregar las puntuaciones debajo del título
         JPanel scorePanel = new JPanel(new GridLayout(1, 2));
-        int puntuacion_J1 = vintage.getJewels()[0];
-        int puntuacion_J2 = vintage.getJewels()[1];
+        int puntuacion_J1 = 0;
+        int puntuacion_J2 = 0;
         player1Label = new JLabel("Joyas J1: " + puntuacion_J1);
         player2Label = new JLabel("Joyas J2: " + puntuacion_J2);
         String turnos;
