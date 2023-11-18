@@ -5,6 +5,7 @@ import javax.swing.*;
 import javax.swing.event.*;
 import java.sql.PreparedStatement;
 import java.util.*;
+import javax.swing.border.LineBorder;
 import java.io.File;
 import domain.Vintage;
 import domain.VintageException;
@@ -155,10 +156,21 @@ public class VintageGUI extends JFrame{
         JPanel configuracionesPanel = new JPanel(new BorderLayout());
 
         // Crear un panel para los botones con un GridLayout centrado
-        JPanel buttonPanel = new JPanel(new GridLayout(2, 1));
+        JPanel buttonPanel = new JPanel(new GridLayout(3, 1));
 
-        JButton defaultButton = new JButton("Default");
-        JButton personalizadaButton = new JButton("Personalizada");
+        ImageIcon defaultIcon = new ImageIcon("ImagesGUI/default.png");
+        ImageIcon personalizadoIcon = new ImageIcon("ImagesGUI/custom.png");
+        ImageIcon backIcon = new ImageIcon("ImagesGUI/back.png");
+        ImageIcon resizedStartIcon = new ImageIcon(defaultIcon.getImage().getScaledInstance(935, 200, Image.SCALE_SMOOTH));
+        ImageIcon resizedContinueIcon = new ImageIcon(personalizadoIcon.getImage().getScaledInstance(935, 150, Image.SCALE_SMOOTH));
+        ImageIcon resizedExitIcon = new ImageIcon(backIcon.getImage().getScaledInstance(935, 170, Image.SCALE_SMOOTH));
+
+        JButton defaultButton = new JButton(resizedStartIcon);
+        defaultButton.setBackground(Color.GRAY);
+        JButton personalizadaButton = new JButton(resizedContinueIcon);
+        personalizadaButton.setBackground(Color.white);
+        JButton backButton = new JButton(resizedExitIcon);
+        backButton.setBackground(Color.white);
 
         // Asociar ActionListener a los botones según sea necesario
         defaultButton.addActionListener(new ActionListener() {
@@ -167,9 +179,10 @@ public class VintageGUI extends JFrame{
             }
         });
         personalizadaButton.addActionListener(e -> cardLayout.show(cardPanel, "personConfig"));
-
+        backButton.addActionListener(e -> cardLayout.show(cardPanel, "initial"));
         buttonPanel.add(defaultButton);
         buttonPanel.add(personalizadaButton);
+        buttonPanel.add(backButton);
 
         // Agregar el panel de botones al centro de la pantalla de configuraciones
         configuracionesPanel.add(buttonPanel, BorderLayout.CENTER);
@@ -177,9 +190,15 @@ public class VintageGUI extends JFrame{
         return configuracionesPanel;
     }
     private void configuracionesDefalut(){
-        this.tablero = true;
-        prepareElementsBoard();
-        cardLayout.show(cardPanel, "game");
+        int opcion = JOptionPane.showConfirmDialog(this, "La configuración inicial tiene un tamaño de tablero de 8x8 y colores de gemas predefinidos, ¿quieres continuar?", "Confirmar finalizar",
+                JOptionPane.YES_NO_OPTION);
+        if (opcion == JOptionPane.NO_OPTION) {
+            cardLayout.show(cardPanel, "initial");
+        }else{
+            this.tablero = true;
+            prepareElementsBoard();
+            cardLayout.show(cardPanel, "game");
+        }
     }
     private JPanel configuracionesPersonalizadas() {
         JPanel configuracionesPanel = new JPanel(new GridBagLayout());
@@ -187,14 +206,6 @@ public class VintageGUI extends JFrame{
 
         // Panel para el JColorChooser de las joyas
         JPanel colorChooserPanel = new JPanel(new GridLayout(2, 4, 10, 10)); // Añadí espacio entre las celdas (10 píxeles)
-        JButton chooseColorButton = new JButton("Seleccionar Color");
-        chooseColorButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                elegirColor(7); // 7 representa el botón "Seleccionar Color"
-                chooseColorButton.setBackground(coloresPersonalizados[7]);
-            }
-        });
-
         for (int i = 0; i < 7; i++) {
             JPanel jewelColorPanel = crearColorChooserPanel("Color Joya " + (i + 1) + ":", i);
             colorChooserPanel.add(jewelColorPanel);
@@ -205,7 +216,6 @@ public class VintageGUI extends JFrame{
 
         // Panel para mostrar el color seleccionado
         JPanel selectedColorPanel = new JPanel(new FlowLayout());
-        selectedColorPanel.add(chooseColorButton);
 
         // Panel para elegir filas y columnas
         JPanel dimensionsPanel = new JPanel(new FlowLayout());
@@ -341,7 +351,11 @@ public class VintageGUI extends JFrame{
     }
 
     private void cancelar() {
-        cardLayout.show(cardPanel, "init");
+        int opcion = JOptionPane.showConfirmDialog(this, "¿Seguro que quieres cancelar?", "Confirmar cancelacion",
+                JOptionPane.YES_NO_OPTION);
+        if (opcion == JOptionPane.YES_OPTION) {
+            cardLayout.show(cardPanel, "initial");
+        }
     }
     private JPanel createGamePanel() {
 
@@ -408,7 +422,7 @@ public class VintageGUI extends JFrame{
 
             for (int i = 0; i < boardMatrix.length; i++) {
                 for (int j = 0; j < boardMatrix[0].length; j++) {
-                    Jewel jewel = new Jewel();
+                    Jewel jewel = new Jewel(0);
                     jewels[i][j] = jewel;
                     jewel.addMouseListener(new CellClickListener(i, j));
                     boardPanel.add(jewel);
@@ -429,32 +443,40 @@ public class VintageGUI extends JFrame{
     }
 
     private void setColorFromChar(Jewel jewel, char colorChar[]) {
-        Color lightBrown = new Color(222, 184, 135);
+        Color lightBrown = new Color(222, 184, 135, 80);
 
         switch (colorChar[0]) {
             case 'r':
                 jewel.setJewelColor(coloresPersonalizados[0]);
+                jewel.setShape(0);
                 break;
             case 'b':
                 jewel.setJewelColor(coloresPersonalizados[1]);
+                jewel.setShape(1);
                 break;
             case 'a':
                 jewel.setJewelColor(coloresPersonalizados[2]);
+                jewel.setShape(2);
                 break;
             case 'v':
                 jewel.setJewelColor(coloresPersonalizados[3]);
+                jewel.setShape(3);
                 break;
             case 'o':
                 jewel.setJewelColor(coloresPersonalizados[4]);
+                jewel.setShape(0);
                 break;
             case 'm':
                 jewel.setJewelColor(coloresPersonalizados[5]);
+                jewel.setShape(1);
                 break;
             case 'l':
                 jewel.setJewelColor(coloresPersonalizados[6]);
+                jewel.setShape(2);
                 break;
             case 't':
                 jewel.setJewelColor(coloresPersonalizados[7]);
+                jewel.setShape(3);
                 break;
         }
         switch (colorChar[1]){
@@ -462,7 +484,7 @@ public class VintageGUI extends JFrame{
                 jewel.setBackgroundColor(lightBrown);
                 break;
             case 'n':
-                jewel.setBackgroundColor(Color.BLACK);
+                jewel.setBackgroundColor(new Color(0, 0, 0, 120));
                 break;
         }
     }
@@ -535,17 +557,20 @@ public class VintageGUI extends JFrame{
         }
     }
 
-    private class Jewel extends JPanel {
+
+    public class Jewel extends JPanel {
         private Color jewelColor;
         private Color backgroundColor;
+        private int shape; // 0: Círculo, 1: Triángulo, 2: Cuadrado, 3: Pentágono, 4: Hexágono, 5: Heptágono
 
-        public Jewel() {
+        public Jewel(int shape) {
             this.jewelColor = Color.WHITE; // Color predeterminado
             this.backgroundColor = Color.WHITE; // Color predeterminado
+            this.shape = shape;
         }
 
-        public Color getJewelColor() {
-            return jewelColor;
+        public void setShape(int shape){
+            this.shape = shape;
         }
 
         public void setJewelColor(Color jewelColor) {
@@ -566,9 +591,34 @@ public class VintageGUI extends JFrame{
             g.setColor(backgroundColor);
             g.fillRect(0, 0, getWidth(), getHeight());
             g.setColor(jewelColor);
-            g.fillOval(5, 5, getWidth() - 10, getHeight() - 10);
+            setBorder(new LineBorder(Color.BLACK, 1)); // Puedes ajustar el color y el grosor del borde según tus preferencias
+            int[] xPoints, yPoints;
+
+            switch (shape) {
+                case 0: // Círculo
+                    g.fillOval(5, 5, getWidth() - 10, getHeight() - 10);
+                    break;
+                case 1: // Triángulo
+                    xPoints = new int[]{getWidth() / 2, 5, getWidth() - 5};
+                    yPoints = new int[]{5, getHeight() - 5, getHeight() - 5};
+                    g.fillPolygon(xPoints, yPoints, 3);
+                    break;
+                case 2: // Triángulo Invertido
+                    xPoints = new int[]{getWidth() / 2, 5, getWidth() - 5};
+                    yPoints = new int[]{getHeight() - 5, 5, 5};
+                    g.fillPolygon(xPoints, yPoints, 3);
+                    break;
+
+                case 3: // Rombo
+                    xPoints = new int[]{getWidth() / 2, getWidth() / 4, getWidth() / 2, 3 * getWidth() / 4, getWidth() / 2};
+                    yPoints = new int[]{5, getHeight() / 2, getHeight() - 5, getHeight() / 2, 5};
+                    g.fillPolygon(xPoints, yPoints, 5);
+                    break;
+
+            }
         }
     }
+
     private void addTopPanel() {
         // Crear un panel para la parte superior
         JPanel topPanel = new JPanel(new BorderLayout());
