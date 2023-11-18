@@ -284,9 +284,6 @@ public class VintageGUI extends JFrame{
         volverButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                vintage = null;
-                boardMatrix = null;
-                refresh();
                 cardLayout.show(cardPanel, "initial");
             }
         });
