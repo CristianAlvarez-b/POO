@@ -1,7 +1,4 @@
 package domain;
-import javax.swing.*;
-import java.awt.*;
-import java.util.Arrays;
 import java.util.Random;
 
 public class Vintage {
@@ -39,9 +36,10 @@ public class Vintage {
     private boolean verifyGame(){
         boolean gameOver = true;
         for (int row = 0; row < board.length && gameOver; row++){
-            for (int column = 0; column < board[0].length && gameOver; column++){
+            for (int column = 0; column < board[0].length; column++){
                 if (board[row][column][1] != 'n'){
                     gameOver = false;
+                    break;
                 }
             }
         }
