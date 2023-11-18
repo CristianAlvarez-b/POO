@@ -144,14 +144,16 @@ private int traverseDiagonalLeftToRight() {
     int punctuation = 0;
 
     for (int k = 0; k < rows + columns - 1; k++) {
-        int startRow = Math.max(0, k - columns + 1);
-        int count = Math.min(k + 1, Math.min(rows, columns - startRow));
+        int startRow = Math.min(k, rows - 1);
+        int count = Math.min(k + 1, columns);
+
         char validateColor = board[startRow][0][0];
         int[][] toEliminate = {{startRow,0}};
 
         for (int j = 0; j < count; j++) {
-            int row = startRow + j;
-            int col = Math.min(columns - 1, Math.max(0, k - startRow - j));
+            int row = Math.max(0, startRow - j);
+            int col = Math.min(columns - 1, j);
+
             char currentGem = board[row][col][0];
             if (validateColor == currentGem) {
                 int[] currentPosition = {row, col};
