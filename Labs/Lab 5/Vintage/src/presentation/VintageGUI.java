@@ -383,6 +383,41 @@ public class VintageGUI extends JFrame{
         });
         prepareActionsMenu();
     }
+    private void prepareElementsMenu() {
+        // Crear la barra de menú
+        JMenuBar menuBar = new JMenuBar();
+
+        // Crear el menú Archivo
+        JMenu menu = new JMenu("Menu");
+
+        // Crear las opciones del menú
+        JMenuItem nuevoMenuItem = new JMenuItem("Nuevo");
+
+        JSeparator separator1 = new JSeparator();
+
+        JMenuItem abrirMenuItem = new JMenuItem("Abrir");
+        JMenuItem salvarMenuItem = new JMenuItem("Salvar");
+
+        // Crear un separador entre las opciones
+        JSeparator separator2 = new JSeparator();
+
+        // Crear la opción de salir
+        JMenuItem salirMenuItem = new JMenuItem("Salir");
+
+        // Agregar las opciones al menú
+        menu.add(nuevoMenuItem);
+        menu.add(separator1);
+        menu.add(abrirMenuItem);
+        menu.add(salvarMenuItem);
+        menu.add(separator2); // Separador
+        menu.add(salirMenuItem);
+
+        // Agregar el menú a la barra de menú
+        menuBar.add(menu);
+
+        // Establecer la barra de menú en la ventana
+        setJMenuBar(menuBar);
+    }
     private void prepareActionsMenu() {
         ActionListener salirListener = e -> confirmarCierre();
         JMenuItem salirMenuItem = getJMenuBar().getMenu(0).getItem(5);
@@ -808,41 +843,7 @@ public class VintageGUI extends JFrame{
             refresh();
         }
     }
-    private void prepareElementsMenu() {
-        // Crear la barra de menú
-        JMenuBar menuBar = new JMenuBar();
 
-        // Crear el menú Archivo
-        JMenu menu = new JMenu("Menu");
-
-        // Crear las opciones del menú
-        JMenuItem nuevoMenuItem = new JMenuItem("Nuevo");
-
-        JSeparator separator1 = new JSeparator();
-
-        JMenuItem abrirMenuItem = new JMenuItem("Abrir");
-        JMenuItem salvarMenuItem = new JMenuItem("Salvar");
-
-        // Crear un separador entre las opciones
-        JSeparator separator2 = new JSeparator();
-
-        // Crear la opción de salir
-        JMenuItem salirMenuItem = new JMenuItem("Salir");
-
-        // Agregar las opciones al menú
-        menu.add(nuevoMenuItem);
-        menu.add(separator1);
-        menu.add(abrirMenuItem);
-        menu.add(salvarMenuItem);
-        menu.add(separator2); // Separador
-        menu.add(salirMenuItem);
-
-        // Agregar el menú a la barra de menú
-        menuBar.add(menu);
-
-        // Establecer la barra de menú en la ventana
-        setJMenuBar(menuBar);
-    }
     private void resetColoresDefault(){
         this.coloresPersonalizados = new Color[]{
                 Color.RED, Color.BLUE, Color.YELLOW, Color.GREEN, Color.ORANGE,
