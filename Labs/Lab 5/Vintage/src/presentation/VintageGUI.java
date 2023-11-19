@@ -2,12 +2,15 @@ package presentation;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import java.io.*;
 import javax.swing.border.LineBorder;
 import java.io.File;
 import domain.Vintage;
 import domain.VintageException;
 
+/**
+ * The VintageGUI class represents the graphical user interface for the Vintage game.
+ * It extends the JFrame class and provides a user-friendly interface for playing the game.
+ */
 public class VintageGUI extends JFrame{
 
     private JPanel mainPanel;
@@ -26,16 +29,30 @@ public class VintageGUI extends JFrame{
     private JComboBox<String> dimensionComboBox;
     private CardLayout cardLayout;
     private JPanel cardPanel;
+    /**
+     * Constructs a VintageGUI object, initializing the elements and actions for the graphical interface.
+     *
+     * @throws VintageException If an exception specific to the Vintage game occurs.
+     */
     private VintageGUI() throws VintageException {
         prepareElements();
         prepareActions();
     }
+    /**
+     * Prepares the elements of the graphical interface.
+     *
+     * @throws VintageException If an exception specific to the Vintage game occurs.
+     */
     private void prepareElements() throws VintageException {
 
         prepareScreens();
         prepareElementsMenu();
     }
-
+    /**
+     * Prepares the screens for the graphical interface.
+     *
+     * @throws VintageException If an exception specific to the Vintage game occurs.
+     */
     private void prepareScreens() throws VintageException {
         cardLayout = new CardLayout();
         cardPanel = new JPanel(cardLayout);
@@ -61,7 +78,11 @@ public class VintageGUI extends JFrame{
         mainPanel.add(cardPanel, BorderLayout.CENTER);
         setContentPane(mainPanel);
     }
-
+    /**
+     * Crea y retorna un panel inicial que muestra una imagen de bienvenida y botones para iniciar, continuar o salir del juego.
+     *
+     * @return JPanel con la interfaz gráfica inicial.
+     */
     private JPanel createInitialPanel() {
         setTitle("Vintage");
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -124,7 +145,11 @@ public class VintageGUI extends JFrame{
 
         return initialPanel;
     }
-
+    /**
+     * Crea y retorna un panel de continuación que permite al usuario cargar partidas guardadas o volver al panel inicial.
+     *
+     * @return JPanel con la interfaz gráfica de continuación.
+     */
     private JPanel createContinuePanel(){
         JPanel continuePanel = new JPanel(new BorderLayout());
 
@@ -153,6 +178,11 @@ public class VintageGUI extends JFrame{
         continuePanel.add(buttonPanel, BorderLayout.CENTER);
         return continuePanel;
     }
+    /**
+     * Crea y retorna un panel de configuraciones iniciales con opciones predeterminadas o personalizadas.
+     *
+     * @return JPanel con la interfaz gráfica de configuraciones iniciales.
+     */
     private JPanel configuracionesIniciales(){
         JPanel configuracionesPanel = new JPanel(new BorderLayout());
 
@@ -192,6 +222,11 @@ public class VintageGUI extends JFrame{
 
         return configuracionesPanel;
     }
+    /**
+     * Muestra un cuadro de diálogo para confirmar la configuración predeterminada y procede con el juego si es aceptado.
+     *
+     * @throws VintageException Si hay un problema con la configuración inicial.
+     */
     private void configuracionesDefalut() throws VintageException {
         int opcion = JOptionPane.showConfirmDialog(this, "La configuración inicial tiene un tamaño de tablero de 8x8 y colores de gemas predefinidos, ¿quieres continuar?", "Confirmar finalizar",
                 JOptionPane.YES_NO_OPTION);
@@ -203,6 +238,11 @@ public class VintageGUI extends JFrame{
             cardLayout.show(cardPanel, "game");
         }
     }
+    /**
+     * Crea y retorna un panel de configuraciones personalizadas que permite al usuario ajustar colores y tipos de gemas.
+     *
+     * @return JPanel con la interfaz gráfica de configuraciones personalizadas.
+     */
     private JPanel configuracionesPersonalizadas() {
         JPanel configuracionesPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -278,8 +318,13 @@ public class VintageGUI extends JFrame{
         return mainPanel;
     }
 
-
-
+    /**
+     * Crea y retorna un panel que permite al usuario seleccionar un color para una joya específica.
+     *
+     * @param label Etiqueta que describe la acción del panel.
+     * @param joya Identificador de la joya para la cual se seleccionará el color.
+     * @return JPanel con un botón para seleccionar el color.
+     */
     private JPanel crearColorChooserPanel(String label, int joya) {
         JPanel colorChooserPanel = new JPanel(new BorderLayout());
         JLabel colorChooserLabel = new JLabel(label);
@@ -293,6 +338,11 @@ public class VintageGUI extends JFrame{
         colorChooserPanel.add(colorChooserButton, BorderLayout.CENTER);
         return colorChooserPanel;
     }
+    /**
+     * Abre un selector de color y guarda el color seleccionado en el arreglo de colores personalizados.
+     *
+     * @param joya Identificador de la joya para la cual se seleccionará el color.
+     */
     private void elegirColor(int joya) {
         new JColorChooser();
         Color colorElegido = JColorChooser.showDialog(this, "Seleccionar Color", Color.BLACK);
@@ -306,6 +356,11 @@ public class VintageGUI extends JFrame{
             }
         }
     }
+    /**
+     * Crea y retorna un panel que muestra un mensaje de felicitaciones al ganador, una imagen de trofeo y un botón para volver al menú principal.
+     *
+     * @return JPanel con la interfaz gráfica del panel de ganador.
+     */
     private JPanel createWinnerPanel() {
         String ganador;
         if(vintage.getJewels()[0] > vintage.getJewels()[1]){
@@ -331,6 +386,11 @@ public class VintageGUI extends JFrame{
 
         return winnerPanel;
     }
+    /**
+     * Aplica la configuración personalizada seleccionada por el usuario y muestra un mensaje de confirmación.
+     *
+     * @throws VintageException Si hay un problema con la configuración personalizada.
+     */
     private void aplicarConfiguracion() throws VintageException {
         // Implementa la lógica para aplicar la configuración personalizada
         JOptionPane.showMessageDialog(this, "Configuración personalizada aplicada");
@@ -352,7 +412,9 @@ public class VintageGUI extends JFrame{
         prepareElementsBoard();
         cardLayout.show(cardPanel, "game");
     }
-
+    /**
+     * Muestra un cuadro de diálogo para confirmar la cancelación y vuelve al menú principal si es aceptado.
+     */
     private void cancelar() {
         int opcion = JOptionPane.showConfirmDialog(this, "¿Seguro que quieres cancelar?", "Confirmar cancelacion",
                 JOptionPane.YES_NO_OPTION);
@@ -360,6 +422,12 @@ public class VintageGUI extends JFrame{
             cardLayout.show(cardPanel, "initial");
         }
     }
+    /**
+     * Crea y retorna un panel de juego principal con elementos como el título, el tablero y los botones.
+     *
+     * @return JPanel con la interfaz gráfica del panel de juego.
+     * @throws VintageException Si hay un problema al preparar el tablero.
+     */
     private JPanel createGamePanel() throws VintageException {
 
         // Crear el panel principal con BorderLayout
@@ -373,7 +441,9 @@ public class VintageGUI extends JFrame{
         prepareElementsBoard();
         return mainPanel;
     }
-
+    /**
+     * Prepara las acciones para el cierre de la ventana y el menú.
+     */
     private void prepareActions(){
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
@@ -383,6 +453,9 @@ public class VintageGUI extends JFrame{
         });
         prepareActionsMenu();
     }
+    /**
+     * Prepara y muestra la barra de menú en la ventana principal con opciones como Nuevo, Abrir, Salvar y Salir.
+     */
     private void prepareElementsMenu() {
         // Crear la barra de menú
         JMenuBar menuBar = new JMenuBar();
@@ -418,6 +491,9 @@ public class VintageGUI extends JFrame{
         // Establecer la barra de menú en la ventana
         setJMenuBar(menuBar);
     }
+    /**
+     * Asocia acciones a los elementos del menú, como Nuevo, Abrir, Salvar y Salir.
+     */
     private void prepareActionsMenu() {
         ActionListener salirListener = e -> confirmarCierre();
         JMenuItem salirMenuItem = getJMenuBar().getMenu(0).getItem(5);
@@ -439,6 +515,11 @@ public class VintageGUI extends JFrame{
             salvarArchivo();
         });
     }
+    /**
+     * Prepara el tablero de juego y lo muestra en la ventana principal.
+     *
+     * @throws VintageException Si hay un problema al preparar el tablero.
+     */
     private void prepareElementsBoard() throws VintageException {
 
         if (boardPanel == null) {
@@ -469,7 +550,12 @@ public class VintageGUI extends JFrame{
             refresh();
         }
     }
-
+    /**
+     * Establece el color de una joya y su fondo basándose en un carácter específico de la matriz de tablero.
+     *
+     * @param jewel     Joya a la que se le aplicará el color.
+     * @param colorChar Carácter que representa el color en la matriz de tablero.
+     */
     private void setColorFromChar(Jewel jewel, char[] colorChar) {
         switch (colorChar[0]) {
             case 'r':
@@ -516,6 +602,9 @@ public class VintageGUI extends JFrame{
     }
 
 
+    /**
+     * Actualiza la apariencia del tablero de juego y muestra información actualizada como el turno y las puntuaciones.
+     */
     private void refresh() {
 
         boardMatrix = vintage.getBoard(); // Actualizar el estado del tablero
@@ -543,7 +632,12 @@ public class VintageGUI extends JFrame{
     }
 
 
-
+    /**
+     * Maneja el evento de clic en una celda del tablero.
+     *
+     * @param row Fila de la celda clicada.
+     * @param col Columna de la celda clicada.
+     */
     private void handleCellClick(int row, int col) {
         if (selectedRow == -1 && selectedCol == -1) {
             // No hay celda seleccionada, seleccionar la actual
@@ -568,7 +662,9 @@ public class VintageGUI extends JFrame{
         }
     }
 
-
+    /**
+     * Clase interna que escucha los clics en una celda del tablero.
+     */
     private class CellClickListener extends MouseAdapter {
         private final int row;
         private final int col;
@@ -584,7 +680,9 @@ public class VintageGUI extends JFrame{
         }
     }
 
-
+    /**
+     * Clase que representa una joya en el tablero de juego.
+     */
     public static class Jewel extends JPanel {
         private Color jewelColor;
         private Color backgroundColor;
@@ -642,7 +740,9 @@ public class VintageGUI extends JFrame{
             }
         }
     }
-
+    /**
+     * Agrega el panel superior que contiene el título, las puntuaciones y el turno al mainPanel.
+     */
     private void addTopPanel() {
         // Crear un panel para la parte superior
         JPanel topPanel = new JPanel(new BorderLayout());
@@ -675,7 +775,9 @@ public class VintageGUI extends JFrame{
         // Agregar el panel superior a la parte superior de la pantalla principal
         mainPanel.add(topPanel, BorderLayout.NORTH);
     }
-
+    /**
+     * Agrega el panel central (tablero) al mainPanel.
+     */
     private void addMiddlePanel() {
         // Crear un panel para la parte central (tablero)
         JPanel middlePanel = new JPanel(); // Aquí debes agregar tu lógica para el tablero
@@ -683,7 +785,9 @@ public class VintageGUI extends JFrame{
         // Agregar el panel a la parte central de la pantalla principal
         mainPanel.add(middlePanel, BorderLayout.CENTER);
     }
-
+    /**
+     * Agrega el panel inferior con botones "Finalizar" y "Resetear" al mainPanel.
+     */
     private void addBottomPanel() {
         // Crear un panel para la parte inferior
         JPanel bottomPanel = new JPanel();
@@ -708,7 +812,9 @@ public class VintageGUI extends JFrame{
         // Agregar el panel inferior a la parte inferior de la pantalla principal
         mainPanel.add(bottomPanel, BorderLayout.SOUTH);
     }
-
+    /**
+     * Abre un cuadro de diálogo para que el usuario seleccione un archivo. Muestra un mensaje con el nombre del archivo seleccionado.
+     */
     private void abrirArchivo() {
         JFileChooser fileChooser = new JFileChooser();
         int result = fileChooser.showOpenDialog(this);
@@ -717,7 +823,9 @@ public class VintageGUI extends JFrame{
             JOptionPane.showMessageDialog(this, "Funcionalidad Abrir en construcción. Archivo seleccionado: " + selectedFile.getName());
         }
     }
-
+    /**
+     * Actualiza las etiquetas de puntuación con las puntuaciones actuales de los jugadores.
+     */
     private void actualizarPuntuaciones() {
         int puntuacion_J1 = vintage.getJewels()[0];
         int puntuacion_J2 = vintage.getJewels()[1];
@@ -725,6 +833,9 @@ public class VintageGUI extends JFrame{
         player1Label.setText("Joyas J1: " + puntuacion_J1);
         player2Label.setText("Joyas J2: " + puntuacion_J2);
     }
+    /**
+     * Abre un cuadro de diálogo para que el usuario seleccione la ubicación y el nombre de un archivo para salvar. Muestra un mensaje con el nombre del archivo seleccionado.
+     */
     private void salvarArchivo() {
         JFileChooser fileChooser = new JFileChooser();
         int result = fileChooser.showSaveDialog(this);
@@ -733,6 +844,9 @@ public class VintageGUI extends JFrame{
             JOptionPane.showMessageDialog(this, "Funcionalidad Salvar en construcción. Archivo seleccionado: " + selectedFile.getName());
         }
     }
+    /**
+     * Muestra un cuadro de diálogo de confirmación para cerrar la aplicación. Cierra la aplicación si el usuario elige "Sí".
+     */
     private void confirmarCierre() {
         int opcion = JOptionPane.showConfirmDialog(this, "¿Seguro que quieres salir?", "Confirmar cierre",
                 JOptionPane.YES_NO_OPTION);
@@ -742,6 +856,9 @@ public class VintageGUI extends JFrame{
             dispose();
         }
     }
+    /**
+     * Muestra un cuadro de diálogo de confirmación para finalizar el juego. Cambia al panel inicial si el usuario elige "Sí".
+     */
     private void finalizarAccion() {
         int opcion = JOptionPane.showConfirmDialog(this, "¿Seguro que quieres finaliar el juego?", "Confirmar finalizar",
                 JOptionPane.YES_NO_OPTION);
@@ -750,7 +867,10 @@ public class VintageGUI extends JFrame{
         }
     }
 
-
+    /**
+     * Muestra un cuadro de diálogo de confirmación para resetear el juego. Cambia al panel inicial si el usuario elige "Sí" y resetea el juego.
+     * @throws VintageException Excepción específica de la aplicación Vintage.
+     */
     private void resetearAccion() throws VintageException{
         int opcion = JOptionPane.showConfirmDialog(this, "¿Seguro que quieres resetear?", "Confirmar cierre",
                 JOptionPane.YES_NO_OPTION);
@@ -762,14 +882,20 @@ public class VintageGUI extends JFrame{
             refresh();
         }
     }
-
+    /**
+     * Resetea los colores personalizados a los colores predeterminados.
+     */
     private void resetColoresDefault(){
         this.coloresPersonalizados = new Color[]{
                 Color.RED, Color.BLUE, Color.YELLOW, Color.GREEN, Color.ORANGE,
                 new Color(147, 15, 194, 255), Color.CYAN, new Color(222, 184, 135, 80), Color.BLACK
         };
     }
-
+    /**
+     * Método principal que inicia la aplicación VintageGUI.
+     * @param args Argumentos de la línea de comandos.
+     * @throws VintageException Excepción específica de la aplicación Vintage.
+     */
     public static void main(String[] args) throws VintageException {
         VintageGUI gui=new VintageGUI();
         gui.setVisible(true);
