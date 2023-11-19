@@ -81,7 +81,7 @@ public class VintageTest {
             Vintage vintage = new Vintage(5,5);
             vintage.play(0,0,0,1);
             vintage.play(0,0,1,1);
-            assertTrue(vintage.getJewels()[0] > 0 || vintage.getJewels()[1] > 0);
+            assertTrue(vintage.getJewels()[0] > 0);
         } catch (VintageException e) {
             fail();
         }
