@@ -1,12 +1,23 @@
 package domain;
 import java.util.Random;
 
+/**
+ * The Vintage class represents the core logic for a Vintage game, where players can swap gems on a grid to
+ * create consecutive patterns and score points.
+ */
 public class Vintage {
 
     private char[][][] board;
     private int[] jewels;
     private int turn;
 
+    /**
+     * Constructs a Vintage game with the specified number of rows and columns.
+     *
+     * @param row    The number of rows in the game board.
+     * @param column The number of columns in the game board.
+     * @throws VintageException if the specified size is invalid (negative).
+     */
     public Vintage(int row, int column) throws VintageException{
         if(row < 0 || column < 0){
             throw new VintageException(VintageException.INVALID_SIZE);
@@ -16,6 +27,16 @@ public class Vintage {
         jewels = new int[]{0,0};
         turn = 0;
     }
+    /**
+     * Executes a player move by swapping gems at two specified positions.
+     *
+     * @param row1    The row of the first gem.
+     * @param column1 The column of the first gem.
+     * @param row2    The row of the second gem.
+     * @param column2 The column of the second gem.
+     * @return true if the move is valid and the game continues, false if the move ends the game.
+     * @throws VintageException if the move is invalid.
+     */
     public boolean play(int row1, int column1, int row2, int column2) throws VintageException {
         if (isValidMove(row1,column1,row2,column2)) {
             turn += 1;
@@ -46,6 +67,15 @@ public class Vintage {
         return gameOver;
     }
 
+    /**
+     * Checks if a move is valid.
+     *
+     * @param row1    The row of the first gem.
+     * @param column1 The column of the first gem.
+     * @param row2    The row of the second gem.
+     * @param column2 The column of the second gem.
+     * @return true
+     */
     private boolean isValidMove(int row1, int column1, int row2, int column2)throws VintageException{
         if (isValidPosition(row1, column1) && isValidPosition(row2, column2)){
             // Verificar si las posiciones están alrededor (arriba, abajo, o en cualquier diagonal)
@@ -62,6 +92,9 @@ public class Vintage {
         }
     }
 
+    /**
+     * Validates consecutive gem patterns in rows, columns, and diagonals and updates the scores accordingly.
+     */
     private void validateConsecutiveGems() {
         int punctuation = validateRows() + validateColumns() + traverseDiagonalLeftToRight()+
                 traverseDiagonalRightToLeft();
@@ -71,7 +104,11 @@ public class Vintage {
             jewels[1] += punctuation;
         }
     }
-
+    /**
+     * Validates consecutive gem patterns in rows and updates the scores.
+     *
+     * @return the total punctuation obtained from row patterns.
+     */
     private int validateRows(){
         int rows = board.length;
         int columns = board[0].length;
@@ -104,7 +141,11 @@ public class Vintage {
         dropJewel();
         return punctuation;
     }
-
+    /**
+     * Validates consecutive gem patterns in columns and updates the scores.
+     *
+     * @return the total punctuation obtained from column patterns.
+     */
     private int validateColumns() {
         int rows = board.length;
         int columns = board[0].length;
@@ -139,7 +180,11 @@ public class Vintage {
         dropJewel();
         return punctuation;
     }
-
+    /**
+     * Validates consecutive gem patterns in the left-to-right diagonal and updates the scores.
+     *
+     * @return the total punctuation obtained from left-to-right diagonal patterns.
+     */
     private int traverseDiagonalLeftToRight() {
         int rows = board.length;
         int columns = board[0].length;
@@ -184,7 +229,11 @@ public class Vintage {
         return punctuation;
     }
 
-
+    /**
+     * Validates consecutive gem patterns in the right-to-left diagonal and updates the scores.
+     *
+     * @return the total punctuation obtained from right-to-left diagonal patterns.
+     */
     private int traverseDiagonalRightToLeft() {
         int rows = board.length;
         int columns = board[0].length;
@@ -223,7 +272,13 @@ public class Vintage {
         dropJewel();
         return punctuation;
     }
-
+    /**
+     * Adds a new row to a matrix.
+     *
+     * @param matriz     The original matrix.
+     * @param nuevaFila  The new row to be added.
+     * @return a new matrix with the additional row.
+     */
     private int[][] agregarFila(int[][] matriz, int[] nuevaFila) {
         int filasOriginales = matriz.length;
         int columnasOriginales = matriz[0].length;
@@ -242,6 +297,11 @@ public class Vintage {
         return nuevaMatriz;
     }
 
+    /**
+     * Eliminates gems based on provided positions.
+     *
+     * @param toEliminate The positions of gems to be eliminated.
+     */
     private void eliminateGems(int[][] toEliminate){
         for (int[] jewelPosition : toEliminate){
             int row = jewelPosition[0];
@@ -253,13 +313,17 @@ public class Vintage {
             board[row][column][0] = 'w';
         }
     }
-
+    /**
+     * Sets the game board to the provided state.
+     *
+     * @param board The new state of the game board.
+     */
     public void setBoard(char[][][] board){
         this.board = board;
     }
-    public void setJewels(int[] jewels){
-        this.jewels = jewels;
-    }
+    /**
+     * Drops gems down after eliminating some.
+     */
     private void dropJewel() {
         for (int column = 0; column < board[0].length; column++){
             for (int row = board.length-1; row >= 0 ; row--){
@@ -268,8 +332,14 @@ public class Vintage {
                 }
             }
         }
-
     }
+    /**
+     * Fills an empty cell with a new gem color based on the gems above it.
+     *
+     * @param row    The row of the empty cell.
+     * @param column The column of the empty cell.
+     * @return the color of the new gem to be placed in the empty cell.
+     */
     private char fillJewel(int row, int column){
         char color = 'w';
         for (int r = row-1; color=='w' && r>=0; r--){
@@ -286,10 +356,20 @@ public class Vintage {
         }
         return color;
     }
+    /**
+     * Checks if a position is valid on the board.
+     *
+     * @param row    The row of the position.
+     * @param column The column of the position.
+     * @return true if the position is valid, false otherwise.
+     */
 
     private boolean isValidPosition(int row, int column) {
         return row >= 0 && row < board.length && column >= 0 && column < board[0].length;
     }
+    /**
+     * Fills the board with random gem colors.
+     */
     private void fillBoardWithRandomChars() {
         Random random = new Random();
         String possibleChars = "rbavolm";
