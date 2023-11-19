@@ -140,43 +140,50 @@ public class Vintage {
         return punctuation;
     }
 
-private int traverseDiagonalLeftToRight() {
-    int rows = board.length;
-    int columns = board[0].length;
-    int punctuation = 0;
+    private int traverseDiagonalLeftToRight() {
+        int rows = board.length;
+        int columns = board[0].length;
+        int punctuation = 0;
 
-    for (int k = 0; k < rows + columns - 1; k++) {
-        int startRow = Math.max(0, k - columns + 1);
-        int count = Math.min(k + 1, Math.min(rows, columns - startRow));
-        char validateColor = board[startRow][0][0];
-        int[][] toEliminate = {{startRow,0}};
+        for (int k = 0; k < rows + columns - 1; k++) {
+            int startRow = Math.max(0, k - columns + 1);
+            int count = Math.min(k + 1, Math.min(rows, columns - startRow));
+            char validateColor = board[startRow][0][0];  // Primer elemento de la diagonal
+            int consecutiveCount = 1;
+            int[][] toEliminate = {{startRow, 0}};  // Coordenadas de la primera gema
 
-        for (int j = 0; j < count; j++) {
-            int row = startRow + j;
-            int col = Math.min(columns - 1, Math.max(0, k - startRow - j));
-            char currentGem = board[row][col][0];
-            if (validateColor == currentGem) {
-                int[] currentPosition = {row, col};
-                toEliminate = agregarFila(toEliminate, currentPosition);
-            } else {
-                if (toEliminate.length >= 3) {
-                    punctuation += toEliminate.length;
-                    eliminateGems(toEliminate);
+            for (int j = 1; j < count; j++) {
+                int row = startRow + j;
+                int col = Math.min(columns - 1, j);
+                char currentGem = board[row][col][0];
+
+                if (validateColor == currentGem) {
+                    consecutiveCount++;
+                    int[] currentPosition = {row, col};
+                    toEliminate = agregarFila(toEliminate, currentPosition);
                 } else {
+                    if (consecutiveCount >= 3) {
+                        punctuation += consecutiveCount;
+                        eliminateGems(toEliminate);
+                    }
+
+                    validateColor = currentGem;
+                    consecutiveCount = 1;
                     toEliminate = new int[][]{{row, col}};
-                    validateColor = board[row][col][0];
                 }
             }
 
+            // Verificar al final de la diagonal
+            if (consecutiveCount >= 3) {
+                punctuation += consecutiveCount;
+                eliminateGems(toEliminate);
+            }
         }
-        if (toEliminate.length >= 3) {
-            punctuation += toEliminate.length;
-            eliminateGems(toEliminate);
-        }
+
+        dropJewel();
+        return punctuation;
     }
-    dropJewel();
-    return punctuation;
-}
+
 
     private int traverseDiagonalRightToLeft() {
         int rows = board.length;
