@@ -4,4 +4,9 @@ public class Golden extends Cell{
         super(board);
         active = true;
     }
+
+    public void setStone(Stone stone){
+        super.setStone(stone);
+        active = false;
+    }
 }

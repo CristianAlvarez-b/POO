@@ -1,6 +1,6 @@
 public class Cell {
     protected Board board;
-    private Stone stone;
+    protected Stone stone;
 
     public Cell(Board board) {
         this.board = board;
@@ -12,5 +12,9 @@ public class Cell {
 
     public Stone getStone() {
         return stone;
+    }
+
+    public int updateState(){
+        return 0;
     }
 }

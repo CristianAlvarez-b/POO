@@ -50,12 +50,15 @@ public class Board {
         }
     }
 
-    public void addStone(int row, int column, Stone stone) throws GomokuException {
+    public int addStone(int row, int column, Stone stone) throws GomokuException {
+        int punctuation = 0;
         if (!isBoardFull()) {
             if (isValidPosition(row, column)) {
                 Cell cell = cells[row][column];
                 if (!cellHasStone(cell)) {
                     cell.setStone(stone);
+                    punctuation = cell.updateState();
+                    turn += 1;
                 } else {
                     throw new GomokuException(GomokuException.STONE_OVERLOAP);
                 }
@@ -65,6 +68,8 @@ public class Board {
         }else {
             throw new GomokuException(GomokuException.FULL_BOARD);
         }
+        verifyGame();
+        return punctuation;
     }
 
     private boolean isValidPosition(int row, int column) throws GomokuException{
@@ -87,5 +92,35 @@ public class Board {
             }
         }
         return true; // Todas las celdas tienen piedra, el tablero está lleno
+    }
+
+    public Cell[][] getCells() {
+        return cells;
+    }
+
+    public int[] getDimension() {
+        return dimension;
+    }
+
+    public List<int[]> getAdjacentCellPositions(int row, int column) {
+        List<int[]> positions = new ArrayList<>();
+
+        // Definir los límites para iterar sobre las celdas adyacentes
+        int startRow = Math.max(0, row - 1);
+        int endRow = Math.min(dimension[0] - 1, row + 1);
+        int startColumn = Math.max(0, column - 1);
+        int endColumn = Math.min(dimension[1] - 1, column + 1);
+
+        // Iterar sobre las celdas adyacentes y agregar sus posiciones a la lista
+        for (int i = startRow; i <= endRow; i++) {
+            for (int j = startColumn; j <= endColumn; j++) {
+                // Ignorar la celda actual (la posición dada)
+                if (i != row || j != column) {
+                    positions.add(new int[]{i, j});
+                }
+            }
+        }
+
+        return positions;
     }
 }

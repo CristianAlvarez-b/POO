@@ -4,4 +4,18 @@ public class Mine extends Cell{
         super(board);
         active = true;
     }
+
+    public void setStone(Stone stone){
+        super.setStone(stone);
+        active = false;
+    }
+
+    @Override
+    public int updateState(){
+        int punctuation = 0;
+        if(stone != null){
+
+        }
+        return punctuation;
+    }
 }
