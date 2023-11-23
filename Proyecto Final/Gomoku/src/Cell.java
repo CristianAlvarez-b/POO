@@ -1,9 +1,11 @@
 public class Cell {
     protected Board board;
     protected Stone stone;
+    protected int[] position;
 
-    public Cell(Board board) {
+    public Cell(Board board, int[] position) {
         this.board = board;
+        this.position = position;
     }
 
     public void setStone(Stone stone) {

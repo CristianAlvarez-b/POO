@@ -1,22 +1,26 @@
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 public class Board {
-    private int[] dimension;
-    private int turn;
+    private final int[] dimension;
     private Cell[][] cells;
-    public Board(int rows, int columns){
+    private Player[] players;
+    public Board(int rows, int columns) throws Exception {
         dimension = new int[]{rows, columns};
-        turn = 0;
         fillCells();
     }
 
-    private void fillCells() {
+    public void setPlayers(Player[] players) {
+        this.players = players;
+    }
+
+    private void fillCells() throws Exception {
         cells = new Cell[dimension[0]][dimension[1]];
 
         // Llenar la matriz con celdas normales
         for (int i = 0; i < dimension[0]; i++) {
             for (int j = 0; j < dimension[1]; j++) {
-                cells[i][j] = new Cell(this);
+                cells[i][j] = new Cell(this, new int[]{i,j});
             }
         }
 
@@ -29,7 +33,7 @@ public class Board {
         placeSpecialCells(totalSpecialCells, Teleport.class);
     }
 
-    private void placeSpecialCells(int totalSpecialCells, Class<? extends Cell> specialCellClass) {
+    private void placeSpecialCells(int totalSpecialCells, Class<? extends Cell> specialCellClass) throws Exception{
         Random random = new Random();
 
         for (int k = 0; k < totalSpecialCells; k++) {
@@ -42,11 +46,7 @@ public class Board {
             } while (specialCellClass.isInstance(cells[i][j]));
 
             // Colocar la celda especial en la posición aleatoria
-            try {
-                cells[i][j] = specialCellClass.getDeclaredConstructor(Board.class).newInstance(this);
-            } catch (Exception e) {
-                e.printStackTrace(); // Manejar la excepción según tu lógica
-            }
+            cells[i][j] = specialCellClass.getDeclaredConstructor(Board.class, int[].class).newInstance(this, new int[]{i,j});
         }
     }
 
@@ -58,7 +58,6 @@ public class Board {
                 if (!cellHasStone(cell)) {
                     cell.setStone(stone);
                     punctuation = cell.updateState();
-                    turn += 1;
                 } else {
                     throw new GomokuException(GomokuException.STONE_OVERLOAP);
                 }
@@ -68,7 +67,6 @@ public class Board {
         }else {
             throw new GomokuException(GomokuException.FULL_BOARD);
         }
-        verifyGame();
         return punctuation;
     }
 
@@ -122,5 +120,14 @@ public class Board {
         }
 
         return positions;
+    }
+
+    public boolean verifyGame(){
+        //En construccion
+        return false;
+    }
+
+    public Player[] getPlayers() {
+        return players;
     }
 }

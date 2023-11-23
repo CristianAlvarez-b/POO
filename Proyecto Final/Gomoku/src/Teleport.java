@@ -2,8 +2,8 @@ import java.util.*;
 
 public class Teleport extends Cell{
     private boolean active;
-    public Teleport(Board board){
-        super(board);
+    public Teleport(Board board, int[] position){
+        super(board, position);
         active = true;
     }
 
@@ -11,7 +11,9 @@ public class Teleport extends Cell{
         super.setStone(stone);
         active = false;
     }
-
+    public boolean isActive() {
+        return active;
+    }
     @Override
     public int updateState(){
         if(stone != null) {
