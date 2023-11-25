@@ -41,7 +41,9 @@ public class Gomoku{
         turn += 1;
         return board.verifyGame();
     }
-
+    public void reset(int row, int col) throws Exception {
+        this.board = new Board(row, col);
+    }
     public Cell[][] board() {
         return board.getCells();
     }
