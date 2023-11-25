@@ -19,11 +19,14 @@ public class GomokuGUI extends JFrame {
     private int selectedRow = -1;
     private int selectedCol = -1;
     private boolean turn = true;
-    private int row = 15;
-    private int col = 15;
-
+    private int size = 10;
+    private int stoneLimit = size*size;
+    private int timeLimit = -1;
+    private boolean canRefill;
+    private Stone[] piedrasJ1;
+    private Stone[] piedrasJ2;
     public GomokuGUI() throws Exception {
-        gomoku = new Gomoku(row, col, 800, 1000);
+        gomoku = new Gomoku(size ,stoneLimit, timeLimit);
         prepareElements();
         prepareActions();
     }
@@ -31,8 +34,7 @@ public class GomokuGUI extends JFrame {
     private void prepareElements() {
         setTitle("Gomoku");
         setLayout(new BorderLayout());
-        setSize(new Dimension(SIDE * SIZE, SIDE * SIZE + 50));
-        setResizable(false);
+        setSize(new Dimension(SIDE * SIZE+150, SIDE * SIZE + 50));
         mainPanel = new JPanel(new BorderLayout());
         addTopPanel();
         addLeftPanel();
@@ -157,7 +159,7 @@ public class GomokuGUI extends JFrame {
         // Crear un panel para la parte inferior
         JPanel bottomPanel = new JPanel();
         // Agregar los botones "Finalizar" y "Resetear"
-        JButton guardarFichaButton = new JButton("Guardar ficha");
+        JButton guardarFichaButton = new JButton("Usar ficha especial");
 
         // Agregar ActionListener a los botones según sea necesario
         guardarFichaButton.addActionListener(e -> guardarFicha());
@@ -216,7 +218,7 @@ public class GomokuGUI extends JFrame {
         boardPanel = null;
         cellMatrix = null;
         // Crear un nuevo tablero y panel
-        gomoku = new Gomoku(row, col, 800, 1000);
+        gomoku = new Gomoku(size, stoneLimit, timeLimit);
         prepareElementsBoard();
         refresh();
     }
@@ -255,7 +257,9 @@ public class GomokuGUI extends JFrame {
             turn = true;
         }
         try {
-            gomoku.play(row, col, new Stone(color));
+            if(gomoku.play(row, col, new Stone(color))){
+                //finish()
+            }
             refresh();
         } catch (GomokuException e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
@@ -274,9 +278,6 @@ public class GomokuGUI extends JFrame {
             this.isVisible = isVisible;
         }
 
-        //public void setShape(int shape){
-//        this.shape = shape;
-//    }
 
         public void setPiedraColor(Color piedraColor) {
             this.piedraColor = piedraColor;

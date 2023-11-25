@@ -1,6 +1,7 @@
 package domain;
 
 import java.awt.*;
+import java.lang.reflect.InvocationTargetException;
 
 public class Gomoku{
     private Board board;
@@ -10,18 +11,17 @@ public class Gomoku{
     private int timeLimit;
     private int turn;
 
-    public Gomoku(int rows, int columns, int stoneLimit, int timeLimit) throws Exception {
+    public Gomoku(int size, int stoneLimit, int timeLimit) throws Exception {
         turn = 0;
-        board = new Board(rows, columns);
+        board = new Board(size, size);
         this.stoneLimit = stoneLimit;
         this.timeLimit = timeLimit;
-        this.player1 = new Human(Color.BLACK, board);
-        this.player2 = new Human(Color.WHITE,board);
+        this.setPlayers(Human.class, Human.class);
         board.setPlayers(new Player[]{this.player1,this.player2});
     }
-    public void setPlayers(Player player1, Player player2){
-        this.player1 = player1;
-        this.player2 = player2;
+    public void setPlayers(Class<? extends Player> playerClass1, Class<? extends Player> playerClass2) throws Exception {
+        this.player1 = playerClass1.getDeclaredConstructor(Color.class, Board.class).newInstance(Color.BLACK, board);
+        this.player2 = playerClass2.getDeclaredConstructor(Color.class, Board.class).newInstance(Color.WHITE, board);
         board.setPlayers(new Player[]{this.player1,this.player2});
     }
     public boolean play(int row, int column, Stone stone) throws GomokuException{
@@ -41,9 +41,7 @@ public class Gomoku{
         turn += 1;
         return board.verifyGame();
     }
-    public void reset(int row, int col) throws Exception {
-        this.board = new Board(row, col);
-    }
+
     public Cell[][] board() {
         return board.getCells();
     }
