@@ -1,0 +1,20 @@
+#BlueJ class context
+comment0.target=DomainTest
+comment0.text=\r\n\ The\ test\ class\ Test.\r\n\r\n\ @author\ \ (your\ name)\r\n\ @version\ (a\ version\ number\ or\ a\ date)\r\n
+comment1.params=
+comment1.target=DomainTest()
+comment2.params=
+comment2.target=void\ ShouldDie()
+comment3.params=
+comment3.target=void\ ShouldHungryAnt()
+comment4.params=
+comment4.target=void\ ShouldOpenFlower()
+comment5.params=
+comment5.target=void\ ShouldMoveGuardian()
+comment6.params=
+comment6.target=void\ ShouldNotMoveGuardian()
+comment7.params=
+comment7.target=void\ ShouldMoveBee()
+comment8.params=
+comment8.target=void\ ShouldNotMoveBee()
+numComments=9

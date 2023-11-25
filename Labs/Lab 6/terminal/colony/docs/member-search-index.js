@@ -1,0 +1,1 @@
+memberSearchIndex = [{"p":"presentation","c":"ColonyGUI","l":"getColony()"},{"p":"presentation","c":"ColonyGUI","l":"main(String[])","u":"main(java.lang.String[])"},{"p":"presentation","c":"ColonyGUI","l":"SIDE"},{"p":"presentation","c":"ColonyGUI","l":"SIZE"}];updateSearchResults();

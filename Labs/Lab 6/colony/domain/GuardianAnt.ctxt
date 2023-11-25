@@ -1,0 +1,10 @@
+#BlueJ class context
+comment0.target=GuardianAnt
+comment0.text=\r\n\ La\ clase\ GuardianAnt\ representa\ una\ hormiga\ guardiana\ en\ la\ colonia.\ Las\ hormigas\ guardiana\ son\ de\ color\ rojo\ y\ tienen\ la\ capacidad\ de\ proteger\ la\ colonia\ de\ las\ abejas.\r\n
+comment1.params=name\ colony\ row\ column
+comment1.target=GuardianAnt(java.lang.String,\ Colony,\ int,\ int)
+comment1.text=\r\n\ Constructor\ para\ objetos\ de\ la\ clase\ GuardianAnt.\r\n\ Crea\ una\ nueva\ hormiga\ guardiana\ en\ la\ fila\ y\ columna\ especificadas\ en\ la\ colonia\ dada.\r\n\ @param\ name\ Nombre\ de\ la\ hormiga\ guardiana.\r\n\ @param\ colony\ La\ colonia\ a\ la\ que\ pertenece\ la\ hormiga\ guardiana.\r\n\ @param\ row\ Fila\ de\ ubicaci\u00F3n\ de\ la\ hormiga\ guardiana.\r\n\ @param\ column\ Columna\ de\ ubicaci\u00F3n\ de\ la\ hormiga\ guardiana.\r\n
+comment2.params=
+comment2.target=void\ move()
+comment2.text=\r\n\ La\ hormiga\ guardiana\ se\ mueve\ hacia\ la\ abeja\ m\u00E1s\ cercana\ en\ la\ colonia\ para\ protegerla.\r\n
+numComments=3

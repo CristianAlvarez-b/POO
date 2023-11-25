@@ -1,0 +1,19 @@
+#BlueJ class context
+comment0.target=Flower
+comment0.text=\r\n\ La\ clase\ Flower\ representa\ una\ flor\ en\ la\ colonia.\ Las\ flores\ pueden\ estar\ abiertas\ o\ cerradas\ y\ cambian\ de\ color.\r\n
+comment1.params=name\ colony\ row\ column
+comment1.target=Flower(java.lang.String,\ Colony,\ int,\ int)
+comment1.text=\r\n\ Constructor\ para\ objetos\ de\ la\ clase\ Flower.\r\n\ Crea\ una\ nueva\ flor\ en\ la\ fila\ y\ columna\ especificadas\ en\ la\ colonia\ dada.\r\n\ @param\ name\ Nombre\ de\ la\ flor.\r\n\ @param\ colony\ La\ colonia\ a\ la\ que\ pertenece\ la\ flor.\r\n\ @param\ row\ Fila\ de\ ubicaci\u00F3n\ de\ la\ flor.\r\n\ @param\ column\ Columna\ de\ ubicaci\u00F3n\ de\ la\ flor.\r\n
+comment2.params=
+comment2.target=void\ act()
+comment2.text=\r\n\ Realiza\ una\ acci\u00F3n\ relacionada\ con\ la\ flor,\ alternando\ entre\ los\ colores\ verde\ y\ rojo\ para\ simular\ la\ apertura\ y\ cierre\ de\ la\ flor.\r\n
+comment3.params=
+comment3.target=int\ shape()
+comment3.text=\r\n\ Obtiene\ la\ forma\ de\ la\ flor.\r\n\ @return\ Valor\ entero\ que\ representa\ la\ forma\ de\ la\ flor\ (FLORES).\r\n
+comment4.params=
+comment4.target=boolean\ is()
+comment4.text=\r\n\ Comprueba\ si\ la\ flor\ "es"\ una\ flor\ abierta\ (isOpen).\r\n\ @return\ `true`\ si\ la\ flor\ est\u00E1\ abierta,\ `false`\ si\ est\u00E1\ cerrada.\r\n
+comment5.params=
+comment5.target=java.awt.Color\ getColor()
+comment5.text=\r\n\ Obtiene\ el\ color\ de\ la\ flor.\r\n\ @return\ Color\ de\ la\ flor\ (puede\ ser\ verde\ o\ rojo).\r\n
+numComments=6

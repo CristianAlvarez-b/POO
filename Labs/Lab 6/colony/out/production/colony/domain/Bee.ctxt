@@ -1,0 +1,16 @@
+#BlueJ class context
+comment0.target=Bee
+comment0.text=\r\n\ La\ clase\ Bee\ representa\ una\ abeja\ en\ la\ colonia.\ Las\ abejas\ buscan\ flores\ en\ la\ colonia\ y\ pueden\ morir\ despu\u00E9s\ de\ cierta\ edad.\r\n
+comment1.params=name\ colony\ row\ column
+comment1.target=Bee(java.lang.String,\ Colony,\ int,\ int)
+comment1.text=\r\n\ Constructor\ para\ objetos\ de\ la\ clase\ Bee.\r\n\ Crea\ una\ nueva\ abeja\ en\ la\ fila\ y\ columna\ especificadas\ en\ la\ colonia\ dada.\r\n\ @param\ name\ Nombre\ de\ la\ abeja.\r\n\ @param\ colony\ La\ colonia\ a\ la\ que\ pertenece\ la\ abeja.\r\n\ @param\ row\ Fila\ de\ ubicaci\u00F3n\ de\ la\ abeja.\r\n\ @param\ column\ Columna\ de\ ubicaci\u00F3n\ de\ la\ abeja.\r\n
+comment2.params=
+comment2.target=int\ shape()
+comment2.text=\r\n\ Obtiene\ la\ forma\ de\ la\ abeja.\r\n\ @return\ Valor\ entero\ que\ representa\ la\ forma\ de\ la\ abeja\ (INSECT).\r\n
+comment3.params=
+comment3.target=void\ act()
+comment3.text=\r\n\ Realiza\ las\ acciones\ de\ la\ abeja\ en\ un\ paso\ de\ tiempo.\ La\ abeja\ muere\ despu\u00E9s\ de\ cierta\ edad.\r\n
+comment4.params=
+comment4.target=void\ move()
+comment4.text=\r\n\ La\ abeja\ se\ mueve\ hacia\ la\ flor\ m\u00E1s\ cercana\ en\ la\ colonia.\r\n
+numComments=5
