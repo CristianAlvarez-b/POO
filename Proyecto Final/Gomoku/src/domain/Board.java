@@ -1,12 +1,15 @@
 package domain;
-import java.lang.reflect.InvocationTargetException;
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 public class Board {
     private final int[] dimension;
     private Cell[][] cells;
     private Player[] players;
+    private int turn;
     public Board(int rows, int columns) throws Exception {
+        turn = 0;
         dimension = new int[]{rows, columns};
         fillCells();
     }
@@ -15,7 +18,7 @@ public class Board {
         this.players = players;
     }
 
-    private void fillCells() throws Exception {
+    private void fillCells(){
         cells = new Cell[dimension[0]][dimension[1]];
 
         // Llenar la matriz con celdas normales
@@ -58,7 +61,7 @@ public class Board {
                 Cell cell = cells[row][column];
                 if (!cellHasStone(cell)) {
                     cell.setStone(stone);
-                    punctuation = cell.updateState();
+                    punctuation += cell.updateState();
                 } else {
                     throw new GomokuException(GomokuException.STONE_OVERLOAP);
                 }
@@ -68,6 +71,7 @@ public class Board {
         }else {
             throw new GomokuException(GomokuException.FULL_BOARD);
         }
+        turn += 1;
         return punctuation;
     }
 
@@ -122,11 +126,14 @@ public class Board {
 
         return positions;
     }
+    public int getTurn(){return turn;}
 
     public boolean verifyGame(){
         //En construccion
         return false;
     }
+
+
 
     public Player[] getPlayers() {
         return players;
