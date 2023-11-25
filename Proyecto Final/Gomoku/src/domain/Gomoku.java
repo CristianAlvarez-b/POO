@@ -8,10 +8,8 @@ public class Gomoku{
     private Player player2;
     private int stoneLimit = 800;
     private int timeLimit;
-    private int turn;
 
     public Gomoku(int rows, int columns, int stoneLimit, int timeLimit) throws Exception {
-        turn = 0;
         board = new Board(rows, columns);
         this.stoneLimit = stoneLimit;
         this.timeLimit = timeLimit;
@@ -25,6 +23,8 @@ public class Gomoku{
         board.setPlayers(new Player[]{this.player1,this.player2});
     }
     public boolean play(int row, int column, Stone stone) throws GomokuException{
+        int turn = board.getTurn();
+        boolean gameOver = false;
         if(turn%2 == 0){
             if (player1 instanceof Human){
                 player1.play(row, column, stone);
@@ -38,7 +38,6 @@ public class Gomoku{
                 ((Machine)player2).play();
             }
         }
-        turn += 1;
         return board.verifyGame();
     }
     public void reset(int row, int col) throws Exception {
