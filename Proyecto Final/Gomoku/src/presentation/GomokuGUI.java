@@ -11,6 +11,7 @@ import java.awt.event.MouseEvent;
 import java.util.*;
 
 public class GomokuGUI extends JFrame {
+    private JPanel configuraciones;
     public static final int SIDE = 30;
     public static final int SIZE = 30;
     private Gomoku gomoku;
@@ -26,6 +27,8 @@ public class GomokuGUI extends JFrame {
     private int size = 10;
     private int stoneLimit = size*size;
     private int timeLimit = -1;
+    private  Color colorJ1 = Color.BLACK;
+    private  Color colorJ2 = Color.WHITE;
     private boolean canRefill;
     private Stone[] piedrasJ1;
     private Stone[] piedrasJ2;
@@ -57,47 +60,67 @@ public class GomokuGUI extends JFrame {
         setContentPane(mainPanel);
     }
     private JPanel createInitialPanel() {
-        JPanel initialPanel = new JPanel(new BorderLayout()) {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                // Load and draw the background image
-                ImageIcon backgroundImage = new ImageIcon("GomokuImages/inicio.jpg"); // Reemplazar con la ruta real
-                g.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
-            }
-        };
+        JPanel initialPanel = new JPanel(new GridBagLayout());
+        initialPanel.setBackground(Color.BLACK);
+        // Crear un título con "Go" en negrita y "moku" en normal
+        JPanel titulo = new JPanel(new BorderLayout());
+        JLabel titulo1 = new JLabel("<html><font size=800><b>GO</b></font ><font size=800>MOKU</font></html>", SwingConstants.CENTER);
+        titulo1.setFont(new Font("Arial", Font.ITALIC, 400));
+        titulo1.setPreferredSize(new Dimension(400, 400));
+        titulo.add(titulo1, BorderLayout.CENTER);
+        JPanel buttonPanel = new JPanel(new GridBagLayout());
 
-        JLabel titulo = new JLabel("Gomoku", SwingConstants.CENTER);
-        titulo.setFont(new Font("Arial", Font.BOLD, 36));
-
-
-        JPanel buttonPanel = new JPanel(new FlowLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(10, 10, 10, 10); // Espacio entre los botones
 
         JButton button1 = new JButton("NEW GAME");
         JButton button2 = new JButton("CONTINUE");
         JButton button3 = new JButton("RULES");
 
-        button1.setVerticalTextPosition(SwingConstants.BOTTOM);
-        button1.setHorizontalTextPosition(SwingConstants.CENTER);
+        // Configurar el tamaño de los botones
+        Dimension buttonSize = new Dimension(400, 100);
+        button1.setPreferredSize(buttonSize);
+        button2.setPreferredSize(buttonSize);
+        button3.setPreferredSize(buttonSize);
 
-        button2.setVerticalTextPosition(SwingConstants.BOTTOM);
-        button2.setHorizontalTextPosition(SwingConstants.CENTER);
-
-        button3.setVerticalTextPosition(SwingConstants.BOTTOM);
-        button3.setHorizontalTextPosition(SwingConstants.CENTER);
-
+        // Añadir ActionListeners según sea necesario
         button1.addActionListener(e -> cardLayout.show(cardPanel, "config"));
-        // Agregar otros ActionListeners según sea necesario
 
-        buttonPanel.add(button1);
-        buttonPanel.add(button2);
-        buttonPanel.add(button3);
-        initialPanel.add(titulo, BorderLayout.NORTH);
-        initialPanel.add(buttonPanel, BorderLayout.SOUTH);
+        // Añadir los botones al panel con GridBagLayout
+        buttonPanel.add(button1, gbc);
+        buttonPanel.setBackground(Color.BLACK);
+
+        gbc.gridy++;
+        buttonPanel.add(button2, gbc);
+
+        gbc.gridy++;
+        buttonPanel.add(button3, gbc);
+
+        // Añadir el título y el panel de botones al panel principal
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.NORTH; // Alineación del título
+        initialPanel.add(titulo, gbc);
+
+        gbc.gridy++;
+        gbc.anchor = GridBagConstraints.CENTER; // Alineación del panel de botones
+        initialPanel.add(buttonPanel, gbc);
+
+
         return initialPanel;
     }
 
     private JPanel createConfiguraciones(){
+
+        configuraciones = new JPanel(new GridBagLayout());
+        crearPanelJ1();
+        crearPanelJ2();
+        crearPanelTamaño();
+        return configuraciones;
+    }
+    private void crearPanelJ1(){
         HashMap<String, Color> coloresMap = new HashMap<>();
         coloresMap.put("NEGRO", Color.BLACK);
         coloresMap.put("GRIS", Color.GRAY);
@@ -105,14 +128,10 @@ public class GomokuGUI extends JFrame {
         coloresMap.put("VERDE", Color.GREEN);
         coloresMap.put("PURPURA", new Color(128, 0, 128)); // Puedes ajustar estos valores según tus preferencias
         coloresMap.put("ROJO", Color.RED);
-
-        JPanel configuraciones = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-
         JPanel jugador1 = new JPanel(new BorderLayout());
         JLabel titulo = new JLabel("JUGADOR 1", SwingConstants.CENTER);
         titulo.setFont(new Font("Arial", Font.BOLD, 18));
-
+        GridBagConstraints gbc = new GridBagConstraints();
         // Add the label "Ingresa tu nombre:"
         JLabel nombreLabel = new JLabel("Ingresa tu nombre:");
 
@@ -124,20 +143,20 @@ public class GomokuGUI extends JFrame {
         JComboBox<String> ficha1 = new JComboBox<>(coloresJ1);
         selectColorFicha.add(colorLabel1);
         selectColorFicha.add(ficha1);
-        ficha1.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                String colorSeleccionado = (String) ficha1.getSelectedItem();
-                if (coloresMap.containsKey(colorSeleccionado)) {
-                    jugador1.setBackground(coloresMap.get(colorSeleccionado));
-                }
-            }
-        });
+
         jugador1.add(titulo, BorderLayout.NORTH);
 
         // Add the nombreLabel and nombre to jugador1
         jugador1.add(nombreLabel, BorderLayout.WEST);
         jugador1.add(nombre, BorderLayout.CENTER);
 
+        ficha1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String colorSeleccionado = (String) ficha1.getSelectedItem();
+                colorJ1 = coloresMap.get(colorSeleccionado);
+            }
+        });
         jugador1.add(selectColorFicha, BorderLayout.SOUTH);
 
         gbc.gridx = 0;
@@ -146,7 +165,110 @@ public class GomokuGUI extends JFrame {
         gbc.anchor = GridBagConstraints.CENTER;
 
         configuraciones.add(jugador1, gbc);
-        return configuraciones;
+    }
+    private void crearPanelJ2() {
+        HashMap<String, Color> coloresMap = new HashMap<>();
+        coloresMap.put("BLANCO", Color.WHITE);
+        coloresMap.put("AMARILLO", Color.YELLOW);
+        coloresMap.put("AZUL", Color.BLUE);
+        coloresMap.put("VERDE", Color.GREEN);
+        coloresMap.put("PURPURA", new Color(128, 0, 128));
+        coloresMap.put("ROJO", Color.RED);
+
+        JPanel jugador2 = new JPanel();
+        jugador2.setLayout(new BoxLayout(jugador2, BoxLayout.Y_AXIS)); // Set layout to BoxLayout
+
+        JLabel titulo = new JLabel("JUGADOR 2", SwingConstants.CENTER);
+        titulo.setFont(new Font("Arial", Font.BOLD, 18));
+
+        GridBagConstraints gbc = new GridBagConstraints();
+
+        JLabel nombreLabel = new JLabel("Ingresa tu nombre:");
+        JTextArea nombre = new JTextArea();
+
+        JPanel selectColorFicha = new JPanel(new FlowLayout());
+        JLabel colorLabel1 = new JLabel("Selecciona el color de ficha:");
+        String[] coloresJ2 = {"BLANCO", "AMARILLO", "AZUL", "VERDE", "PURPURA", "ROJO"};
+        JComboBox<String> ficha2 = new JComboBox<>(coloresJ2);
+
+        JCheckBox jugadorCheckBox = new JCheckBox("Jugar contra maquina");
+        jugadorCheckBox.setSelected(false);  // Default to human player
+
+        selectColorFicha.add(colorLabel1);
+        selectColorFicha.add(ficha2);
+
+        ficha2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String colorSeleccionado = (String) ficha2.getSelectedItem();
+                colorJ2 = coloresMap.get(colorSeleccionado);
+            }
+        });
+
+        jugador2.add(titulo);
+        jugador2.add(nombreLabel);
+        jugador2.add(nombre);
+        jugador2.add(selectColorFicha);
+        jugador2.add(jugadorCheckBox);
+
+        gbc.gridx = 0;
+        gbc.gridy = 1; // Assuming the second panel goes below the first one
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+
+        configuraciones.add(jugador2, gbc);
+    }
+    private void crearPanelTamaño() {
+        GridBagConstraints gbc = new GridBagConstraints();
+
+        // Primer TextField
+        JLabel tamañoLabel = new JLabel("Tamaño del tablero:");
+        JTextField tamañoTextField = new JTextField();
+        tamañoTextField.setColumns(10);
+        tamañoTextField.setColumns(10); // Puedes ajustar el tamaño según tus preferencias
+        tamañoTextField.addActionListener(e -> {
+            try {
+                size = Integer.parseInt(tamañoTextField.getText());
+            } catch (NumberFormatException ex) {
+                // Manejar la excepción si el texto no es un número entero válido
+                // Puedes mostrar un mensaje de error o realizar otras acciones según tus necesidades
+            }
+        });
+        // Segundo TextField
+        JLabel especialesLabel = new JLabel("Porcentaje de especiales:");
+        JTextField especialesTextField = new JTextField();
+        especialesTextField.setColumns(10); // Puedes ajustar el tamaño según tus preferencias
+//        especialesTextField.addActionListener(e -> {
+//            try {
+//                size = Integer.parseInt(especialesTextField.getText());
+//            } catch (NumberFormatException ex) {
+//                // Manejar la excepción si el texto no es un número entero válido
+//                // Puedes mostrar un mensaje de error o realizar otras acciones según tus necesidades
+//            }
+//        });
+        // Botón
+        JButton boton = new JButton("Iniciar Juego");
+        boton.addActionListener(e -> cardLayout.show(cardPanel, "game"));
+
+        // Agregar componentes al panel de configuraciones
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.anchor = GridBagConstraints.WEST;
+        configuraciones.add(tamañoLabel, gbc);
+
+        gbc.gridy = 3;
+        configuraciones.add(tamañoTextField, gbc);
+
+        gbc.gridy = 4;
+        configuraciones.add(especialesLabel, gbc);
+
+        gbc.gridy = 5;
+        configuraciones.add(especialesTextField, gbc);
+
+        gbc.gridy = 6;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        configuraciones.add(boton, gbc);
     }
 
     private JPanel createGamePanel() throws Exception {
@@ -295,8 +417,14 @@ public class GomokuGUI extends JFrame {
                 if(cellMatrix[i][j].getStone() != null) {
                     Piedra piedra = (Piedra) components[i * cellMatrix[0].length + j];
                     // Configurar el color de las joyas y el fondo según la matriz
-                    piedra.setPiedraColor(cellMatrix[i][j].getStone().getColor());
-                    piedra.makeVisible();
+                    if(cellMatrix[i][j].getStone().getColor().equals(Color.BLACK)){
+                        piedra.setPiedraColor(colorJ1);
+                        piedra.makeVisible();
+                    }else{
+                        piedra.setPiedraColor(colorJ2);
+                        piedra.makeVisible();
+                    }
+
                 }
             }
         }
