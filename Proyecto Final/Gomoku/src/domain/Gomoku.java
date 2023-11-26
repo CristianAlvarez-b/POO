@@ -23,6 +23,8 @@ public class Gomoku{
     public void setPlayers(Class<? extends Player> playerClass1, Class<? extends Player> playerClass2) throws Exception {
         this.player1 = playerClass1.getDeclaredConstructor(Color.class, Board.class).newInstance(Color.BLACK, board);
         this.player2 = playerClass2.getDeclaredConstructor(Color.class, Board.class).newInstance(Color.WHITE, board);
+        //player1.refillStones(stoneLimit/2, 50);
+        //player2.refillStones(stoneLimit/2, 50);
         board.setPlayers(new Player[]{this.player1,this.player2});
     }
     public boolean play(int row, int column, Stone stone) throws GomokuException{
@@ -44,6 +46,8 @@ public class Gomoku{
     }
 
     public boolean getTurn(){return board.getTurn();}
+    public Player getPlayer1(){return player1;}
+    public Player getPlayer2(){return player2;}
 
     public Cell[][] board() {
         return board.getCells();
