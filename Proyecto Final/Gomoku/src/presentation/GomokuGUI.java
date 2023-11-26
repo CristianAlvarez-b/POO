@@ -21,6 +21,8 @@ public class GomokuGUI extends JFrame {
     private JLabel numNormalJ2;
     private JLabel numPesadaJ2;
     private JLabel numTemporaryJ2;
+    private JLabel name1;
+    private JLabel name2;
     private Gomoku gomoku;
     private CardLayout cardLayout;
     private JPanel cardPanel;
@@ -28,6 +30,9 @@ public class GomokuGUI extends JFrame {
     private JPanel gamePanel;
     private JPanel boardPanel;
     private Cell[][] cellMatrix;
+    private JPanel piedraJ1;
+    private JPanel piedraJ2;
+
     private String nombreJ1 = "Jugador 1.";
     private String nombreJ2 = "Jugador 2.";
     private boolean turn = true;
@@ -150,7 +155,20 @@ public class GomokuGUI extends JFrame {
         // Add the label "Ingresa tu nombre:"
         JLabel nombreLabel = new JLabel("Ingresa tu nombre:");
 
-        JTextArea nombre = new JTextArea();
+        JTextField nombre = new JTextField();
+        nombre.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Cuando se presiona Enter en el JTextField, se actualizará el nombre
+                actualizarNombreJ1();
+            }
+            private void actualizarNombreJ1() {
+                // Actualiza la variable de clase con el texto actual del JTextField
+                nombreJ1 = nombre.getText();
+                System.out.println("Nombre actualizado del jugador 1: " + nombreJ1);
+            }
+        });
+
 
         JPanel selectColorFicha = new JPanel(new FlowLayout());
         JLabel colorLabel1 = new JLabel("Selecciona el color de ficha:");
@@ -181,6 +199,7 @@ public class GomokuGUI extends JFrame {
 
         configuraciones.add(jugador1, gbc);
     }
+
     private void crearPanelJ2() {
         HashMap<String, Color> coloresMap = new HashMap<>();
         coloresMap.put("BLANCO", Color.WHITE);
@@ -199,7 +218,19 @@ public class GomokuGUI extends JFrame {
         GridBagConstraints gbc = new GridBagConstraints();
 
         JLabel nombreLabel = new JLabel("Ingresa tu nombre:");
-        JTextArea nombre = new JTextArea();
+        JTextField nombre = new JTextField();
+        nombre.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Cuando se presiona Enter en el JTextField, se actualizará el nombre
+                actualizarNombreJ1();
+            }
+            private void actualizarNombreJ1() {
+                // Actualiza la variable de clase con el texto actual del JTextField
+                nombreJ2 = nombre.getText();
+                System.out.println("Nombre actualizado del jugador 1: " + nombreJ2);
+            }
+        });
 
         JPanel selectColorFicha = new JPanel(new FlowLayout());
         JLabel colorLabel1 = new JLabel("Selecciona el color de ficha:");
@@ -239,11 +270,12 @@ public class GomokuGUI extends JFrame {
         // Primer TextField
         JLabel tamañoLabel = new JLabel("Tamaño del tablero:");
         JTextField tamañoTextField = new JTextField();
+
         tamañoTextField.setColumns(10);
         tamañoTextField.setColumns(10); // Puedes ajustar el tamaño según tus preferencias
         tamañoTextField.addActionListener(e -> {
             try {
-                size = Integer.parseInt(tamañoTextField.getText());
+
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(null, "Ingresa un número válido.");
             }
@@ -251,18 +283,27 @@ public class GomokuGUI extends JFrame {
         // Segundo TextField
         JLabel especialesLabel = new JLabel("Porcentaje de especiales:");
         JTextField especialesTextField = new JTextField();
-        especialesTextField.setColumns(10); // Puedes ajustar el tamaño según tus preferencias
-//        especialesTextField.addActionListener(e -> {
-//            try {
-//                size = Integer.parseInt(especialesTextField.getText());
-//            } catch (NumberFormatException ex) {
-//                // Manejar la excepción si el texto no es un número entero válido
-//                // Puedes mostrar un mensaje de error o realizar otras acciones según tus necesidades
-//            }
-//        });
-        // Botón
+        tamañoTextField.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Cuando se presiona Enter en el JTextField, se actualizará el nombre
+                actualizarNombreJ1();
+            }
+            private void actualizarNombreJ1() {
+                // Actualiza la variable de clase con el texto actual del JTextField
+                size = Integer.parseInt(tamañoTextField.getText());
+                System.out.println("Nombre actualizado del jugador 1: " + size);
+            }
+        });
         JButton boton = new JButton("Iniciar Juego");
-        boton.addActionListener(e -> cardLayout.show(cardPanel, "game"));
+
+        boton.addActionListener(e -> {
+            try {
+                empezarJuego();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null,"Algo elegiste mal");
+            }
+        });
 
         // Agregar componentes al panel de configuraciones
         gbc.gridx = 0;
@@ -284,7 +325,12 @@ public class GomokuGUI extends JFrame {
         gbc.anchor = GridBagConstraints.CENTER;
         configuraciones.add(boton, gbc);
     }
-
+    private void empezarJuego() throws Exception {
+        updateRemainingLabels();
+        optionNew();
+        refresh();
+        cardLayout.show(cardPanel, "game");
+    }
     private JPanel createGamePanel() throws Exception {
         gamePanel = new JPanel(new BorderLayout());
         addTopPanel();
@@ -294,6 +340,7 @@ public class GomokuGUI extends JFrame {
         prepareElementsBoard();
         prepareElementsMenu();
         updateRemainingLabels();
+        gamePanel.add(Box.createHorizontalStrut(20));
         return gamePanel;
     }
     private void prepareElementsMenu(){
@@ -379,12 +426,12 @@ public class GomokuGUI extends JFrame {
         JLabel imageLabel = new JLabel(resized, JLabel.CENTER);
 
         // Crear un JLabel para el nombre del jugador
-        JLabel name = new JLabel(nombreJ1);
+        name1 = new JLabel(nombreJ1);
         // Crear un JLabel para el texto "Juegas con las fichas:"
         JLabel texto = new JLabel("Juegas con las fichas:");
 
         // Crear un JPanel para la piedra
-        JPanel piedraJ1 = new JPanel(new BorderLayout());
+        piedraJ1 = new JPanel(new BorderLayout());
         piedra1 = new Piedra(false);
         piedraJ1.setPreferredSize(new Dimension(150, 150));
         piedra1.setPiedraColor(colorJ1);
@@ -392,11 +439,12 @@ public class GomokuGUI extends JFrame {
         piedra1.makeVisible();
         piedraJ1.add(texto, BorderLayout.NORTH);
         piedraJ1.add(piedra1, BorderLayout.CENTER);
+        piedraJ1.setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
 
         // Configurar GridBagConstraints para datosJ1
         gbcDatosJ1.gridx = 0;
         gbcDatosJ1.gridy = 0;
-        datosJ1.add(name, gbcDatosJ1);
+        datosJ1.add(name1, gbcDatosJ1);
 
         gbcDatosJ1.gridx = 0;
         gbcDatosJ1.gridy = 1;
@@ -488,12 +536,12 @@ public class GomokuGUI extends JFrame {
         JLabel imageLabel = new JLabel(resized, JLabel.CENTER);
 
         // Crear un JLabel para el nombre del jugador
-        JLabel name = new JLabel(nombreJ2);
+        name2 = new JLabel(nombreJ2);
         // Crear un JLabel para el texto "Juegas con las fichas:"
         JLabel texto = new JLabel("Juegas con las fichas:");
 
         // Crear un JPanel para la piedra
-        JPanel piedraJ2 = new JPanel(new BorderLayout());
+        piedraJ2 = new JPanel(new BorderLayout());
         piedra2 = new Piedra(false);
         piedraJ2.setPreferredSize(new Dimension(150, 150));
         piedra2.setPiedraColor(colorJ2);
@@ -505,7 +553,7 @@ public class GomokuGUI extends JFrame {
         // Configurar GridBagConstraints para datosJ1
         gbcDatosJ2.gridx = 0;
         gbcDatosJ2.gridy = 0;
-        datosJ2.add(name, gbcDatosJ2);
+        datosJ2.add(name2, gbcDatosJ2);
 
         gbcDatosJ2.gridx = 0;
         gbcDatosJ2.gridy = 1;
@@ -831,22 +879,22 @@ public class GomokuGUI extends JFrame {
         }
     }
     private void updateBorders() {
-        JPanel leftPanel = (JPanel) gamePanel.getComponent(1);
-        JPanel rightPanel = (JPanel) gamePanel.getComponent(2);
 
         if (turn) {
             // Si es el turno de player1 (izquierda), actualizar el borde de player1 y quitar el borde de player2
-            leftPanel.setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
-            rightPanel.setBorder(null);
+            piedraJ1.setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
+            piedraJ2.setBorder(null);
         } else {
             // Si es el turno de player2 (derecha), actualizar el borde de player2 y quitar el borde de player1
-            leftPanel.setBorder(null);
-            rightPanel.setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
+            piedraJ1.setBorder(null);
+            piedraJ2.setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
         }
     }
     private void updateRemainingLabels() {
         piedra1.setPiedraColor(colorJ1);
         piedra2.setPiedraColor(colorJ2);
+        name1.setText(nombreJ1);
+        name2.setText(nombreJ2);
         numNormalJ1.setText("Normales restantes: "+ gomoku.getPlayer1().numOfType(Stone.class));
         numPesadaJ1.setText("Pesadas restantes: "+ gomoku.getPlayer1().numOfType(Heavy.class));
         numTemporaryJ1.setText("Temporales restantes: "+ gomoku.getPlayer1().numOfType(Temporary.class));
