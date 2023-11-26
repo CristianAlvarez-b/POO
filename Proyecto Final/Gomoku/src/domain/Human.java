@@ -7,13 +7,13 @@ public class Human extends Player{
         this.color = color;
         this.board = board;
         extraStones = new ArrayList<>();
-        remainingStones = -1;
+       // remainingStones = -1;
         punctuation = 0;
     }
 
     public Human(Color color, Board board, int stoneLimit) {
         this(color, board);
-        remainingStones = stoneLimit;
+        //remainingStones = stoneLimit;
     }
 
     @Override
