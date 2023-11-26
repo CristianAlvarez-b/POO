@@ -11,6 +11,9 @@ public class Gomoku{
     private int timeLimit;
 
     public Gomoku(int size, int stoneLimit, int timeLimit) throws Exception {
+        if(size < 10){
+            throw new GomokuException(GomokuException.INVALID_BOARD_SIZE);
+        }
         board = new Board(size, size);
         this.stoneLimit = stoneLimit;
         this.timeLimit = timeLimit;
