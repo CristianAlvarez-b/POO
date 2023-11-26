@@ -35,14 +35,14 @@ public class GomokuGUI extends JFrame {
         prepareActions();
     }
 
-    private void prepareElements() {
+    private void prepareElements() throws Exception {
         prepareScreens();
         prepareActionsMenu();
         setTitle("Gomoku");
         setSize(new Dimension(SIDE * SIZE+150, SIDE * SIZE + 50));
          // Add mainPanel to the frame
     }
-    private void prepareScreens(){
+    private void prepareScreens() throws Exception {
         cardLayout = new CardLayout();
         cardPanel = new JPanel(cardLayout);
         setTitle("Gomoku.");
@@ -57,14 +57,22 @@ public class GomokuGUI extends JFrame {
         setContentPane(mainPanel);
     }
     private JPanel createInitialPanel() {
-        setTitle("Bienvenidos a GomokuPOOP.");
-        setLocationRelativeTo(null);
-        JPanel initialPanel = new JPanel(new BorderLayout());
-        JLabel titulo = new JLabel("Gomoku", SwingConstants.CENTER);
-        titulo.setFont(new Font("Arial", Font.BOLD, 18));
-        initialPanel.add(titulo, BorderLayout.NORTH);
+        JPanel initialPanel = new JPanel(new BorderLayout()) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                // Load and draw the background image
+                ImageIcon backgroundImage = new ImageIcon("GomokuImages/inicio.jpg"); // Reemplazar con la ruta real
+                g.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
+            }
+        };
 
-        JPanel buttonPanel = new JPanel(new FlowLayout()); // Use FlowLayout for buttons
+        JLabel titulo = new JLabel("Gomoku", SwingConstants.CENTER);
+        titulo.setFont(new Font("Arial", Font.BOLD, 36));
+
+
+        JPanel buttonPanel = new JPanel(new FlowLayout());
+
         JButton button1 = new JButton("NEW GAME");
         JButton button2 = new JButton("CONTINUE");
         JButton button3 = new JButton("RULES");
@@ -78,13 +86,13 @@ public class GomokuGUI extends JFrame {
         button3.setVerticalTextPosition(SwingConstants.BOTTOM);
         button3.setHorizontalTextPosition(SwingConstants.CENTER);
 
-        button1.addActionListener(e -> cardLayout.show(cardPanel, "game"));
-        // Add other action listeners as needed
+        button1.addActionListener(e -> cardLayout.show(cardPanel, "config"));
+        // Agregar otros ActionListeners según sea necesario
 
         buttonPanel.add(button1);
         buttonPanel.add(button2);
         buttonPanel.add(button3);
-
+        initialPanel.add(titulo, BorderLayout.NORTH);
         initialPanel.add(buttonPanel, BorderLayout.SOUTH);
         return initialPanel;
     }
@@ -116,7 +124,14 @@ public class GomokuGUI extends JFrame {
         JComboBox<String> ficha1 = new JComboBox<>(coloresJ1);
         selectColorFicha.add(colorLabel1);
         selectColorFicha.add(ficha1);
-
+        ficha1.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String colorSeleccionado = (String) ficha1.getSelectedItem();
+                if (coloresMap.containsKey(colorSeleccionado)) {
+                    jugador1.setBackground(coloresMap.get(colorSeleccionado));
+                }
+            }
+        });
         jugador1.add(titulo, BorderLayout.NORTH);
 
         // Add the nombreLabel and nombre to jugador1
@@ -134,7 +149,7 @@ public class GomokuGUI extends JFrame {
         return configuraciones;
     }
 
-    private JPanel createGamePanel(){
+    private JPanel createGamePanel() throws Exception {
         gamePanel = new JPanel(new BorderLayout());
         addTopPanel();
         addLeftPanel();
@@ -176,9 +191,9 @@ public class GomokuGUI extends JFrame {
         menuBar.add(menu);
         setJMenuBar(menuBar);
     }
-    private void prepareElementsBoard() {
+    private void prepareElementsBoard() throws Exception {
         if (boardPanel == null) {
-            //gomoku = new G(row,column);
+            gomoku = new Gomoku(size, stoneLimit, timeLimit);
             // Si el tablero aún no se ha creado, crearlo y agregarlo al mainPanel
             cellMatrix = gomoku.board();
             boardPanel = new JPanel(new GridLayout(cellMatrix.length, cellMatrix[0].length));
@@ -198,7 +213,6 @@ public class GomokuGUI extends JFrame {
             // Si el tablero ya está creado, simplemente refresca su contenido
             gomoku = null;
             boardPanel = null;
-            prepareElements();
             refresh();
         }
     }
@@ -262,7 +276,13 @@ public class GomokuGUI extends JFrame {
         JButton guardarFichaButton = new JButton("Usar ficha especial");
 
         // Agregar ActionListener a los botones según sea necesario
-        guardarFichaButton.addActionListener(e -> guardarFicha());
+        guardarFichaButton.addActionListener(e -> {
+            try {
+                optionNew();
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        });
         bottomPanel.add(guardarFichaButton);
         // Agregar el panel inferior a la parte inferior de la pantalla principal
         gamePanel.add(bottomPanel, BorderLayout.SOUTH);
@@ -314,13 +334,24 @@ public class GomokuGUI extends JFrame {
         });
     }
     private void optionNew() throws Exception {
+        // Eliminar el componente boardPanel del gamePanel
         gamePanel.remove(boardPanel);
-        boardPanel = null;
+
+        // Liberar recursos relacionados con el tablero (piedras, etc.)
         cellMatrix = null;
+        boardPanel = null;
+        turn = true;
         // Crear un nuevo tablero y panel
         gomoku = new Gomoku(size, stoneLimit, timeLimit);
         prepareElementsBoard();
         refresh();
+
+        // Agregar el nuevo boardPanel al gamePanel
+        gamePanel.add(boardPanel, BorderLayout.CENTER);
+
+        // Revalidar y repintar el gamePanel para asegurar la actualización en la interfaz gráfica
+        gamePanel.revalidate();
+        gamePanel.repaint();
     }
     private void optionExit(){
         System.exit(0);
@@ -358,10 +389,20 @@ public class GomokuGUI extends JFrame {
         }
         try {
             if(gomoku.play(row, col, new Stone(color))){
-                //finish()
+                refresh();
+                if(turn){
+                    JOptionPane.showMessageDialog(null, "GANAASTEEEEEEEE."+nombreJ2);
+                    optionNew();
+                    cardLayout.show(cardPanel, "initial");
+                }else{
+                    JOptionPane.showMessageDialog(null, "GANAASTEEEEEEEE."+nombreJ1);
+                    optionNew();
+                    cardLayout.show(cardPanel, "initial");
+                }
+
             }
             refresh();
-        } catch (GomokuException e) {
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
     }
@@ -412,8 +453,8 @@ public class GomokuGUI extends JFrame {
         }
     }
     private void updateBorders() {
-        Component[] leftPanelComponents = ((JPanel) mainPanel.getComponent(1)).getComponents(); // Obtener componentes del panel izquierdo
-        Component[] rightPanelComponents = ((JPanel) mainPanel.getComponent(2)).getComponents(); // Obtener componentes del panel derecho
+        Component[] leftPanelComponents = ((JPanel) gamePanel.getComponent(1)).getComponents(); // Obtener componentes del panel izquierdo
+        Component[] rightPanelComponents = ((JPanel) gamePanel.getComponent(2)).getComponents(); // Obtener componentes del panel derecho
 
         if (turn) {
             // Si es el turno de player1 (izquierda), actualizar el borde de player1 y quitar el borde de player2
