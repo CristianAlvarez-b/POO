@@ -13,12 +13,12 @@ public abstract class Player {
 
     public abstract void play(int row, int column, Stone stone) throws GomokuException;
 
-    public void addExtraStone(Stone stone){
-        extraStones.add(stone);
+    public void addStone(ArrayList<Stone> stoneList, Stone stone){
+        stoneList.add(stone);
     }
 
-    public void eliminateExtraStone(int index){
-        extraStones.remove(index);
+    public void eliminateStone(ArrayList<Stone> stoneList,Stone stone){
+        stoneList.remove(stone);
     }
 
     public void refillStones(int size, int specialStonesPercentage) {
@@ -50,6 +50,10 @@ public abstract class Player {
             }
 
         }
+    }
+
+    public ArrayList<Stone> getRemainingStones() {
+        return remainingStones;
     }
 
     public Color getColor() {return color;}
