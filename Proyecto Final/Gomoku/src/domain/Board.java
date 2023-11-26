@@ -7,12 +7,14 @@ public class Board {
     private final int[] dimension;
     private Cell[][] cells;
     private Player[] players;
-    private int turn;
+    private boolean turn;
     public Board(int rows, int columns) throws Exception {
-        turn = 0;
+        turn = true;
         dimension = new int[]{rows, columns};
         fillCells();
     }
+
+
 
     public void setPlayers(Player[] players) {
         this.players = players;
@@ -71,7 +73,7 @@ public class Board {
         }else {
             throw new GomokuException(GomokuException.FULL_BOARD);
         }
-        turn += 1;
+        turn = !turn;
         return punctuation;
     }
 
@@ -126,14 +128,116 @@ public class Board {
 
         return positions;
     }
-    public int getTurn(){return turn;}
+    public boolean getTurn(){return turn;}
 
-    public boolean verifyGame(){
-        //En construccion
+    public boolean verifyGame(boolean turn) {
+        // Verificar ganador en filas
+        return checkRows(turn) || checkColumns(turn) || checkDiagonalLeftToRight(turn) || checkDiagonalRightToLeft(turn);
+    }
+
+    private boolean checkRows(boolean turn) {
+        int rows = cells.length;
+        int columns = cells[0].length;
+        Color playerColor = turn ? players[0].getColor() : players[1].getColor();
+
+        // Iterar sobre las filas del tablero
+        for (int row = 0; row < rows; row++) {
+            int stoneCount = 0;
+
+            // Iterar sobre las columnas de la fila actual
+            for (int column = 0; column < columns; column++) {
+                stoneCount = updateStoneCount(stoneCount, cells[row][column], playerColor);
+
+                // Verificar si el jugador actual ha alcanzado 5 piedras consecutivas
+                if (stoneCount == 5) {
+                    return true;  // El jugador actual ha ganado
+                }
+            }
+        }
+
+        return false;  // No se encontraron secuencias ganadoras en las filas
+    }
+
+
+    private boolean checkColumns(boolean turn) {
+        int rows = cells.length;
+        int columns = cells[0].length;
+        Color playerColor = turn ? players[0].getColor() : players[1].getColor();
+
+        for (int column = 0; column < columns; column++) {
+            int stoneCount = 0;
+
+            for (int row = 0; row < rows; row++) {
+                stoneCount = updateStoneCount(stoneCount, cells[row][column], playerColor);
+
+                if (stoneCount == 5) {
+                    return true;  // El jugador actual ha ganado
+                }
+            }
+        }
+
         return false;
     }
 
 
+    private boolean checkDiagonalLeftToRight(boolean turn) {
+        int rows = cells.length;
+        int columns = cells[0].length;
+        Color playerColor = turn ? players[0].getColor() : players[1].getColor();
+
+        for (int k = 0; k < rows + columns - 1; k++) {
+            int startRow = Math.max(0, k - columns + 1);
+            int count = Math.min(k + 1, Math.min(rows, columns - startRow));
+            int stoneCount = 0;
+
+            for (int j = 1; j < count; j++) {
+                int row = startRow + j;
+                int col = Math.min(columns - 1, j);
+
+                stoneCount = updateStoneCount(stoneCount, cells[row][col], playerColor);
+
+                if (stoneCount == 5) {
+                    return true;  // El jugador actual ha ganado
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private boolean checkDiagonalRightToLeft(boolean turn) {
+        int rows = cells.length;
+        int columns = cells[0].length;
+        Color playerColor = turn ? players[0].getColor() : players[1].getColor();
+
+        for (int k = 0; k < rows + columns - 1; k++) {
+            int startRow = Math.max(0, k - columns + 1);
+            int count = Math.min(k + 1, Math.min(rows, columns - startRow));
+            int stoneCount = 0;
+
+            for (int j = 0; j < count; j++) {
+                int row = startRow + j;
+                int col = Math.min(columns - 1, Math.max(0, k - startRow - j));
+
+                stoneCount = updateStoneCount(stoneCount, cells[row][col], playerColor);
+            }
+
+            if (stoneCount == 5) {
+                return true;  // El jugador actual ha ganado
+            }
+        }
+
+        return false;
+    }
+
+
+    private int updateStoneCount(int stoneCount, Cell cell, Color playerColor) {
+        if (cell.getStone() != null) {
+            return playerColor.equals(cell.getStone().getColor()) ? stoneCount + cell.getStone().getValue() : 0;
+        } else {
+            return 0;
+        }
+    }
 
     public Player[] getPlayers() {
         return players;

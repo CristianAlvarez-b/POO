@@ -18,4 +18,6 @@ public abstract class Player {
     public void eliminateExtraStone(int index){
         extraStones.remove(index);
     }
+
+    public Color getColor() {return color;}
 }
