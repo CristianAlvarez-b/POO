@@ -220,15 +220,16 @@ public class Board {
                 int col = Math.min(columns - 1, Math.max(0, k - startRow - j));
 
                 stoneCount = updateStoneCount(stoneCount, cells[row][col], playerColor);
-            }
 
-            if (stoneCount == 5) {
-                return true;  // El jugador actual ha ganado
+                if (stoneCount == 5) {
+                    return true;  // El jugador actual ha ganado
+                }
             }
         }
 
         return false;
     }
+
 
 
     private int updateStoneCount(int stoneCount, Cell cell, Color playerColor) {
