@@ -72,15 +72,19 @@ public class GomokuGUI extends JFrame {
         setContentPane(mainPanel);
     }
     private JPanel createInitialPanel() {
+        ImagePanel fondo = new ImagePanel("GomokuImages/inicio.png");
         JPanel initialPanel = new JPanel(new GridBagLayout());
+        initialPanel.setOpaque(false);
         initialPanel.setBackground(Color.BLACK);
         // Crear un título con "Go" en negrita y "moku" en normal
         JPanel titulo = new JPanel(new BorderLayout());
-        JLabel titulo1 = new JLabel("<html><font size=800><b>GO</b></font ><font size=800>MOKU</font></html>", SwingConstants.CENTER);
+        titulo.setOpaque(false);
+        JLabel titulo1 = new JLabel("", SwingConstants.CENTER);
         titulo1.setFont(new Font("Arial", Font.ITALIC, 400));
-        titulo1.setPreferredSize(new Dimension(400, 400));
+        titulo1.setPreferredSize(new Dimension(200, 250));
         titulo.add(titulo1, BorderLayout.CENTER);
         JPanel buttonPanel = new JPanel(new GridBagLayout());
+        buttonPanel.setOpaque(false);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -119,9 +123,8 @@ public class GomokuGUI extends JFrame {
         gbc.gridy++;
         gbc.anchor = GridBagConstraints.CENTER; // Alineación del panel de botones
         initialPanel.add(buttonPanel, gbc);
-
-
-        return initialPanel;
+        fondo.add(initialPanel);
+        return fondo;
     }
 
     private JPanel createConfiguraciones(){
