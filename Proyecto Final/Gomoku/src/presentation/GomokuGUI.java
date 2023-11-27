@@ -293,7 +293,8 @@ public class GomokuGUI extends JFrame {
             private void actualizarNombreJ1() {
                 // Actualiza la variable de clase con el texto actual del JTextField
                 size = Integer.parseInt(tamañoTextField.getText());
-                System.out.println("Nombre actualizado del jugador 1: " + size);
+                System.out.println("Tamaño del tablero: " + size);
+                stoneLimit = size*size;
             }
         });
         JButton boton = new JButton("Iniciar Juego");
