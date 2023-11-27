@@ -17,13 +17,13 @@ public class Fearful extends Machine{
         refillStones(stoneLimit, 0);
     }
     @Override
-    public void play() throws GomokuException {
+    public void play() throws Exception {
         //Calcula la posicion y de forma random decide que piedra
         play(0,0,new Stone(color));
     }
 
     @Override
-    public void play(int row, int column, Stone stone) throws GomokuException {
+    public void play(int row, int column, Stone stone) throws Exception {
         punctuation += board.addStone(row, column, stone);
     }
 }

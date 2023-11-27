@@ -54,14 +54,14 @@ public class Board {
         }
     }
 
-    public int addStone(int row, int column, Stone stone) throws GomokuException {
+    public int addStone(int row, int column, Stone stone) throws Exception {
         int punctuation = 0;
         if (!isBoardFull()) {
             if (isValidPosition(row, column)) {
                 Cell cell = cells[row][column];
                 if (!cellHasStone(cell)) {
                     cell.setStone(stone);
-                    punctuation += cell.updateState();
+                    punctuation += cell.updateState(turn);
                 } else {
                     throw new GomokuException(GomokuException.STONE_OVERLOAP);
                 }

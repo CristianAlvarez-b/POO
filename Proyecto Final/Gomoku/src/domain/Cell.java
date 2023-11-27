@@ -17,7 +17,17 @@ public class Cell {
         return stone;
     }
 
-    public int updateState(){
+    public int updateState(boolean turn) throws Exception {
+        updateTemporaryStoneLife();
         return 0;
+    }
+    public void updateTemporaryStoneLife() {
+        if (stone != null && stone instanceof Temporary) {
+            try {
+                ((Temporary) stone).updateLife();
+            } catch (GomokuException e) {
+                stone = null;
+            }
+        }
     }
 }

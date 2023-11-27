@@ -25,7 +25,7 @@ public class Gomoku{
         this.player2 = playerClass2.getDeclaredConstructor(Color.class, Board.class).newInstance(Color.WHITE, board);
         board.setPlayers(new Player[]{this.player1,this.player2});
     }
-    public boolean play(int row, int column, Stone stone) throws GomokuException{
+    public boolean play(int row, int column, Stone stone) throws Exception {
         boolean turn = board.getTurn();
         if(turn){
             if (player1 instanceof Human){

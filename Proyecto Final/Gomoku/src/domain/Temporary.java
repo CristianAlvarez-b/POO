@@ -7,8 +7,11 @@ public class Temporary extends Stone{
         super(color);
         this.life = 0;
     }
-    public void upLife(){
-
+    public void updateLife() throws GomokuException {
+        life++;
+        if (life>=3){
+            throw new GomokuException(GomokuException.MAXIMUS_LIFE);
+        }
     }
 
 }

@@ -18,8 +18,12 @@ public class Human extends Player{
     }
 
     @Override
-    public void play(int row, int column, Stone stone) throws GomokuException {
-        punctuation += board.addStone(row, column, stone);
+    public void play(int row, int column, Stone stone) throws Exception {
+        Stone myStone = super.eliminateStone(remainingStones, stone.getClass());
+        if (myStone.getClass() != Stone.class){
+            punctuation += 100; //Si se usa una piedra especial
+        }
+        punctuation += board.addStone(row, column, myStone);
     }
 
 
