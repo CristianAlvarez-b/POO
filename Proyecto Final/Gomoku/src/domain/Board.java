@@ -14,8 +14,6 @@ public class Board {
         fillCells();
     }
 
-
-
     public void setPlayers(Player[] players) {
         this.players = players;
     }

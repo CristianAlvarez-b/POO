@@ -44,10 +44,11 @@ public class GomokuGUI extends JFrame {
     private int porcentajeEspeciales = 50;
     public static Color colorJ1 = Color.BLACK;
     public static Color colorJ2 = Color.WHITE;
-    private Stone selectedStone;
+    private Stone selectedStoneJ1 = null;
+    private Stone selectedStoneJ2 = null;
     private boolean canRefill;
-    private ArrayList<Stone> stonesJ1 = new ArrayList<>();
-    private ArrayList<Stone> stonesJ2 = new ArrayList<>();
+    private static ArrayList<Stone> stonesJ1 = new ArrayList<>();
+    private static ArrayList<Stone> stonesJ2 = new ArrayList<>();
     public GomokuGUI() throws Exception {
         prepareElements();
         prepareActions();
@@ -328,7 +329,6 @@ public class GomokuGUI extends JFrame {
     private void empezarJuego() throws Exception {
         updateRemainingLabels();
         optionNew();
-        refresh();
         cardLayout.show(cardPanel, "game");
     }
     private JPanel createGamePanel() throws Exception {
@@ -355,8 +355,8 @@ public class GomokuGUI extends JFrame {
 
         JSeparator separator2 = new JSeparator();
 
-        JMenuItem importarMenuItem = new JMenuItem("Importar");
-        JMenuItem exportarMenuItem = new JMenuItem("Exportar");
+        JMenuItem inicioMenuItem = new JMenuItem("Inicio");
+        JMenuItem configuracionesMenuItem = new JMenuItem("Configuraciones");
 
         JSeparator separator3 = new JSeparator();
 
@@ -367,8 +367,8 @@ public class GomokuGUI extends JFrame {
         menu.add(abrirMenuItem);
         menu.add(salvarMenuItem);
         menu.add(separator2); // Separador
-        menu.add(importarMenuItem);
-        menu.add(exportarMenuItem);
+        menu.add(inicioMenuItem);
+        menu.add(configuracionesMenuItem);
         menu.add(separator3);
         menu.add(salirMenuItem);
 
@@ -399,7 +399,7 @@ public class GomokuGUI extends JFrame {
             // Si el tablero ya está creado, simplemente refresca su contenido
             gomoku = null;
             boardPanel = null;
-            refresh();
+            reset();
         }
     }
     private void addTopPanel() {
@@ -465,6 +465,27 @@ public class GomokuGUI extends JFrame {
         JButton normal = new JButton("NORMAL");
         JButton pesada = new JButton("HEAVY");
         JButton temporal = new JButton("TEMPORARY");
+        normal.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Acción para el botón NORMAL
+                selectedStoneJ1 = getFirstStoneOfType(stonesJ1, Stone.class);
+            }
+        });
+        pesada.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Acción para el botón HEAVY
+                selectedStoneJ1 = getFirstStoneOfType(stonesJ1, Heavy.class);
+            }
+        });
+        temporal.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Acción para el botón TEMPORARY
+                JOptionPane.showMessageDialog(null, "En construccion.");
+            }
+        });
 
         Dimension buttonSize = new Dimension(120, 30); // Tamaño deseado para los botones
         normal.setPreferredSize(buttonSize);
@@ -574,7 +595,27 @@ public class GomokuGUI extends JFrame {
         JButton normal = new JButton("NORMAL");
         JButton pesada = new JButton("HEAVY");
         JButton temporal = new JButton("TEMPORARY");
-
+        normal.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Acción para el botón NORMAL
+                selectedStoneJ2 = getFirstStoneOfType(stonesJ2, Stone.class);
+            }
+        });
+        pesada.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Acción para el botón HEAVY
+                selectedStoneJ2 = getFirstStoneOfType(stonesJ2, Heavy.class);
+            }
+        });
+        temporal.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Acción para el botón TEMPORARY
+                JOptionPane.showMessageDialog(null, "En construccion.");
+            }
+        });
         Dimension buttonSize = new Dimension(120, 30); // Tamaño deseado para los botones
         normal.setPreferredSize(buttonSize);
         pesada.setPreferredSize(buttonSize);
@@ -646,32 +687,37 @@ public class GomokuGUI extends JFrame {
         // Agregar el panel inferior a la parte inferior de la pantalla principal
         gamePanel.add(bottomPanel, BorderLayout.SOUTH);
     }
-    private void refresh() {
+    private void reset() {
         stonesJ1 = gomoku.getPlayer1().getRemainingStones();
         stonesJ2 = gomoku.getPlayer2().getRemainingStones();
         cellMatrix = gomoku.board();
         Component[] components = boardPanel.getComponents();
-        for (int i = 0; i < cellMatrix.length; i++) {
-            for (int j = 0; j < cellMatrix[0].length; j++) {
-                if(cellMatrix[i][j].getStone() != null) {
-                    Piedra piedra = (Piedra) components[i * cellMatrix[0].length + j];
-                    // Configurar el color de las joyas y el fondo según la matriz
-                    if(cellMatrix[i][j].getStone().getColor().equals(Color.BLACK)){
-                        piedra.setPiedraColor(colorJ1);
-                        piedra.setType(chooseCharForAStone(cellMatrix[i][j].getStone()));
-                        piedra.makeVisible();
-                    }else{
-                        piedra.setPiedraColor(colorJ2);
-                        piedra.setType(chooseCharForAStone(cellMatrix[i][j].getStone()));
-                        piedra.makeVisible();
-                    }
-                }
-            }
-        }
         updateBorders();
         updateRemainingLabels();
         boardPanel.revalidate(); // Asegurar que el panel se redibuje correctamente
         boardPanel.repaint();
+    }
+    private void refresh(int row, int column) {
+        stonesJ1 = gomoku.getPlayer1().getRemainingStones();
+        stonesJ2 = gomoku.getPlayer2().getRemainingStones();
+        cellMatrix = gomoku.board();
+        Component[] components = boardPanel.getComponents();
+        Piedra piedra = (Piedra) components[row * cellMatrix[0].length + column];
+        refreshStoneAppearance(piedra, cellMatrix[row][column].getStone());
+        updateBorders();
+        updateRemainingLabels();
+        boardPanel.revalidate(); // Ensure that the panel is redrawn correctly
+        boardPanel.repaint();
+    }
+
+    private void refreshStoneAppearance(Piedra piedra, Stone stone) {
+        if (stone.getColor().equals(Color.BLACK)) {
+            piedra.setPiedraColor(colorJ1);
+        } else {
+            piedra.setPiedraColor(colorJ2);
+        }
+        piedra.setType(chooseCharForAStone(stone));
+        piedra.makeVisible();
     }
 
     private void prepareActions() {
@@ -693,10 +739,10 @@ public class GomokuGUI extends JFrame {
             //optionSave();
         });
         getJMenuBar().getMenu(0).getItem(5).addActionListener(e -> {
-            //optionImport();
+            cardLayout.show(cardPanel, "initial");
         });
         getJMenuBar().getMenu(0).getItem(6).addActionListener(e -> {
-            //optionExport();
+            cardLayout.show(cardPanel, "config");
         });
         getJMenuBar().getMenu(0).getItem(8).addActionListener(e -> {
             optionExit();
@@ -713,7 +759,7 @@ public class GomokuGUI extends JFrame {
         // Crear un nuevo tablero y panel
         gomoku = new Gomoku(size, stoneLimit, timeLimit);
         prepareElementsBoard();
-        refresh();
+        reset();
 
         // Agregar el nuevo boardPanel al gamePanel
         gamePanel.add(boardPanel, BorderLayout.CENTER);
@@ -744,33 +790,44 @@ public class GomokuGUI extends JFrame {
             } catch (GomokuException ex) {
                 throw new RuntimeException(ex);
             } catch (Exception ex) {
-                throw new RuntimeException(ex);
+                JOptionPane.showMessageDialog(null, "Selecciona el tipo de ficha que quieres poner!");
             }
         }
     }
     private void ponerFicha(int row, int col) throws Exception {
-        Color color;
+        Stone selectedStone;
         if (turn) {
-            color = Color.BLACK;
-            turn = false;
+            if(selectedStoneJ1 == null){
+                selectedStoneJ1 = getFirstStoneOfType(stonesJ1, Stone.class);
+            }
+            selectedStone = selectedStoneJ1;
+
         } else {
-            color = Color.WHITE;
-            turn = true;
+            if(selectedStoneJ2 == null){
+                selectedStoneJ2 = getFirstStoneOfType(stonesJ2, Stone.class);
+            }
+            selectedStone = selectedStoneJ2;
         }
         try {
-            if(gomoku.play(row, col, new Stone(color))){
-                refresh();
+            if(gomoku.play(row, col, selectedStone)){
                 if(turn){
-                    JOptionPane.showMessageDialog(null, "GANAASTEEEEEEEE."+nombreJ2);
-                    optionNew();
+                    refresh(row, col);
+                    JOptionPane.showMessageDialog(null, "GANAASTEEEEEEEE. "+nombreJ2);
                     cardLayout.show(cardPanel, "initial");
                 }else{
-                    JOptionPane.showMessageDialog(null, "GANAASTEEEEEEEE."+nombreJ1);
-                    optionNew();
+                    refresh(row, col);
+                    JOptionPane.showMessageDialog(null, "GANAASTEEEEEEEE. "+nombreJ1);
                     cardLayout.show(cardPanel, "initial");
                 }
             }
-            refresh();
+            if(turn){
+                removeFirstStoneOfType(stonesJ1, selectedStone.getClass());
+                turn = false;
+            }else{
+                removeFirstStoneOfType(stonesJ2, selectedStone.getClass());
+                turn = true;
+            }
+            refresh(row, col);
         } catch (Exception e) {
             if(e.getMessage().equals(GomokuException.STONE_OVERLOAP)){
                 if(turn){
@@ -855,6 +912,8 @@ public class GomokuGUI extends JFrame {
                         // Dibujar la estrella
                         drawStar(g, width / 2, height / 2, 20, 5);
                         break;
+                    case 't':
+
                 }
             }
         }
@@ -889,6 +948,25 @@ public class GomokuGUI extends JFrame {
             piedraJ1.setBorder(null);
             piedraJ2.setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
         }
+    }
+    public Stone getFirstStoneOfType(ArrayList<Stone> stones,Class<?> type) {
+        for (Stone stone : stones) {
+            if (type.isInstance(stone) && stone.getClass() == type) {
+                return stone;
+            }
+        }
+        return null; // Si no se encuentra un objeto del tipo especificado
+    }
+    public Stone removeFirstStoneOfType(ArrayList<Stone> stones, Class<?> type) {
+        Iterator<Stone> iterator = stones.iterator();
+        while (iterator.hasNext()) {
+            Stone stone = iterator.next();
+            if (type.isInstance(stone) && stone.getClass() == type) {
+                iterator.remove();
+                return stone;
+            }
+        }
+        return null; // Si no se encuentra un objeto del tipo especificado
     }
     private void updateRemainingLabels() {
         piedra1.setPiedraColor(colorJ1);
