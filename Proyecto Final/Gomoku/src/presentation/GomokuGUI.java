@@ -224,9 +224,9 @@ public class GomokuGUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Cuando se presiona Enter en el JTextField, se actualizará el nombre
-                actualizarNombreJ1();
+                actualizarNombreJ2();
             }
-            private void actualizarNombreJ1() {
+            private void actualizarNombreJ2() {
                 // Actualiza la variable de clase con el texto actual del JTextField
                 nombreJ2 = nombre.getText();
                 System.out.println("Nombre actualizado del jugador 1: " + nombreJ2);
@@ -288,9 +288,9 @@ public class GomokuGUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Cuando se presiona Enter en el JTextField, se actualizará el nombre
-                actualizarNombreJ1();
+                actualizarTamaño();
             }
-            private void actualizarNombreJ1() {
+            private void actualizarTamaño() {
                 // Actualiza la variable de clase con el texto actual del JTextField
                 size = Integer.parseInt(tamañoTextField.getText());
                 System.out.println("Tamaño del tablero: " + size);
