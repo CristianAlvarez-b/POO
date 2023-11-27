@@ -7,5 +7,8 @@ public class Temporary extends Stone{
         super(color);
         this.life = 0;
     }
+    public void upLife(){
+
+    }
 
 }
