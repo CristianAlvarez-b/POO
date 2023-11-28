@@ -347,4 +347,5 @@ public class Colony implements Serializable {
             throw new ColonyException("Error al escribir en el archivo." + archivo.getName());
         }
     }
+
 }
