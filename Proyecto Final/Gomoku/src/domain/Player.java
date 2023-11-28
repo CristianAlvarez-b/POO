@@ -25,7 +25,7 @@ public abstract class Player {
 
         while (iterator.hasNext() && foundStone == null) {
             Stone stone = iterator.next();
-            if (type.isInstance(stone)) {
+            if (type.isInstance(stone) && stone.getClass() == type) {
                 iterator.remove();
                 foundStone = stone;
             }

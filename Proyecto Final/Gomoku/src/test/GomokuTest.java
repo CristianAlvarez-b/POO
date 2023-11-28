@@ -56,6 +56,7 @@ public class GomokuTest {
         // Attempt to place a stone outside the board bounds, should throw an exception
         assertThrows(GomokuException.class, () -> gomoku.play(16, 16, new Stone(Color.BLACK)));
     }
+
     @Test
     void shouldWin() throws Exception {
         Gomoku gomoku = new Gomoku(15, 800, 60);

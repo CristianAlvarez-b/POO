@@ -484,7 +484,7 @@ public class GomokuGUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Acción para el botón TEMPORARY
-                JOptionPane.showMessageDialog(null, "En construccion.");
+                selectedStoneJ1 = getFirstStoneOfType(stonesJ1, Temporary.class);
             }
         });
 
@@ -614,7 +614,7 @@ public class GomokuGUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Acción para el botón TEMPORARY
-                JOptionPane.showMessageDialog(null, "En construccion.");
+                selectedStoneJ2 = getFirstStoneOfType(stonesJ2, Temporary.class);
             }
         });
         Dimension buttonSize = new Dimension(120, 30); // Tamaño deseado para los botones
