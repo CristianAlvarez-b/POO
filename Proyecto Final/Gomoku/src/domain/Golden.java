@@ -1,6 +1,9 @@
 package domain;
+import java.awt.*;
 import java.util.*;
 import java.lang.*;
+import java.util.List;
+
 public class Golden extends Cell{
     private boolean active;
     public Golden(Board board, int[] position){
@@ -10,19 +13,32 @@ public class Golden extends Cell{
 
     public void setStone(Stone stone){
         super.setStone(stone);
-        active = false;
-    }
-    public boolean isActive() {
-        return active;
     }
     @Override
-    public int updateState(){
-        if (stone != null){
-            //En construccion
-            //Escoger piedra random y darsela al jugar correspondiente con addExtraStone
-            //Lo conocemos por el color de la piedra de esta casilla y el color del jugador
+    public int updateState(boolean turn) throws Exception {
+        super.updateTemporaryStoneLife();
+        if (stone != null && active){
+            active = false;
+            Stone newStone = getRandomStone(stone.getColor());
+            if (board.getPlayers()[0].getColor().equals(stone.getColor())){
+                board.getPlayers()[0].addStone(board.getPlayers()[0].getExtraStones(),newStone);
+            }else {
+                board.getPlayers()[1].addStone(board.getPlayers()[1].getExtraStones(),newStone);
+            }
         }
         return 0;
+    }
+    private Stone getRandomStone(Color color) throws Exception {
+        List<Class<? extends Stone>> stoneClasses = new ArrayList<>();
+        stoneClasses.add(Stone.class);
+        stoneClasses.add(Temporary.class);
+        stoneClasses.add(Heavy.class);
+
+        Random random = new Random();
+        int randomIndex = random.nextInt(stoneClasses.size());
+        Class<? extends Stone> selectedStoneClass = stoneClasses.get(randomIndex);
+
+        return selectedStoneClass.getDeclaredConstructor(Color.class).newInstance(color);
     }
 
 

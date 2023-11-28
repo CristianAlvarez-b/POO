@@ -8,13 +8,15 @@ public class Board {
     private Cell[][] cells;
     private Player[] players;
     private boolean turn;
-    public Board(int rows, int columns) throws Exception {
+    public Board(int rows, int columns, int specialStonesPercentage) throws Exception {
         turn = true;
         dimension = new int[]{rows, columns};
         fillCells();
+        Class<? extends Cell>[] clasesEspeciales = new Class[]{Mine.class, Golden.class, Teleport.class};
+        placeSpecialCells(clasesEspeciales,specialStonesPercentage);
     }
 
-    public void setPlayers(Player[] players) {
+    public final void setPlayers(Player[] players) {
         this.players = players;
     }
 
@@ -27,17 +29,12 @@ public class Board {
                 cells[i][j] = new Cell(this, new int[]{i,j});
             }
         }
-
-        // Calcular la cantidad total de celdas especiales
-//        int totalSpecialCells = (int) (dimension[0] * dimension[1] * 0.1); // El 10% de las celdas
-//
-//        // Colocar celdas especiales de manera aleatoria
-//        placeSpecialCells(totalSpecialCells, Mine.class);
-//        placeSpecialCells(totalSpecialCells, Golden.class);
-//        placeSpecialCells(totalSpecialCells, Teleport.class);
     }
 
-    private void placeSpecialCells(int totalSpecialCells, Class<? extends Cell> specialCellClass) throws Exception{
+
+    protected final void placeSpecialCells(Class<? extends Cell>[] specialCellClasses, int specialCellPercentage) throws Exception {
+        int totalSpecialCells = dimension[0] * dimension[1] * specialCellPercentage / 100;
+
         Random random = new Random();
 
         for (int k = 0; k < totalSpecialCells; k++) {
@@ -47,21 +44,33 @@ public class Board {
             do {
                 i = random.nextInt(dimension[0]);
                 j = random.nextInt(dimension[1]);
-            } while (specialCellClass.isInstance(cells[i][j]));
+            } while (isSpecialCell(cells[i][j], specialCellClasses));
 
             // Colocar la celda especial en la posición aleatoria
-            cells[i][j] = specialCellClass.getDeclaredConstructor(Board.class, int[].class).newInstance(this, new int[]{i,j});
+            int randomIndex = random.nextInt(specialCellClasses.length);
+            Class<? extends Cell> selectedSpecialCellClass = specialCellClasses[randomIndex];
+            cells[i][j] = selectedSpecialCellClass.getDeclaredConstructor(Board.class, int[].class).newInstance(this, new int[]{i, j});
         }
     }
 
-    public int addStone(int row, int column, Stone stone) throws GomokuException {
+    private boolean isSpecialCell(Cell cell, Class<? extends Cell>[] specialCellClasses) {
+        for (Class<? extends Cell> specialCellClass : specialCellClasses) {
+            if (specialCellClass.isInstance(cell)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public final int addStone(int row, int column, Stone stone) throws Exception {
         int punctuation = 0;
         if (!isBoardFull()) {
             if (isValidPosition(row, column)) {
                 Cell cell = cells[row][column];
                 if (!cellHasStone(cell)) {
                     cell.setStone(stone);
-                    punctuation += cell.updateState();
+                    punctuation += cell.updateState(turn);
+                    updateStateForAllCells(); // Actualizar el estado del tablero después de agregar la piedra
                 } else {
                     throw new GomokuException(GomokuException.STONE_OVERLOAP);
                 }
@@ -73,6 +82,15 @@ public class Board {
         }
         turn = !turn;
         return punctuation;
+    }
+
+    public final void updateStateForAllCells() throws Exception {
+        for (int i = 0; i < dimension[0]; i++) {
+            for (int j = 0; j < dimension[1]; j++) {
+                Cell cell = cells[i][j];
+                cell.updateState(turn);
+            }
+        }
     }
 
     private boolean isValidPosition(int row, int column) throws GomokuException{
@@ -97,15 +115,15 @@ public class Board {
         return true; // Todas las celdas tienen piedra, el tablero está lleno
     }
 
-    public Cell[][] getCells() {
+    public final Cell[][] getCells() {
         return cells;
     }
 
-    public int[] getDimension() {
+    public final int[] getDimension() {
         return dimension;
     }
 
-    public List<int[]> getAdjacentCellPositions(int row, int column) {
+    public final List<int[]> getAdjacentCellPositions(int row, int column) {
         List<int[]> positions = new ArrayList<>();
 
         // Definir los límites para iterar sobre las celdas adyacentes
@@ -126,7 +144,7 @@ public class Board {
 
         return positions;
     }
-    public boolean getTurn(){return turn;}
+    public final boolean getTurn(){return turn;}
 
     public boolean verifyGame(boolean turn) {
         // Verificar ganador en filas
@@ -155,7 +173,6 @@ public class Board {
 
         return false;  // No se encontraron secuencias ganadoras en las filas
     }
-
 
     private boolean checkColumns(boolean turn) {
         int rows = cells.length;
@@ -237,7 +254,7 @@ public class Board {
         }
     }
 
-    public Player[] getPlayers() {
+    public final Player[] getPlayers() {
         return players;
     }
 }

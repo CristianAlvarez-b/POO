@@ -11,15 +11,35 @@ public abstract class Player {
     protected Board board;
     protected int punctuation;
 
-    public abstract void play(int row, int column, Stone stone) throws GomokuException;
+    public abstract void play(int row, int column, Stone stone) throws Exception;
 
     public void addStone(ArrayList<Stone> stoneList, Stone stone){
         stoneList.add(stone);
     }
 
-    public void eliminateStone(ArrayList<Stone> stoneList,Stone stone){
-        stoneList.remove(stone);
+    public void addPunctuation(int punctuation){this.punctuation += punctuation;}
+
+    public Stone eliminateStone(ArrayList<Stone> stoneList, Class<?> type) throws GomokuException {
+        Iterator<Stone> iterator = stoneList.iterator();
+        Stone foundStone = null;
+
+        while (iterator.hasNext() && foundStone == null) {
+            Stone stone = iterator.next();
+            if (type.isInstance(stone)) {
+                iterator.remove();
+                foundStone = stone;
+            }
+        }
+
+        if (foundStone == null) {
+            throw new GomokuException(GomokuException.NO_STONE_FOUND);
+        }
+
+        return foundStone;
     }
+
+
+
 
     public void refillStones(int size, int specialStonesPercentage) {
         if (canRefill) {
@@ -65,4 +85,8 @@ public abstract class Player {
     }
 
     public Color getColor() {return color;}
+
+    public ArrayList<Stone> getExtraStones() {
+        return extraStones;
+    }
 }

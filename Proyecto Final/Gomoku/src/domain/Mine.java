@@ -10,29 +10,33 @@ public class Mine extends Cell{
 
     public void setStone(Stone stone){
         super.setStone(stone);
-        active = false;
     }
 
     @Override
-    public int updateState(){
-        int punctuation = 0;
-        if(stone != null){
-            punctuation -= 50;
+    public int updateState(boolean turn){
+        super.updateTemporaryStoneLife();
+        int punctuationCurrentPlayer = 0;
+        int punctuationOtherPlayer = 0;
+        if(stone != null && active){
+            active = false;
+            punctuationCurrentPlayer -= 50;
             List<int[]> adjacentCells = board.getAdjacentCellPositions(position[0], position[1]);
             for (int[] position : adjacentCells) {
                 Cell currentCell = board.getCells()[position[0]][position[1]];
                 if(currentCell.getStone().getColor() == stone.getColor()){
-                    punctuation -= 50;
+                    punctuationCurrentPlayer -= 50;
                 }else {
-                    punctuation += 100;
+                    punctuationCurrentPlayer += 100;
+                    punctuationOtherPlayer -= 50;
                 }
                 currentCell.setStone(null);
             }
         }
-        return punctuation;
-    }
-
-    public boolean isActive() {
-        return active;
+        if (turn){
+            board.getPlayers()[1].addPunctuation(punctuationOtherPlayer);
+        }else {
+            board.getPlayers()[0].addPunctuation(punctuationOtherPlayer);
+        }
+        return punctuationCurrentPlayer;
     }
 }

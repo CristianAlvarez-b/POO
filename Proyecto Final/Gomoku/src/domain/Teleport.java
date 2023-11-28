@@ -10,14 +10,12 @@ public class Teleport extends Cell{
 
     public void setStone(Stone stone){
         super.setStone(stone);
-        active = false;
-    }
-    public boolean isActive() {
-        return active;
     }
     @Override
-    public int updateState(){
-        if(stone != null) {
+    public int updateState(boolean turn){
+        super.updateTemporaryStoneLife();
+        if(stone != null && active) {
+            active = false;
             Stone stone = this.stone;
             this.stone = null;
             int i, j;

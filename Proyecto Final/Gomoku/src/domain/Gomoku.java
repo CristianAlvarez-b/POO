@@ -14,18 +14,18 @@ public class Gomoku{
         if(size < 10){
             throw new GomokuException(GomokuException.INVALID_BOARD_SIZE);
         }
-        board = new Board(size, size);
+        board = new Board(size, size, 0);
         this.stoneLimit = stoneLimit;
         this.timeLimit = timeLimit;
         this.setPlayers(Human.class, Human.class);
         board.setPlayers(new Player[]{this.player1,this.player2});
     }
     public void setPlayers(Class<? extends Player> playerClass1, Class<? extends Player> playerClass2) throws Exception {
-        this.player1 = playerClass1.getDeclaredConstructor(Color.class, Board.class).newInstance(Color.BLACK, board);
-        this.player2 = playerClass2.getDeclaredConstructor(Color.class, Board.class).newInstance(Color.WHITE, board);
+        this.player1 = playerClass1.getDeclaredConstructor(Color.class, Board.class, int.class).newInstance(Color.BLACK, board, 0);
+        this.player2 = playerClass2.getDeclaredConstructor(Color.class, Board.class, int.class).newInstance(Color.WHITE, board, 0);
         board.setPlayers(new Player[]{this.player1,this.player2});
     }
-    public boolean play(int row, int column, Stone stone) throws GomokuException{
+    public boolean play(int row, int column, Stone stone) throws Exception {
         boolean turn = board.getTurn();
         if(turn){
             if (player1 instanceof Human){

@@ -703,8 +703,27 @@ public class GomokuGUI extends JFrame {
         stonesJ2 = gomoku.getPlayer2().getRemainingStones();
         cellMatrix = gomoku.board();
         Component[] components = boardPanel.getComponents();
-        Piedra piedra = (Piedra) components[row * cellMatrix[0].length + column];
-        refreshStoneAppearance(piedra, cellMatrix[row][column].getStone());
+        for (int i = 0; i < cellMatrix.length; i++) {
+            for (int j = 0; j < cellMatrix[0].length; j++) {
+                if(cellMatrix[i][j].getStone() != null) {
+                    Piedra piedra = (Piedra) components[i * cellMatrix[0].length + j];
+                    // Configurar el color de las joyas y el fondo según la matriz
+                    if(cellMatrix[i][j].getStone().getColor().equals(Color.BLACK)){
+                        piedra.setPiedraColor(colorJ1);
+                        piedra.setType(chooseCharForAStone(cellMatrix[i][j].getStone()));
+                        piedra.makeVisible();
+                    }else{
+                        piedra.setPiedraColor(colorJ2);
+                        piedra.setType(chooseCharForAStone(cellMatrix[i][j].getStone()));
+                        piedra.makeVisible();
+                    }
+                }else{
+                    Piedra piedra = (Piedra) components[i * cellMatrix[0].length + j];
+                    piedra.makeInvisible();
+                }
+            }
+        }
+        //refreshStoneAppearance(piedra, cellMatrix[row][column].getStone());
         updateBorders();
         updateRemainingLabels();
         boardPanel.revalidate(); // Ensure that the panel is redrawn correctly
@@ -822,10 +841,10 @@ public class GomokuGUI extends JFrame {
                 }
             }
             if(turn){
-                removeFirstStoneOfType(stonesJ1, selectedStone.getClass());
+                //removeFirstStoneOfType(stonesJ1, selectedStone.getClass());
                 turn = false;
             }else{
-                removeFirstStoneOfType(stonesJ2, selectedStone.getClass());
+                //removeFirstStoneOfType(stonesJ2, selectedStone.getClass());
                 turn = true;
             }
             refresh(row, col);
@@ -841,6 +860,7 @@ public class GomokuGUI extends JFrame {
                 throw new Exception(e.getMessage());
             }
         }
+
     }
     public char chooseCharForAStone(Stone stone){
         if(stone instanceof Heavy){
@@ -914,7 +934,11 @@ public class GomokuGUI extends JFrame {
                         drawStar(g, width / 2, height / 2, 20, 5);
                         break;
                     case 't':
-
+                        g.fillRect(0, 0, getWidth(), getHeight());
+                        g.setColor(piedraColor);
+                        setBorder(new LineBorder(new Color(139, 69, 19), 1)); // Puedes ajustar el color y el grosor del borde según tus preferencias
+                        g.fillOval(5, 5, getWidth() - 10, getHeight() - 10);
+                        break;
                 }
             }
         }
@@ -952,7 +976,7 @@ public class GomokuGUI extends JFrame {
     }
     public Stone getFirstStoneOfType(ArrayList<Stone> stones,Class<?> type) {
         for (Stone stone : stones) {
-            if (type.isInstance(stone) && stone.getClass() == type) {
+            if (type.isInstance(stone) && stone.getClass().equals(type)) {
                 return stone;
             }
         }
