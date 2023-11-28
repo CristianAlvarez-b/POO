@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="bin">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/terminal/colony/bin/hamcrest-core.jar!/" />
+      <root url="jar://$PROJECT_DIR$/terminal/colony/bin/junit-4.12.jar!/" />
+      <root url="jar://$PROJECT_DIR$/terminal/colony/bin/junit.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
