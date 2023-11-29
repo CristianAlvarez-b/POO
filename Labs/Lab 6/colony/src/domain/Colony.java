@@ -296,7 +296,7 @@ public class Colony implements Serializable {
                 String[] entidad = line.split("\\s+");
 
                 if (entidad.length != 3) {
-                    throw new ColonyException("Informacion de la entidad invalida en el archivo. Línea: " + lineNumber + ", Contenido: " + line);
+                    throw new ColonyException("Cantidad de datos necesarios excedidos, revise que solo sean 3. Línea: " + lineNumber + ", Contenido: " + line);
                 }
 
                 int numero1, numero2;
