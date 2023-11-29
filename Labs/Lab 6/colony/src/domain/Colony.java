@@ -334,7 +334,6 @@ public class Colony implements Serializable {
     }
     public void export(File archivo) throws ColonyException {
         File archivoFinal = new File(archivo.getPath() + ".txt");
-
         try (PrintWriter pw = new PrintWriter(new FileOutputStream(archivoFinal))) {
             for (int i = 0; i < colony.length; i++) {
                 for (int j = 0; j < colony[0].length; j++) {
