@@ -870,7 +870,7 @@ public class GomokuGUI extends JFrame {
         private Color piedraColor;
         private Color backgroundColor;
         private char type;
-        private int life = 3;
+        private int life = 6;
         private boolean isVisible;
 
 
@@ -944,16 +944,20 @@ public class GomokuGUI extends JFrame {
                         g.setFont(font);
                         FontMetrics fontMetrics = g.getFontMetrics();
                         String numero;
-                        if(life == 3){
+                        if(life < 7 && life > 4){
                             numero = "3";
                             life--;
-                        } else if (life == 2) {
+                        } else if (life < 5 && life > 2) {
                             numero = "2";
                             life--;
-                        }else{
+                        }else if(life < 3 && life > 0){
                             numero = "1";
-                            life = 3;
+                            life--;
+                        }else{
+                            life = 5;
+                            numero = "3";
                         }
+
                         int x = (getWidth() - fontMetrics.stringWidth(numero)) / 2;
                         int y = (getHeight() - fontMetrics.getHeight()) / 2 + fontMetrics.getAscent();
                         g.drawString(numero, x, y);
