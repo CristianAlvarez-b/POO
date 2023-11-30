@@ -870,8 +870,9 @@ public class GomokuGUI extends JFrame {
         private Color piedraColor;
         private Color backgroundColor;
         private char type;
-        //private int shape;
+        private int life = 3;
         private boolean isVisible;
+
 
         public Piedra(boolean isVisible) {
             this.piedraColor = Color.WHITE; // Color predeterminado
@@ -925,14 +926,37 @@ public class GomokuGUI extends JFrame {
                         g.fillOval(5, 5, width - 10, height - 10);
 
                         // Dibujar la estrella
-                        drawStar(g, width / 2, height / 2, 20, 5);
+                        drawStar(g, width / 2, height / 2, 15, 5);
                         break;
                     case 't':
+                        // Dibujar el óvalo
+                        g.setColor(backgroundColor);
                         g.fillRect(0, 0, getWidth(), getHeight());
                         g.setColor(piedraColor);
-                        setBorder(new LineBorder(new Color(139, 69, 19), 1)); // Puedes ajustar el color y el grosor del borde según tus preferencias
                         g.fillOval(5, 5, getWidth() - 10, getHeight() - 10);
-                        break;
+                        // Dibujar el número 3 en la mitad del óvalo
+                        if(piedraColor.equals(colorJ1)){
+                            g.setColor(colorJ2);
+                        }else{
+                            g.setColor(colorJ1);
+                        }
+                        Font font = new Font("Arial", Font.BOLD, 30);
+                        g.setFont(font);
+                        FontMetrics fontMetrics = g.getFontMetrics();
+                        String numero;
+                        if(life == 3){
+                            numero = "3";
+                            life--;
+                        } else if (life == 2) {
+                            numero = "2";
+                            life--;
+                        }else{
+                            numero = "1";
+                            life = 3;
+                        }
+                        int x = (getWidth() - fontMetrics.stringWidth(numero)) / 2;
+                        int y = (getHeight() - fontMetrics.getHeight()) / 2 + fontMetrics.getAscent();
+                        g.drawString(numero, x, y);
                 }
             }
         }
