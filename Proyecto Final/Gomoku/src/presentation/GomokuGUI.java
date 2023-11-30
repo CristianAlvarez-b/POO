@@ -820,12 +820,13 @@ public class GomokuGUI extends JFrame {
             if(selectedStoneJ1 == null){
                 selectedStoneJ1 = getFirstStoneOfType(stonesJ1, Stone.class);
             }
+            turn = false;
             selectedStone = selectedStoneJ1;
-
         } else {
             if(selectedStoneJ2 == null){
                 selectedStoneJ2 = getFirstStoneOfType(stonesJ2, Stone.class);
             }
+            turn = true;
             selectedStone = selectedStoneJ2;
         }
         try {
@@ -839,13 +840,6 @@ public class GomokuGUI extends JFrame {
                     JOptionPane.showMessageDialog(null, "GANAASTEEEEEEEE. "+nombreJ1);
                     cardLayout.show(cardPanel, "initial");
                 }
-            }
-            if(turn){
-                //removeFirstStoneOfType(stonesJ1, selectedStone.getClass());
-                turn = false;
-            }else{
-                //removeFirstStoneOfType(stonesJ2, selectedStone.getClass());
-                turn = true;
             }
             refresh(row, col);
         } catch (Exception e) {

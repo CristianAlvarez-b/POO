@@ -323,7 +323,6 @@ public class Colony implements Serializable {
                          IllegalAccessException e) {
                     throw new ColonyException("Error al crear una instancia de la entidad. Línea: " + lineNumber + ", Contenido: " + line);
                 }
-
                 colony.setEntity(numero1, numero2, instancia);
                 lineNumber++;
             }
