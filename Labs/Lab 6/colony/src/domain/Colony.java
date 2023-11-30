@@ -124,7 +124,7 @@ public class Colony implements Serializable {
         }
         return nearestPosition;
     }
-    private void clearEntities(){
+        private void clearEntities(){
         for (int r = 0; r < LENGTH; r++) {
             for (int c = 0; c < LENGTH; c++) {
                 colony[r][c] = null;
