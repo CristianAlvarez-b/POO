@@ -157,6 +157,7 @@ public class GomokuGUI extends JFrame {
         JLabel nombreLabel = new JLabel("Ingresa tu nombre:");
 
         JTextField nombre = new JTextField();
+        nombre.setColumns(20);
         nombre.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -213,13 +214,14 @@ public class GomokuGUI extends JFrame {
         JPanel jugador2 = new JPanel();
         jugador2.setLayout(new BoxLayout(jugador2, BoxLayout.Y_AXIS)); // Set layout to BoxLayout
 
-        JLabel titulo = new JLabel("JUGADOR 2", SwingConstants.LEFT);
+        JLabel titulo = new JLabel("JUGADOR 2", SwingConstants.CENTER);
         titulo.setFont(new Font("Arial", Font.BOLD, 18));
 
         GridBagConstraints gbc = new GridBagConstraints();
 
         JLabel nombreLabel = new JLabel("Ingresa tu nombre:");
         JTextField nombre = new JTextField();
+        nombre.setColumns(20);
         nombre.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -255,6 +257,7 @@ public class GomokuGUI extends JFrame {
         jugador2.add(titulo, BorderLayout.NORTH);
         jugador2.add(nombreLabel, BorderLayout.WEST);
         jugador2.add(nombre, BorderLayout.CENTER);
+
         jugador2.add(selectColorFicha);
         jugador2.add(jugadorCheckBox);
 
@@ -274,16 +277,6 @@ public class GomokuGUI extends JFrame {
 
         tamañoTextField.setColumns(10);
         tamañoTextField.setColumns(10); // Puedes ajustar el tamaño según tus preferencias
-        tamañoTextField.addActionListener(e -> {
-            try {
-
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(null, "Ingresa un número válido.");
-            }
-        });
-        // Segundo TextField
-        JLabel especialesLabel = new JLabel("Porcentaje de especiales:");
-        JTextField especialesTextField = new JTextField();
         tamañoTextField.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -297,6 +290,24 @@ public class GomokuGUI extends JFrame {
                 stoneLimit = size*size;
             }
         });
+        // Segundo TextField
+        JLabel especialesLabel = new JLabel("Porcentaje de especiales:");
+        JTextField especialesTextField = new JTextField();
+        especialesTextField.setColumns(10);
+        especialesTextField.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Cuando se presiona Enter en el JTextField, se actualizará el nombre
+                actualizarEspeciales();
+            }
+            private void actualizarEspeciales() {
+                // Actualiza la variable de clase con el texto actual del JTextField
+                porcentajeEspeciales = Integer.parseInt(especialesTextField.getText());
+                System.out.println("Porcentaje especiales: " + porcentajeEspeciales);
+            }
+        });
+
+
         JButton boton = new JButton("Iniciar Juego");
 
         boton.addActionListener(e -> {
