@@ -25,7 +25,6 @@ public class GomokuGUI extends JFrame {
     private Gomoku gomoku;
     private CardLayout cardLayout;
     private JPanel cardPanel;
-    private JPanel mainPanel;
     private JPanel gamePanel;
     private JPanel boardPanel;
     private Cell[][] cellMatrix;
@@ -72,7 +71,7 @@ public class GomokuGUI extends JFrame {
         cardPanel.add(configurePanel, "config");
         JPanel gamePanel = createGamePanel();
         cardPanel.add(gamePanel, "game");
-        mainPanel = new JPanel(new BorderLayout());
+        JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.add(cardPanel, BorderLayout.CENTER);
         setContentPane(mainPanel);
     }
@@ -137,7 +136,7 @@ public class GomokuGUI extends JFrame {
         configuraciones = new JPanel(new GridBagLayout());
         crearPanelJ1();
         crearPanelJ2();
-        crearPanelTamaño();
+        crearPanelSize();
         return configuraciones;
     }
     private void crearPanelJ1(){
@@ -184,12 +183,9 @@ public class GomokuGUI extends JFrame {
         jugador1.add(nombreLabel, BorderLayout.WEST);
         jugador1.add(nombre, BorderLayout.CENTER);
 
-        ficha1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String colorSeleccionado = (String) ficha1.getSelectedItem();
-                colorJ1 = coloresMap.get(colorSeleccionado);
-            }
+        ficha1.addActionListener(e -> {
+            String colorSeleccionado = (String) ficha1.getSelectedItem();
+            colorJ1 = coloresMap.get(colorSeleccionado);
         });
         jugador1.add(selectColorFicha, BorderLayout.SOUTH);
 
@@ -245,12 +241,9 @@ public class GomokuGUI extends JFrame {
         selectColorFicha.add(colorLabel1);
         selectColorFicha.add(ficha2);
 
-        ficha2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String colorSeleccionado = (String) ficha2.getSelectedItem();
-                colorJ2 = coloresMap.get(colorSeleccionado);
-            }
+        ficha2.addActionListener(e -> {
+            String colorSeleccionado = (String) ficha2.getSelectedItem();
+            colorJ2 = coloresMap.get(colorSeleccionado);
         });
 
         jugador2.add(titulo, BorderLayout.NORTH);
@@ -267,24 +260,24 @@ public class GomokuGUI extends JFrame {
 
         configuraciones.add(jugador2, gbc);
     }
-    private void crearPanelTamaño() {
+    private void crearPanelSize() {
         GridBagConstraints gbc = new GridBagConstraints();
 
         // Primer TextField
-        JLabel tamañoLabel = new JLabel("Tamaño del tablero:");
-        JTextField tamañoTextField = new JTextField();
+        JLabel SizeLabel = new JLabel("Tamaño del tablero:");
+        JTextField SizeTextField = new JTextField();
 
-        tamañoTextField.setColumns(10);
-        tamañoTextField.setColumns(10); // Puedes ajustar el tamaño según tus preferencias
-        tamañoTextField.addActionListener(new ActionListener() {
+        SizeTextField.setColumns(10);
+        SizeTextField.setColumns(10); // Puedes ajustar el tamaño según tus preferencias
+        SizeTextField.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Cuando se presiona Enter en el JTextField, se actualizará el nombre
-                actualizarTamaño();
+                updateSize();
             }
-            private void actualizarTamaño() {
+            private void updateSize() {
                 // Actualiza la variable de clase con el texto actual del JTextField
-                size = Integer.parseInt(tamañoTextField.getText());
+                size = Integer.parseInt(SizeTextField.getText());
                 System.out.println("Tamaño del tablero: " + size);
                 stoneLimit = size*size;
             }
@@ -321,10 +314,10 @@ public class GomokuGUI extends JFrame {
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.anchor = GridBagConstraints.WEST;
-        configuraciones.add(tamañoLabel, gbc);
+        configuraciones.add(SizeLabel, gbc);
 
         gbc.gridy = 3;
-        configuraciones.add(tamañoTextField, gbc);
+        configuraciones.add(SizeTextField, gbc);
 
         gbc.gridy = 4;
         configuraciones.add(especialesLabel, gbc);
@@ -476,37 +469,28 @@ public class GomokuGUI extends JFrame {
         JButton normal = new JButton("NORMAL");
         JButton pesada = new JButton("HEAVY");
         JButton temporal = new JButton("TEMPORARY");
-        normal.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(turn){
-                    // Acción para el botón NORMAL
-                    selectedStoneJ1 = getFirstStoneOfType(stonesJ1, Stone.class);
-                    piedra1.setType('n');
-                    piedra1.repaint();
-                }
+        normal.addActionListener(e -> {
+            if(turn){
+                // Acción para el botón NORMAL
+                selectedStoneJ1 = getFirstStoneOfType(stonesJ1, Stone.class);
+                piedra1.setType('n');
+                piedra1.repaint();
             }
         });
-        pesada.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(turn){
-                    // Acción para el botón HEAVY
-                    selectedStoneJ1 = getFirstStoneOfType(stonesJ1, Heavy.class);
-                    piedra1.setType('h');
-                    piedra1.repaint();
-                }
+        pesada.addActionListener(e -> {
+            if(turn){
+                // Acción para el botón HEAVY
+                selectedStoneJ1 = getFirstStoneOfType(stonesJ1, Heavy.class);
+                piedra1.setType('h');
+                piedra1.repaint();
             }
         });
-        temporal.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(turn){
-                    // Acción para el botón TEMPORARY
-                    selectedStoneJ1 = getFirstStoneOfType(stonesJ1, Temporary.class);
-                    piedra1.setType('t');
-                    piedra1.repaint();
-                }
+        temporal.addActionListener(e -> {
+            if(turn){
+                // Acción para el botón TEMPORARY
+                selectedStoneJ1 = getFirstStoneOfType(stonesJ1, Temporary.class);
+                piedra1.setType('t');
+                piedra1.repaint();
             }
         });
 
@@ -619,37 +603,28 @@ public class GomokuGUI extends JFrame {
         JButton normal = new JButton("NORMAL");
         JButton pesada = new JButton("HEAVY");
         JButton temporal = new JButton("TEMPORARY");
-        normal.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(!turn){
-                    // Acción para el botón NORMAL
-                    selectedStoneJ2 = getFirstStoneOfType(stonesJ2, Stone.class);
-                    piedra2.setType('n');
-                    piedra2.repaint();
-                }
+        normal.addActionListener(e -> {
+            if(!turn){
+                // Acción para el botón NORMAL
+                selectedStoneJ2 = getFirstStoneOfType(stonesJ2, Stone.class);
+                piedra2.setType('n');
+                piedra2.repaint();
             }
         });
-        pesada.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(!turn){
-                    // Acción para el botón HEAVY
-                    selectedStoneJ2 = getFirstStoneOfType(stonesJ2, Heavy.class);
-                    piedra2.setType('h');
-                    piedra2.repaint();
-                }
+        pesada.addActionListener(e -> {
+            if(!turn){
+                // Acción para el botón HEAVY
+                selectedStoneJ2 = getFirstStoneOfType(stonesJ2, Heavy.class);
+                piedra2.setType('h');
+                piedra2.repaint();
             }
         });
-        temporal.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(!turn){
-                    // Acción para el botón TEMPORARY
-                    selectedStoneJ2 = getFirstStoneOfType(stonesJ2, Temporary.class);
-                    piedra2.setType('t');
-                    piedra2.repaint();
-                }
+        temporal.addActionListener(e -> {
+            if(!turn){
+                // Acción para el botón TEMPORARY
+                selectedStoneJ2 = getFirstStoneOfType(stonesJ2, Temporary.class);
+                piedra2.setType('t');
+                piedra2.repaint();
             }
         });
         Dimension buttonSize = new Dimension(120, 30); // Tamaño deseado para los botones
@@ -727,7 +702,7 @@ public class GomokuGUI extends JFrame {
         stonesJ1 = gomoku.getPlayer1().getRemainingStones();
         stonesJ2 = gomoku.getPlayer2().getRemainingStones();
         cellMatrix = gomoku.board();
-        Component[] components = boardPanel.getComponents();
+        boardPanel.getComponents();
         updateBorders();
         updateRemainingLabels();
         boardPanel.revalidate(); // Asegurar que el panel se redibuje correctamente
@@ -793,15 +768,9 @@ public class GomokuGUI extends JFrame {
         getJMenuBar().getMenu(0).getItem(3).addActionListener(e -> {
             //optionSave();
         });
-        getJMenuBar().getMenu(0).getItem(5).addActionListener(e -> {
-            cardLayout.show(cardPanel, "initial");
-        });
-        getJMenuBar().getMenu(0).getItem(6).addActionListener(e -> {
-            cardLayout.show(cardPanel, "config");
-        });
-        getJMenuBar().getMenu(0).getItem(8).addActionListener(e -> {
-            optionExit();
-        });
+        getJMenuBar().getMenu(0).getItem(5).addActionListener(e -> cardLayout.show(cardPanel, "initial"));
+        getJMenuBar().getMenu(0).getItem(6).addActionListener(e -> cardLayout.show(cardPanel, "config"));
+        getJMenuBar().getMenu(0).getItem(8).addActionListener(e -> optionExit());
     }
     private void optionNew() throws Exception {
         // Eliminar el componente boardPanel del gamePanel
@@ -825,9 +794,6 @@ public class GomokuGUI extends JFrame {
     }
     private void optionExit(){
         System.exit(0);
-    }
-    private void guardarFicha(){
-        //en contruccion
     }
     private class CellClickListener extends MouseAdapter {
         private final int row;
