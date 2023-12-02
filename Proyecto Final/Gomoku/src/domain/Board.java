@@ -14,8 +14,8 @@ public class Board {
         this.specialPercentage = specialPercentage;
         dimension = new int[]{rows, columns};
         fillCells();
-        //Class<? extends Cell>[] clasesEspeciales = new Class[]{Mine.class, Golden.class, Teleport.class};
-        //placeSpecialCells(clasesEspeciales,specialPercentage);
+//        Class<? extends Cell>[] clasesEspeciales = new Class[]{Mine.class, Golden.class, Teleport.class};
+//        placeSpecialCells(clasesEspeciales,specialPercentage);
     }
 
     public final void setPlayers(Player[] players) {

@@ -380,8 +380,6 @@ public class GomokuGUI extends JFrame {
     private void prepareElementsBoard() throws Exception {
         if (boardPanel == null) {
             gomoku = new Gomoku(size, stoneLimit, timeLimit, porcentajeEspeciales);
-//            gomoku.getPlayer1().refillStones(stoneLimit/2, porcentajeEspeciales);
-//            gomoku.getPlayer2().refillStones(stoneLimit/2, porcentajeEspeciales);
             // Si el tablero aún no se ha creado, crearlo y agregarlo al mainPanel
             cellMatrix = gomoku.board();
             boardPanel = new JPanel(new GridLayout(cellMatrix.length, cellMatrix[0].length));
@@ -391,6 +389,7 @@ public class GomokuGUI extends JFrame {
                 for (int j = 0; j < cellMatrix[0].length; j++) {
                     Piedra piedra = new Piedra(false);
                     piedras[i][j] = piedra;
+                    piedra.setBackType(chooseColorOfBackgroundPiedra(cellMatrix[i][j]));
                     piedra.addMouseListener(new CellClickListener(i, j));
                     //piedra.setOpaque(false);
                     boardPanel.add(piedra);
@@ -722,6 +721,7 @@ public class GomokuGUI extends JFrame {
                         piedra.setPiedraColor(colorJ2);
                     }
                     piedra.setType(chooseCharForAStone(cellMatrix[i][j].getStone()));
+                    //piedra.setBackType(chooseColorOfBackgroundPiedra(cellMatrix[i][j]));
                     piedra.makeVisible();
                 }else{
                     piedra.makeInvisible();
@@ -854,11 +854,23 @@ public class GomokuGUI extends JFrame {
             return 'n';
         }
     }
+    public char chooseColorOfBackgroundPiedra(Cell cell){
+        if(cell instanceof Mine){
+            return 'm';
+        } else if (cell instanceof Teleport) {
+            return 'p';
+        }else if(cell instanceof Golden){
+            return 'g';
+        }else{
+            return 'c';
+        }
+    }
 
     public static class Piedra extends JPanel {
         private Color piedraColor;
         private Color backgroundColor;
         private char type;
+        private char backType;
         private int life = 6;
         private boolean isVisible;
 
@@ -871,6 +883,7 @@ public class GomokuGUI extends JFrame {
         public void setType(char type){
             this.type = type;
         }
+        public void setBackType(char backType){this.backType = backType;}
         public void setPiedraColor(Color piedraColor) {
             this.piedraColor = piedraColor;
         }
@@ -890,7 +903,7 @@ public class GomokuGUI extends JFrame {
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
-            g.setColor(backgroundColor);
+            setBackgroundColor(g);
             if (!isVisible) {
                 g.fillRect(0, 0, getWidth(), getHeight());
                 setBorder(new LineBorder(new Color(139, 69, 19), 1)); // Puedes ajustar el color y el grosor del borde según tus preferencias
@@ -971,6 +984,22 @@ public class GomokuGUI extends JFrame {
             }
             g.fillPolygon(xPoints, yPoints, 2 * 5);
             g.setColor(backgroundColor);
+        }
+        private void setBackgroundColor(Graphics g) {
+            switch (backType) {
+                case 'm':
+                    g.setColor(new Color(255, 0, 0, 80));
+                    break;
+                case 'p':
+                    g.setColor(new Color(0, 0, 255, 80)); // Cambia a tu color de fondo deseado
+                    break;
+                case 'g':
+                    g.setColor(new Color(255, 215, 0, 80)); // Cambia a tu color de fondo deseado
+                    break;
+                default:
+                    g.setColor(backgroundColor);
+                    break;
+            }
         }
     }
     private void updateBorders() {
