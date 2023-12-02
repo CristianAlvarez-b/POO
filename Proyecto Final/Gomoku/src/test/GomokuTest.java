@@ -59,15 +59,18 @@ public class GomokuTest {
 
     @Test
     void shouldWin() throws Exception {
-        Gomoku gomoku = new Gomoku(15, 800, 60, 0);
+        Gomoku gomoku = new Gomoku(10, 800, 60, 0);
         assertDoesNotThrow(() -> gomoku.setPlayers(Human.class, Human.class));
-
         // Simulate a win condition
-        gomoku.play(1, 3, new Stone(Color.BLACK));
-        gomoku.play(1, 4, new Stone(Color.BLACK));
-        gomoku.play(1, 5, new Stone(Color.BLACK));
-        gomoku.play(1, 6, new Stone(Color.BLACK));
-        assertTrue(gomoku.play(1, 7, new Stone(Color.BLACK))); // Assuming winning condition
+        gomoku.play(0, 0, new Stone(Color.BLACK));
+        gomoku.play(1, 0, new Stone(Color.WHITE));
+        gomoku.play(0, 1, new Stone(Color.BLACK));
+        gomoku.play(1, 1, new Stone(Color.WHITE));
+        gomoku.play(0, 2, new Stone(Color.BLACK));
+        gomoku.play(1, 2, new Stone(Color.WHITE));
+        gomoku.play(0, 3, new Stone(Color.BLACK));
+        gomoku.play(1, 3, new Stone(Color.WHITE));
+        assertTrue(gomoku.play(0, 4, new Stone(Color.BLACK))); // Assuming winning condition
     }
 
 }
