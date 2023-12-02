@@ -80,7 +80,6 @@ public class GomokuGUI extends JFrame {
         JPanel initialPanel = new JPanel(new GridBagLayout());
         initialPanel.setOpaque(false);
         initialPanel.setBackground(Color.BLACK);
-        // Crear un título con "Go" en negrita y "moku" en normal
         JPanel titulo = new JPanel(new BorderLayout());
         titulo.setOpaque(false);
         JLabel titulo1 = new JLabel("", SwingConstants.CENTER);
@@ -715,20 +714,17 @@ public class GomokuGUI extends JFrame {
         Component[] components = boardPanel.getComponents();
         for (int i = 0; i < cellMatrix.length; i++) {
             for (int j = 0; j < cellMatrix[0].length; j++) {
+                Piedra piedra = (Piedra) components[i * cellMatrix[0].length + j];
                 if(cellMatrix[i][j].getStone() != null) {
-                    Piedra piedra = (Piedra) components[i * cellMatrix[0].length + j];
                     // Configurar el color de las joyas y el fondo según la matriz
                     if(cellMatrix[i][j].getStone().getColor().equals(Color.BLACK)){
                         piedra.setPiedraColor(colorJ1);
-                        piedra.setType(chooseCharForAStone(cellMatrix[i][j].getStone()));
-                        piedra.makeVisible();
                     }else{
                         piedra.setPiedraColor(colorJ2);
-                        piedra.setType(chooseCharForAStone(cellMatrix[i][j].getStone()));
-                        piedra.makeVisible();
                     }
+                    piedra.setType(chooseCharForAStone(cellMatrix[i][j].getStone()));
+                    piedra.makeVisible();
                 }else{
-                    Piedra piedra = (Piedra) components[i * cellMatrix[0].length + j];
                     piedra.makeInvisible();
                 }
             }
@@ -740,15 +736,6 @@ public class GomokuGUI extends JFrame {
         boardPanel.repaint();
     }
 
-    private void refreshStoneAppearance(Piedra piedra, Stone stone) {
-        if (stone.getColor().equals(Color.BLACK)) {
-            piedra.setPiedraColor(colorJ1);
-        } else {
-            piedra.setPiedraColor(colorJ2);
-        }
-        piedra.setType(chooseCharForAStone(stone));
-        piedra.makeVisible();
-    }
 
     private void prepareActions() {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -783,6 +770,10 @@ public class GomokuGUI extends JFrame {
         // Crear un nuevo tablero y panel
         gomoku = new Gomoku(size, stoneLimit, timeLimit);
         prepareElementsBoard();
+        piedra1.setType('n');
+        piedra2.setType('n');
+        piedra1.repaint();
+        piedra2.repaint();
         reset();
 
         // Agregar el nuevo boardPanel al gamePanel
@@ -845,11 +836,7 @@ public class GomokuGUI extends JFrame {
             refresh();
         } catch (Exception e) {
             if(e.getMessage().equals(GomokuException.STONE_OVERLOAP)){
-                if(turn){
-                    turn = false;
-                }else{
-                    turn = true;
-                }
+                turn = !turn;
                 JOptionPane.showMessageDialog(null, e.getMessage());
             }else{
                 throw new Exception(e.getMessage());
@@ -927,7 +914,7 @@ public class GomokuGUI extends JFrame {
                         g.fillOval(5, 5, width - 10, height - 10);
 
                         // Dibujar la estrella
-                        drawStar(g, width / 2, height / 2, 15, 5);
+                        drawStar(g, width / 2, height / 2);
                         break;
                     case 't':
                         // Dibujar el óvalo
@@ -965,14 +952,14 @@ public class GomokuGUI extends JFrame {
                 }
             }
         }
-        private void drawStar(Graphics g, int x, int y, int radius, int numPoints) {
-            int[] xPoints = new int[2 * numPoints];
-            int[] yPoints = new int[2 * numPoints];
+        private void drawStar(Graphics g, int x, int y) {
+            int[] xPoints = new int[2 * 5];
+            int[] yPoints = new int[2 * 5];
 
-            double angle = Math.PI / numPoints;
+            double angle = Math.PI / 5;
 
-            for (int i = 0; i < 2 * numPoints; i++) {
-                double r = (i % 2 == 0) ? radius : radius / 2.0;
+            for (int i = 0; i < 2 * 5; i++) {
+                double r = (i % 2 == 0) ? 15 : 15 / 2.0;
                 xPoints[i] = x + (int) (r * Math.cos(i * angle));
                 yPoints[i] = y + (int) (r * Math.sin(i * angle));
             }
@@ -981,7 +968,7 @@ public class GomokuGUI extends JFrame {
             }else{
                 g.setColor(colorJ1);
             }
-            g.fillPolygon(xPoints, yPoints, 2 * numPoints);
+            g.fillPolygon(xPoints, yPoints, 2 * 5);
             g.setColor(backgroundColor);
         }
     }
@@ -992,7 +979,7 @@ public class GomokuGUI extends JFrame {
             piedraJ1.setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
             piedraJ2.setBorder(null);
         } else {
-            // Si es el turno de player2 (derecha), actualizar el borde de player2 y quitar el borde de player1
+            // Sí es el turno de player2 (derecha), actualizar el borde de player2 y quitar el borde de player1
             piedraJ1.setBorder(null);
             piedraJ2.setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
         }
@@ -1000,17 +987,6 @@ public class GomokuGUI extends JFrame {
     public Stone getFirstStoneOfType(ArrayList<Stone> stones,Class<?> type) {
         for (Stone stone : stones) {
             if (type.isInstance(stone) && stone.getClass().equals(type)) {
-                return stone;
-            }
-        }
-        return null; // Si no se encuentra un objeto del tipo especificado
-    }
-    public Stone removeFirstStoneOfType(ArrayList<Stone> stones, Class<?> type) {
-        Iterator<Stone> iterator = stones.iterator();
-        while (iterator.hasNext()) {
-            Stone stone = iterator.next();
-            if (type.isInstance(stone) && stone.getClass() == type) {
-                iterator.remove();
                 return stone;
             }
         }
@@ -1034,7 +1010,7 @@ public class GomokuGUI extends JFrame {
                 GomokuGUI gui = new GomokuGUI();
                 gui.setVisible(true);
             } catch (Exception e) {
-                e.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Paso algo inseperado");
             }
         });
     }
