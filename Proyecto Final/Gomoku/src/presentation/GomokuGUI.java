@@ -480,22 +480,34 @@ public class GomokuGUI extends JFrame {
         normal.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Acción para el botón NORMAL
-                selectedStoneJ1 = getFirstStoneOfType(stonesJ1, Stone.class);
+                if(turn){
+                    // Acción para el botón NORMAL
+                    selectedStoneJ1 = getFirstStoneOfType(stonesJ1, Stone.class);
+                    piedra1.setType('n');
+                    piedra1.repaint();
+                }
             }
         });
         pesada.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Acción para el botón HEAVY
-                selectedStoneJ1 = getFirstStoneOfType(stonesJ1, Heavy.class);
+                if(turn){
+                    // Acción para el botón HEAVY
+                    selectedStoneJ1 = getFirstStoneOfType(stonesJ1, Heavy.class);
+                    piedra1.setType('h');
+                    piedra1.repaint();
+                }
             }
         });
         temporal.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Acción para el botón TEMPORARY
-                selectedStoneJ1 = getFirstStoneOfType(stonesJ1, Temporary.class);
+                if(turn){
+                    // Acción para el botón TEMPORARY
+                    selectedStoneJ1 = getFirstStoneOfType(stonesJ1, Temporary.class);
+                    piedra1.setType('t');
+                    piedra1.repaint();
+                }
             }
         });
 
@@ -552,6 +564,7 @@ public class GomokuGUI extends JFrame {
         // Agregar el JPanel al contenedor principal (mainPanel)
         gamePanel.add(leftPanel, BorderLayout.WEST);
     }
+
 
     private void addRightPanel() {
         JPanel rightPanel = new JPanel(new BorderLayout());
@@ -610,22 +623,34 @@ public class GomokuGUI extends JFrame {
         normal.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Acción para el botón NORMAL
-                selectedStoneJ2 = getFirstStoneOfType(stonesJ2, Stone.class);
+                if(!turn){
+                    // Acción para el botón NORMAL
+                    selectedStoneJ2 = getFirstStoneOfType(stonesJ2, Stone.class);
+                    piedra2.setType('n');
+                    piedra2.repaint();
+                }
             }
         });
         pesada.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Acción para el botón HEAVY
-                selectedStoneJ2 = getFirstStoneOfType(stonesJ2, Heavy.class);
+                if(!turn){
+                    // Acción para el botón HEAVY
+                    selectedStoneJ2 = getFirstStoneOfType(stonesJ2, Heavy.class);
+                    piedra2.setType('h');
+                    piedra2.repaint();
+                }
             }
         });
         temporal.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Acción para el botón TEMPORARY
-                selectedStoneJ2 = getFirstStoneOfType(stonesJ2, Temporary.class);
+                if(!turn){
+                    // Acción para el botón TEMPORARY
+                    selectedStoneJ2 = getFirstStoneOfType(stonesJ2, Temporary.class);
+                    piedra2.setType('t');
+                    piedra2.repaint();
+                }
             }
         });
         Dimension buttonSize = new Dimension(120, 30); // Tamaño deseado para los botones
@@ -709,7 +734,7 @@ public class GomokuGUI extends JFrame {
         boardPanel.revalidate(); // Asegurar que el panel se redibuje correctamente
         boardPanel.repaint();
     }
-    private void refresh(int row, int column) {
+    private void refresh() {
         stonesJ1 = gomoku.getPlayer1().getRemainingStones();
         stonesJ2 = gomoku.getPlayer2().getRemainingStones();
         cellMatrix = gomoku.board();
@@ -843,16 +868,16 @@ public class GomokuGUI extends JFrame {
         try {
             if(gomoku.play(row, col, selectedStone)){
                 if(turn){
-                    refresh(row, col);
+                    refresh();
                     JOptionPane.showMessageDialog(null, "GANAASTEEEEEEEE. "+nombreJ2);
                     cardLayout.show(cardPanel, "initial");
                 }else{
-                    refresh(row, col);
+                    refresh();
                     JOptionPane.showMessageDialog(null, "GANAASTEEEEEEEE. "+nombreJ1);
                     cardLayout.show(cardPanel, "initial");
                 }
             }
-            refresh(row, col);
+            refresh();
         } catch (Exception e) {
             if(e.getMessage().equals(GomokuException.STONE_OVERLOAP)){
                 if(turn){
@@ -956,13 +981,13 @@ public class GomokuGUI extends JFrame {
                         FontMetrics fontMetrics = g.getFontMetrics();
                         String numero;
                         if(life < 7 && life > 4){
-                            numero = "3";
+                            numero = "▼";
                             life--;
                         } else if (life < 5 && life > 2) {
-                            numero = "2";
+                            numero = "V";
                             life--;
                         }else if(life < 3 && life > 0){
-                            numero = "1";
+                            numero = "/";
                             life--;
                         }else{
                             life = 5;
