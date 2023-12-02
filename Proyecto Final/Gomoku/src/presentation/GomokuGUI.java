@@ -59,7 +59,6 @@ public class GomokuGUI extends JFrame {
         setSize(new Dimension(SIDE * SIZE+200, SIDE * SIZE + 50));
         setResizable(false);
         setLocationRelativeTo(null);
-         // Add mainPanel to the frame
     }
     private void prepareScreens() throws Exception {
         cardLayout = new CardLayout();
@@ -380,9 +379,9 @@ public class GomokuGUI extends JFrame {
     }
     private void prepareElementsBoard() throws Exception {
         if (boardPanel == null) {
-            gomoku = new Gomoku(size, stoneLimit, timeLimit);
-            gomoku.getPlayer1().refillStones(stoneLimit/2, porcentajeEspeciales);
-            gomoku.getPlayer2().refillStones(stoneLimit/2, porcentajeEspeciales);
+            gomoku = new Gomoku(size, stoneLimit, timeLimit, porcentajeEspeciales);
+//            gomoku.getPlayer1().refillStones(stoneLimit/2, porcentajeEspeciales);
+//            gomoku.getPlayer2().refillStones(stoneLimit/2, porcentajeEspeciales);
             // Si el tablero aún no se ha creado, crearlo y agregarlo al mainPanel
             cellMatrix = gomoku.board();
             boardPanel = new JPanel(new GridLayout(cellMatrix.length, cellMatrix[0].length));
@@ -471,7 +470,7 @@ public class GomokuGUI extends JFrame {
         normal.addActionListener(e -> {
             if(turn){
                 // Acción para el botón NORMAL
-                selectedStoneJ1 = getFirstStoneOfType(stonesJ1, Stone.class);
+                selectedStoneJ1 =  new Stone(colorJ1);
                 piedra1.setType('n');
                 piedra1.repaint();
             }
@@ -479,7 +478,7 @@ public class GomokuGUI extends JFrame {
         pesada.addActionListener(e -> {
             if(turn){
                 // Acción para el botón HEAVY
-                selectedStoneJ1 = getFirstStoneOfType(stonesJ1, Heavy.class);
+                selectedStoneJ1 = new Heavy(colorJ1);
                 piedra1.setType('h');
                 piedra1.repaint();
             }
@@ -487,7 +486,7 @@ public class GomokuGUI extends JFrame {
         temporal.addActionListener(e -> {
             if(turn){
                 // Acción para el botón TEMPORARY
-                selectedStoneJ1 = getFirstStoneOfType(stonesJ1, Temporary.class);
+                selectedStoneJ1 = new Temporary(colorJ1);
                 piedra1.setType('t');
                 piedra1.repaint();
             }
@@ -605,7 +604,7 @@ public class GomokuGUI extends JFrame {
         normal.addActionListener(e -> {
             if(!turn){
                 // Acción para el botón NORMAL
-                selectedStoneJ2 = getFirstStoneOfType(stonesJ2, Stone.class);
+                selectedStoneJ2 = new Stone(colorJ2);
                 piedra2.setType('n');
                 piedra2.repaint();
             }
@@ -613,7 +612,7 @@ public class GomokuGUI extends JFrame {
         pesada.addActionListener(e -> {
             if(!turn){
                 // Acción para el botón HEAVY
-                selectedStoneJ2 = getFirstStoneOfType(stonesJ2, Heavy.class);
+                selectedStoneJ2 = new Heavy(colorJ2);
                 piedra2.setType('h');
                 piedra2.repaint();
             }
@@ -621,7 +620,7 @@ public class GomokuGUI extends JFrame {
         temporal.addActionListener(e -> {
             if(!turn){
                 // Acción para el botón TEMPORARY
-                selectedStoneJ2 = getFirstStoneOfType(stonesJ2, Temporary.class);
+                selectedStoneJ2 = new Temporary(colorJ2);
                 piedra2.setType('t');
                 piedra2.repaint();
             }
@@ -768,10 +767,11 @@ public class GomokuGUI extends JFrame {
         boardPanel = null;
         turn = true;
         // Crear un nuevo tablero y panel
-        gomoku = new Gomoku(size, stoneLimit, timeLimit);
+        gomoku = new Gomoku(size, stoneLimit, timeLimit, porcentajeEspeciales);
         prepareElementsBoard();
         piedra1.setType('n');
         piedra2.setType('n');
+        selectedStoneJ1 = null;
         piedra1.repaint();
         piedra2.repaint();
         reset();
@@ -799,10 +799,8 @@ public class GomokuGUI extends JFrame {
         public void mouseClicked(MouseEvent e) {
             try {
                 ponerFicha(row, col);
-            } catch (GomokuException ex) {
-                throw new RuntimeException(ex);
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(null, "Selecciona el tipo de ficha que quieres poner!");
+                JOptionPane.showMessageDialog(null, ex.getMessage());
             }
         }
     }
@@ -826,11 +824,11 @@ public class GomokuGUI extends JFrame {
                 if(turn){
                     refresh();
                     JOptionPane.showMessageDialog(null, "GANAASTEEEEEEEE. "+nombreJ2);
-                    cardLayout.show(cardPanel, "initial");
+                    //cardLayout.show(cardPanel, "initial");
                 }else{
                     refresh();
                     JOptionPane.showMessageDialog(null, "GANAASTEEEEEEEE. "+nombreJ1);
-                    cardLayout.show(cardPanel, "initial");
+                    //cardLayout.show(cardPanel, "initial");
                 }
             }
             refresh();
@@ -838,7 +836,10 @@ public class GomokuGUI extends JFrame {
             if(e.getMessage().equals(GomokuException.STONE_OVERLOAP)){
                 turn = !turn;
                 JOptionPane.showMessageDialog(null, e.getMessage());
-            }else{
+            } else if (e.getMessage().equals(GomokuException.FULL_BOARD)) {
+                refresh();
+                JOptionPane.showMessageDialog(null, "Empate.");
+            } else{
                 throw new Exception(e.getMessage());
             }
         }
@@ -943,7 +944,7 @@ public class GomokuGUI extends JFrame {
                             life--;
                         }else{
                             life = 5;
-                            numero = "3";
+                            numero = "▼";
                         }
 
                         int x = (getWidth() - fontMetrics.stringWidth(numero)) / 2;

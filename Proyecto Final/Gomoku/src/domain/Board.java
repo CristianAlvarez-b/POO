@@ -8,12 +8,14 @@ public class Board {
     private Cell[][] cells;
     private Player[] players;
     private boolean turn;
-    public Board(int rows, int columns, int specialStonesPercentage) throws Exception {
+    private int specialPercentage;
+    public Board(int rows, int columns, int specialPercentage) throws Exception {
         turn = true;
+        this.specialPercentage = specialPercentage;
         dimension = new int[]{rows, columns};
         fillCells();
-        Class<? extends Cell>[] clasesEspeciales = new Class[]{Mine.class, Golden.class, Teleport.class};
-        placeSpecialCells(clasesEspeciales,specialStonesPercentage);
+        //Class<? extends Cell>[] clasesEspeciales = new Class[]{Mine.class, Golden.class, Teleport.class};
+        //placeSpecialCells(clasesEspeciales,specialPercentage);
     }
 
     public final void setPlayers(Player[] players) {
@@ -64,21 +66,17 @@ public class Board {
 
     public final int addStone(int row, int column, Stone stone) throws Exception {
         int punctuation = 0;
-        if (!isBoardFull()) {
-            if (isValidPosition(row, column)) {
-                Cell cell = cells[row][column];
-                if (!cellHasStone(cell)) {
-                    cell.setStone(stone);
-                    punctuation += cell.updateState(turn);
-                    updateStateForAllCells(); // Actualizar el estado del tablero después de agregar la piedra
-                } else {
-                    throw new GomokuException(GomokuException.STONE_OVERLOAP);
-                }
+        if (isValidPosition(row, column)) {
+            Cell cell = cells[row][column];
+            if (!cellHasStone(cell)) {
+                cell.setStone(stone);
+                punctuation += cell.updateState(turn);
+                updateStateForAllCells(); // Actualizar el estado del tablero después de agregar la piedra
             } else {
-                throw new GomokuException(GomokuException.OUT_OF_BOARD);
+                throw new GomokuException(GomokuException.STONE_OVERLOAP);
             }
-        }else {
-            throw new GomokuException(GomokuException.FULL_BOARD);
+        } else {
+            throw new GomokuException(GomokuException.OUT_OF_BOARD);
         }
         turn = !turn;
         return punctuation;
@@ -146,8 +144,11 @@ public class Board {
     }
     public final boolean getTurn(){return turn;}
 
-    public boolean verifyGame(boolean turn) {
+    public boolean verifyGame(boolean turn) throws GomokuException {
         // Verificar ganador en filas
+        if(isBoardFull()){
+            throw new GomokuException(GomokuException.FULL_BOARD);
+        }
         return checkRows(turn) || checkColumns(turn) || checkDiagonalLeftToRight(turn) || checkDiagonalRightToLeft(turn);
     }
 
@@ -205,9 +206,9 @@ public class Board {
             int count = Math.min(k + 1, Math.min(rows, columns - startRow));
             int stoneCount = 0;
 
-            for (int j = 1; j < count; j++) {
+            for (int j = 0; j < count; j++) {  // Modificado: j inicia desde 0
                 int row = startRow + j;
-                int col = Math.min(columns - 1, j);
+                int col = Math.min(columns - 1, k - j);  // Modificado: Cálculo de col corregido
 
                 stoneCount = updateStoneCount(stoneCount, cells[row][col], playerColor);
 
@@ -216,7 +217,6 @@ public class Board {
                 }
             }
         }
-
         return false;
     }
 
@@ -232,12 +232,14 @@ public class Board {
 
             for (int j = 0; j < count; j++) {
                 int row = startRow + j;
-                int col = Math.min(columns - 1, Math.max(0, k - startRow - j));
+                int col = columns - 1 - (k - j);  // Ajuste del cálculo de la columna
 
-                stoneCount = updateStoneCount(stoneCount, cells[row][col], playerColor);
+                if (row >= 0 && row < rows && col >= 0 && col < columns) {
+                    stoneCount = updateStoneCount(stoneCount, cells[row][col], playerColor);
 
-                if (stoneCount == 5) {
-                    return true;  // El jugador actual ha ganado
+                    if (stoneCount == 5) {
+                        return true;  // El jugador actual ha ganado
+                    }
                 }
             }
         }
@@ -252,6 +254,10 @@ public class Board {
         } else {
             return 0;
         }
+    }
+
+    public int getSpecialPercentage() {
+        return specialPercentage;
     }
 
     public final Player[] getPlayers() {

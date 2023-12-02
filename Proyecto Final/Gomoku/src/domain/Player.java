@@ -20,9 +20,11 @@ public abstract class Player {
     public void addPunctuation(int punctuation){this.punctuation += punctuation;}
 
     public Stone eliminateStone(ArrayList<Stone> stoneList, Class<?> type) throws GomokuException {
+        if(canRefill && stoneList.isEmpty()){
+            refillStones(board.getDimension()[0], board.getSpecialPercentage());
+        }
         Iterator<Stone> iterator = stoneList.iterator();
         Stone foundStone = null;
-
         while (iterator.hasNext() && foundStone == null) {
             Stone stone = iterator.next();
             if (type.isInstance(stone) && stone.getClass() == type) {

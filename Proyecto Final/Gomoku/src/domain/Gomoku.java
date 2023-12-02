@@ -10,11 +10,11 @@ public class Gomoku{
     private int stoneLimit = 800;
     private int timeLimit;
 
-    public Gomoku(int size, int stoneLimit, int timeLimit) throws Exception {
+    public Gomoku(int size, int stoneLimit, int timeLimit, int porcentajeEspeciales) throws Exception {
         if(size < 10){
             throw new GomokuException(GomokuException.INVALID_BOARD_SIZE);
         }
-        board = new Board(size, size, 0);
+        board = new Board(size, size, porcentajeEspeciales);
         this.stoneLimit = stoneLimit;
         this.timeLimit = timeLimit;
         this.setPlayers(Human.class, Human.class);
@@ -23,6 +23,8 @@ public class Gomoku{
     public void setPlayers(Class<? extends Player> playerClass1, Class<? extends Player> playerClass2) throws Exception {
         this.player1 = playerClass1.getDeclaredConstructor(Color.class, Board.class, int.class).newInstance(Color.BLACK, board, 0);
         this.player2 = playerClass2.getDeclaredConstructor(Color.class, Board.class, int.class).newInstance(Color.WHITE, board, 0);
+        player1.refillStones(stoneLimit, board.getSpecialPercentage());
+        player2.refillStones(stoneLimit, board.getSpecialPercentage());
         board.setPlayers(new Player[]{this.player1,this.player2});
     }
     public boolean play(int row, int column, Stone stone) throws Exception {
