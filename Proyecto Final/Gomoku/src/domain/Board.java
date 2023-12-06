@@ -5,17 +5,17 @@ import java.util.List;
 
 public class Board {
     private final int[] dimension;
-    private Cell[][] cells;
-    private Player[] players;
-    private boolean turn;
+    protected Cell[][] cells;
+    protected Player[] players;
+    protected boolean turn;
     private int specialPercentage;
     public Board(int rows, int columns, int specialPercentage) throws Exception {
         turn = true;
         this.specialPercentage = specialPercentage;
         dimension = new int[]{rows, columns};
         fillCells();
-//        Class<? extends Cell>[] clasesEspeciales = new Class[]{Mine.class, Golden.class, Teleport.class};
-//        placeSpecialCells(clasesEspeciales,specialPercentage);
+        Class<? extends Cell>[] clasesEspeciales = new Class[]{Mine.class, Golden.class, Teleport.class};
+        placeSpecialCells(clasesEspeciales,specialPercentage);
     }
 
     public final void setPlayers(Player[] players) {

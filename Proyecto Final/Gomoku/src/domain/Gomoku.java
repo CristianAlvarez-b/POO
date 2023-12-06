@@ -1,6 +1,7 @@
 package domain;
 
 import java.awt.*;
+import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 
 public class Gomoku{
@@ -52,5 +53,29 @@ public class Gomoku{
     public Cell[][] board() {
         return board.getCells();
     }
+
+    public static Gomoku open(File archivo) throws GomokuException, ClassNotFoundException {
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(archivo))) {
+            String header = (String) in.readObject();
+            if (!header.equals("Gomoku storage\n")) {
+                throw new GomokuException("El archivo no es un archivo de almacenamiento de gomoku válido.");
+            }
+            return (Gomoku) in.readObject();
+        } catch (FileNotFoundException e) {
+            throw new GomokuException("El archivo no existe: " + archivo.getName());
+        } catch (IOException e) {
+            throw new GomokuException("Error al leer el archivo: " + archivo.getName());
+        }
+    }
+    public void save(File archivo) throws GomokuException {
+        File archivoFinal = new File(archivo.getPath() + ".dat");
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(archivoFinal))) {
+            out.writeObject("Gomoku storage\n");
+            out.writeObject(this);
+        } catch (IOException e) {
+            throw new GomokuException("Error al escribir en el archivo: "+ archivo.getName());
+        }
+    }
+
 
 }

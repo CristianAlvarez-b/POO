@@ -7,6 +7,7 @@ public class GomokuException extends Exception{
     public static final String INVALID_BOARD_SIZE = "Tamano invalido del tablero.";
     public static final String NO_STONE_FOUND = "Piedra no encontrada.";
     public static final String MAXIMUS_LIFE = "Vida maxima alcanzada";
+    public static final String DRAW = "Empate";
 
     public GomokuException(String message){
         super(message);

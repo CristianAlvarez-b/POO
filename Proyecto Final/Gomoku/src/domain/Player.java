@@ -91,4 +91,8 @@ public abstract class Player {
     public ArrayList<Stone> getExtraStones() {
         return extraStones;
     }
+
+    public void setCanRefill(boolean canRefill) {
+        this.canRefill = canRefill;
+    }
 }
