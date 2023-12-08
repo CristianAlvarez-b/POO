@@ -1,7 +1,11 @@
 package domain;
-public class Cell {
+
+import java.io.Serializable;
+
+public class Cell implements Serializable {
     protected Board board;
     protected Stone stone;
+    protected boolean active;
     protected int[] position;
 
     public Cell(Board board, int[] position) {
@@ -29,5 +33,9 @@ public class Cell {
                 stone = null;
             }
         }
+    }
+
+    public boolean isActive() {
+        return active;
     }
 }

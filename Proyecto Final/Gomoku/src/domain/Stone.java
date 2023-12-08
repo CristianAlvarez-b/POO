@@ -1,6 +1,8 @@
 package domain;
 import java.awt.*;
-public class Stone {
+import java.io.Serializable;
+
+public class Stone implements Serializable {
     protected Color color;
     protected int value;
     public Stone(Color color){

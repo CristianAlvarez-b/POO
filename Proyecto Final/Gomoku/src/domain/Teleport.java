@@ -2,7 +2,7 @@ package domain;
 import java.util.*;
 
 public class Teleport extends Cell{
-    private boolean active;
+
     public Teleport(Board board, int[] position){
         super(board, position);
         active = true;

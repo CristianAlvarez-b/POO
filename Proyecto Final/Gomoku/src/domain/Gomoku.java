@@ -4,12 +4,13 @@ import java.awt.*;
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 
-public class Gomoku{
+public class Gomoku implements Serializable{
     private Board board;
     private Player player1;
     private Player player2;
     private int stoneLimit = 800;
     private int timeLimit;
+    private int size;
 
     public Gomoku(int size, int stoneLimit, int timeLimit, int porcentajeEspeciales) throws Exception {
         if(size < 10){
@@ -20,6 +21,7 @@ public class Gomoku{
         this.timeLimit = timeLimit;
         this.setPlayers(Human.class, Human.class);
         board.setPlayers(new Player[]{this.player1,this.player2});
+        this.size = size;
     }
     public void setPlayers(Class<? extends Player> playerClass1, Class<? extends Player> playerClass2) throws Exception {
         this.player1 = playerClass1.getDeclaredConstructor(Color.class, Board.class, int.class).newInstance(Color.BLACK, board, 0);
@@ -75,6 +77,10 @@ public class Gomoku{
         } catch (IOException e) {
             throw new GomokuException("Error al escribir en el archivo: "+ archivo.getName());
         }
+    }
+
+    public int getSize() {
+        return size;
     }
 
     public Board getBoard() {

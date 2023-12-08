@@ -2,7 +2,6 @@ package domain;
 import java.util.List;
 
 public class Mine extends Cell{
-    private boolean active;
     public Mine(Board board, int[] position){
         super(board, position);
         active = true;

@@ -5,7 +5,7 @@ import java.lang.*;
 import java.util.List;
 
 public class Golden extends Cell{
-    private boolean active;
+    //private boolean active;
     public Golden(Board board, int[] position){
         super(board, position);
         active = true;

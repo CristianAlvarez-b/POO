@@ -1,5 +1,8 @@
 package domain;
-public class GomokuException extends Exception{
+
+import java.io.Serializable;
+
+public class GomokuException extends Exception implements Serializable {
     public static final String OUT_OF_BOARD = "Posicion fuera del tablero";
     public static final String NEGATIVE_POSITION = "Posicion invalida";
     public static final String STONE_OVERLOAP = "Ya hay una piedra en la casilla";

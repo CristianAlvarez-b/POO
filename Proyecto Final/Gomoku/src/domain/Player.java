@@ -1,9 +1,10 @@
 package domain;
+import java.io.Serializable;
 import java.util.*;
 import java.awt.*;
 
 
-public abstract class Player {
+public abstract class Player implements Serializable {
     protected String name;
     protected ArrayList<Stone> remainingStones;
     protected boolean canRefill = true;
@@ -14,6 +15,10 @@ public abstract class Player {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public abstract void play(int row, int column, Stone stone) throws Exception;
@@ -92,6 +97,10 @@ public abstract class Player {
     }
 
     public Color getColor() {return color;}
+
+    public void setColor(Color color) {
+        this.color = color;
+    }
 
     public ArrayList<Stone> getExtraStones() {
         return extraStones;

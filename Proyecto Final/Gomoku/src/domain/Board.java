@@ -1,9 +1,10 @@
 package domain;
 import java.awt.*;
+import java.io.Serializable;
 import java.util.*;
 import java.util.List;
 
-public class Board {
+public class Board implements Serializable {
     private final int[] dimension;
     protected Cell[][] cells;
     protected Player[] players;
