@@ -4,16 +4,15 @@ import domain.*;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 public class GomokuGUI extends JFrame {
     private JPanel configuraciones;
-    public static final int SIDE = 30;
-    public static final int SIZE = 30;
+
     private JLabel numNormalJ1;
     private JLabel numPesadaJ1;
     private JLabel numTemporaryJ1;
@@ -30,14 +29,13 @@ public class GomokuGUI extends JFrame {
     private Cell[][] cellMatrix;
     private JPanel piedraJ1;
     private JPanel piedraJ2;
-
     private String nombreJ1 = "Jugador 1.";
     private String nombreJ2 = "Jugador 2.";
     private boolean turn = true;
     private Piedra piedra1;
     private Piedra piedra2;
     private int size = 15;
-    private int stoneLimit = size*size;
+    private int stoneLimit = size * size;
     private int timeLimit = -1;
     private int porcentajeEspeciales = 50;
     public static Color colorJ1 = Color.BLACK;
@@ -45,8 +43,8 @@ public class GomokuGUI extends JFrame {
     private Stone selectedStoneJ1 = null;
     private Stone selectedStoneJ2 = null;
     private boolean canRefill;
-    private static ArrayList<Stone> stonesJ1 = new ArrayList<>();
-    private static ArrayList<Stone> stonesJ2 = new ArrayList<>();
+
+
     public GomokuGUI() throws Exception {
         prepareElements();
         prepareActions();
@@ -56,10 +54,18 @@ public class GomokuGUI extends JFrame {
         prepareScreens();
         prepareActionsMenu();
         setTitle("Gomoku");
-        setSize(new Dimension(SIDE * SIZE+200, SIDE * SIZE + 50));
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+
+        // Calcular el tamaño deseado de la ventana (ajustar según tus necesidades)
+        int windowWidth = (int) (screenSize.width * 0.8);
+        int windowHeight = (int) (screenSize.height * 0.9);
+
+        // Establecer el tamaño de la ventana
+        setSize(new Dimension(windowWidth, windowHeight));
         setResizable(false);
         setLocationRelativeTo(null);
     }
+
     private void prepareScreens() throws Exception {
         cardLayout = new CardLayout();
         cardPanel = new JPanel(cardLayout);
@@ -74,6 +80,7 @@ public class GomokuGUI extends JFrame {
         mainPanel.add(cardPanel, BorderLayout.CENTER);
         setContentPane(mainPanel);
     }
+
     private JPanel createInitialPanel() {
         ImagePanel fondo = new ImagePanel("GomokuImages/inicio.png");
         JPanel initialPanel = new JPanel(new GridBagLayout());
@@ -129,7 +136,7 @@ public class GomokuGUI extends JFrame {
         return fondo;
     }
 
-    private JPanel createConfiguraciones(){
+    private JPanel createConfiguraciones() {
 
         configuraciones = new JPanel(new GridBagLayout());
         crearPanelJ1();
@@ -137,7 +144,8 @@ public class GomokuGUI extends JFrame {
         crearPanelSize();
         return configuraciones;
     }
-    private void crearPanelJ1(){
+
+    private void crearPanelJ1() {
         HashMap<String, Color> coloresMap = new HashMap<>();
         coloresMap.put("NEGRO", Color.BLACK);
         coloresMap.put("GRIS", new Color(64, 64, 64));
@@ -153,21 +161,24 @@ public class GomokuGUI extends JFrame {
         JLabel nombreLabel = new JLabel("Ingresa tu nombre:");
 
         JTextField nombre = new JTextField();
-        nombre.setColumns(20);
-        nombre.addActionListener(new ActionListener() {
+
+        // Agregar DocumentListener al JTextField
+        nombre.getDocument().addDocumentListener(new DocumentListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                // Cuando se presiona Enter en el JTextField, se actualizará el nombre
-                actualizarNombreJ1();
-            }
-            private void actualizarNombreJ1() {
-                // Actualiza la variable de clase con el texto actual del JTextField
+            public void insertUpdate(DocumentEvent e) {
                 nombreJ1 = nombre.getText();
-                System.out.println("Nombre actualizado del jugador 1: " + nombreJ1);
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                nombreJ1 = nombre.getText();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                nombreJ1 = nombre.getText();
             }
         });
-
-
         JPanel selectColorFicha = new JPanel(new FlowLayout());
         JLabel colorLabel1 = new JLabel("Selecciona el color de ficha:");
         String[] coloresJ1 = {"NEGRO", "GRIS", "AZUL", "VERDE", "PURPURA", "ROJO"};
@@ -215,16 +226,20 @@ public class GomokuGUI extends JFrame {
         JLabel nombreLabel = new JLabel("Ingresa tu nombre:");
         JTextField nombre = new JTextField();
         nombre.setColumns(20);
-        nombre.addActionListener(new ActionListener() {
+        nombre.getDocument().addDocumentListener(new DocumentListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                // Cuando se presiona Enter en el JTextField, se actualizará el nombre
-                actualizarNombreJ2();
-            }
-            private void actualizarNombreJ2() {
-                // Actualiza la variable de clase con el texto actual del JTextField
+            public void insertUpdate(DocumentEvent e) {
                 nombreJ2 = nombre.getText();
-                System.out.println("Nombre actualizado del jugador 1: " + nombreJ2);
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                nombreJ2 = nombre.getText();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                nombreJ2 = nombre.getText();
             }
         });
 
@@ -267,36 +282,67 @@ public class GomokuGUI extends JFrame {
 
         SizeTextField.setColumns(10);
         SizeTextField.setColumns(10); // Puedes ajustar el tamaño según tus preferencias
-        SizeTextField.addActionListener(new ActionListener() {
+
+        SizeTextField.getDocument().addDocumentListener(new DocumentListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                // Cuando se presiona Enter en el JTextField, se actualizará el nombre
+            public void insertUpdate(DocumentEvent e) {
+                updateSize();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                updateSize();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
                 updateSize();
             }
             private void updateSize() {
-                // Actualiza la variable de clase con el texto actual del JTextField
-                size = Integer.parseInt(SizeTextField.getText());
-                System.out.println("Tamaño del tablero: " + size);
-                stoneLimit = size*size;
+                SwingUtilities.invokeLater(() -> {
+                    try {
+                        size = Integer.parseInt(SizeTextField.getText());
+                        System.out.println("Tamaño del tablero: " + size);
+                        stoneLimit = size * size;
+                    } catch (NumberFormatException e) {
+                        JOptionPane.showMessageDialog(null, "No estás ingresando un número válido.");
+                        SizeTextField.setText("");
+                    }
+                });
             }
         });
+
         // Segundo TextField
         JLabel especialesLabel = new JLabel("Porcentaje de especiales:");
         JTextField especialesTextField = new JTextField();
         especialesTextField.setColumns(10);
-        especialesTextField.addActionListener(new ActionListener() {
+        especialesTextField.getDocument().addDocumentListener(new DocumentListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                // Cuando se presiona Enter en el JTextField, se actualizará el nombre
+            public void insertUpdate(DocumentEvent e) {
+                actualizarEspeciales();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                actualizarEspeciales();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
                 actualizarEspeciales();
             }
             private void actualizarEspeciales() {
-                // Actualiza la variable de clase con el texto actual del JTextField
-                porcentajeEspeciales = Integer.parseInt(especialesTextField.getText());
-                System.out.println("Porcentaje especiales: " + porcentajeEspeciales);
+                SwingUtilities.invokeLater(() -> {
+                    try {
+                        porcentajeEspeciales = Integer.parseInt(especialesTextField.getText());
+                        System.out.println("Porcentaje especiales: " + porcentajeEspeciales);
+                    } catch (NumberFormatException e) {
+                        JOptionPane.showMessageDialog(null, "No estás ingresando un número válido.");
+                        especialesTextField.setText("");
+                    }
+                });
             }
         });
-
 
         JButton boton = new JButton("Iniciar Juego");
 
@@ -696,8 +742,6 @@ public class GomokuGUI extends JFrame {
         gamePanel.add(bottomPanel, BorderLayout.SOUTH);
     }
     private void reset() {
-        stonesJ1 = gomoku.getPlayer1().getRemainingStones();
-        stonesJ2 = gomoku.getPlayer2().getRemainingStones();
         cellMatrix = gomoku.board();
         boardPanel.getComponents();
         updateBorders();
@@ -706,8 +750,7 @@ public class GomokuGUI extends JFrame {
         boardPanel.repaint();
     }
     private void refresh() {
-        stonesJ1 = gomoku.getPlayer1().getRemainingStones();
-        stonesJ2 = gomoku.getPlayer2().getRemainingStones();
+        turn = gomoku.getBoard().getTurn();
         cellMatrix = gomoku.board();
         Component[] components = boardPanel.getComponents();
         for (int i = 0; i < cellMatrix.length; i++) {
@@ -807,17 +850,27 @@ public class GomokuGUI extends JFrame {
     private void ponerFicha(int row, int col) throws Exception {
         Stone selectedStone;
         if (turn) {
-            if(selectedStoneJ1 == null){
-                selectedStoneJ1 = getFirstStoneOfType(stonesJ1, Stone.class);
+            if(!gomoku.getPlayer1().getExtraStones().isEmpty()){
+                selectedStone = gomoku.getPlayer1().getExtraStones().get(0);
+                gomoku.getPlayer1().eliminateStone(gomoku.getPlayer1().getExtraStones(), selectedStone.getClass());
+            }else{
+                if(selectedStoneJ1 == null){
+                    selectedStoneJ1 = getFirstStoneOfType(gomoku.getPlayer1().getRemainingStones(), Stone.class);
+                }
+                turn = false;
+                selectedStone = selectedStoneJ1;
             }
-            turn = false;
-            selectedStone = selectedStoneJ1;
         } else {
-            if(selectedStoneJ2 == null){
-                selectedStoneJ2 = getFirstStoneOfType(stonesJ2, Stone.class);
+            if(!gomoku.getPlayer2().getExtraStones().isEmpty()){
+                selectedStone = gomoku.getPlayer2().getExtraStones().get(0);
+                gomoku.getPlayer2().eliminateStone(gomoku.getPlayer2().getExtraStones(), selectedStone.getClass());
+            }else{
+                if(selectedStoneJ2 == null){
+                    selectedStoneJ2 = getFirstStoneOfType(gomoku.getPlayer2().getRemainingStones(), Stone.class);
+                }
+                turn = true;
+                selectedStone = selectedStoneJ2;
             }
-            turn = true;
-            selectedStone = selectedStoneJ2;
         }
         try {
             if(gomoku.play(row, col, selectedStone)){
@@ -831,6 +884,7 @@ public class GomokuGUI extends JFrame {
                     //cardLayout.show(cardPanel, "initial");
                 }
             }
+            gomoku.getBoard().setTurn(turn);
             refresh();
         } catch (Exception e) {
             if(e.getMessage().equals(GomokuException.STONE_OVERLOAP)){

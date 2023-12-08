@@ -144,6 +144,10 @@ public class Board {
     }
     public final boolean getTurn(){return turn;}
 
+    public void setTurn(boolean turn) {
+        this.turn = turn;
+    }
+
     public boolean verifyGame(boolean turn) throws GomokuException {
         // Verificar ganador en filas
         if(isBoardFull()){

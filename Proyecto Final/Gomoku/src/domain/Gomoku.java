@@ -77,5 +77,7 @@ public class Gomoku{
         }
     }
 
-
+    public Board getBoard() {
+        return board;
+    }
 }

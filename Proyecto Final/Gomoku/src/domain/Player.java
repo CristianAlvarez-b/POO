@@ -4,12 +4,17 @@ import java.awt.*;
 
 
 public abstract class Player {
+    protected String name;
     protected ArrayList<Stone> remainingStones;
     protected boolean canRefill = true;
     protected Color color;
     protected ArrayList<Stone> extraStones;
     protected Board board;
     protected int punctuation;
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public abstract void play(int row, int column, Stone stone) throws Exception;
 
