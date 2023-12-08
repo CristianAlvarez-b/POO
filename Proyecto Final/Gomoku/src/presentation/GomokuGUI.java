@@ -171,7 +171,7 @@ public class GomokuGUI extends JFrame {
             @Override
             public void insertUpdate(DocumentEvent e) {
                 if(nombre.getText().isEmpty()){
-                    nombreJ1 = "Jugador 1";;
+                    nombreJ1 = "Jugador 1";
                 }else{
                     nombreJ1 = nombre.getText();
                 }
@@ -180,7 +180,7 @@ public class GomokuGUI extends JFrame {
             @Override
             public void removeUpdate(DocumentEvent e) {
                 if(nombre.getText().isEmpty()){
-                    nombreJ1 = "Jugador 1";;
+                    nombreJ1 = "Jugador 1";
                 }else{
                     nombreJ1 = nombre.getText();
                 }
@@ -189,7 +189,7 @@ public class GomokuGUI extends JFrame {
             @Override
             public void changedUpdate(DocumentEvent e) {
                 if(nombre.getText().isEmpty()){
-                    nombreJ1 = "Jugador 1";;
+                    nombreJ1 = "Jugador 1";
                 }else{
                     nombreJ1 = nombre.getText();
                 }
@@ -246,7 +246,7 @@ public class GomokuGUI extends JFrame {
             @Override
             public void insertUpdate(DocumentEvent e) {
                 if(nombre.getText().isEmpty()){
-                    nombreJ2 = "Jugador 1";;
+                    nombreJ2 = "Jugador 2";
                 }else{
                     nombreJ2 = nombre.getText();
                 }
@@ -255,7 +255,7 @@ public class GomokuGUI extends JFrame {
             @Override
             public void removeUpdate(DocumentEvent e) {
                 if(nombre.getText().isEmpty()){
-                    nombreJ2 = "Jugador 1";;
+                    nombreJ2 = "Jugador 2";
                 }else{
                     nombreJ2 = nombre.getText();
                 }
@@ -264,7 +264,7 @@ public class GomokuGUI extends JFrame {
             @Override
             public void changedUpdate(DocumentEvent e) {
                 if(nombre.getText().isEmpty()){
-                    nombreJ2 = "Jugador 1";;
+                    nombreJ2 = "Jugador 2";
                 }else{
                     nombreJ2 = nombre.getText();
                 }
@@ -471,9 +471,7 @@ public class GomokuGUI extends JFrame {
             }
             gamePanel.add(boardPanel, BorderLayout.CENTER);
         } else {
-            // Si el tablero ya está creado, simplemente refresca su contenido
-//            gomoku = null;
-//            boardPanel = null;
+
             refresh();
         }
     }
@@ -850,16 +848,8 @@ public class GomokuGUI extends JFrame {
         piedra2.repaint();
         gomoku.getPlayer1().setColor(colorJ1);
         gomoku.getPlayer2().setColor(colorJ2);
-        if(nombreJ1 == null){
-            gomoku.getPlayer1().setName("Jugador 1");
-        }else{
-            gomoku.getPlayer1().setName(nombreJ1);
-        }
-        if(nombreJ2 == null){
-            gomoku.getPlayer2().setName("Jugador 2");
-        }else{
-            gomoku.getPlayer2().setName(nombreJ2);
-        }
+        gomoku.getPlayer1().setName(Objects.requireNonNullElse(nombreJ1, "Jugador 1"));
+        gomoku.getPlayer2().setName(Objects.requireNonNullElse(nombreJ2, "Jugador 2"));
         reset();
 
         // Agregar el nuevo boardPanel al gamePanel
@@ -973,13 +963,13 @@ public class GomokuGUI extends JFrame {
             gomoku.getBoard().setTurn(turn);
             refresh();
             if (cellMatrix[row][col] instanceof Golden) {
+                String message;
                 if(turn){
-                    String message = "Obtuviste una ficha: " + gomoku.getPlayer2().getExtraStones().get(0).getClass().getSimpleName() + " debes usarla en el siguiente turno.";
-                    JOptionPane.showMessageDialog(null, message);
+                    message = "Obtuviste una ficha: " + gomoku.getPlayer2().getExtraStones().get(0).getClass().getSimpleName() + " debes usarla en el siguiente turno.";
                 }else{
-                    String message = "Obtuviste una ficha: " + gomoku.getPlayer1().getExtraStones().get(0).getClass().getSimpleName() + " debes usarla en el siguiente turno.";
-                    JOptionPane.showMessageDialog(null, message);
+                    message = "Obtuviste una ficha: " + gomoku.getPlayer1().getExtraStones().get(0).getClass().getSimpleName() + " debes usarla en el siguiente turno.";
                 }
+                JOptionPane.showMessageDialog(null, message);
             }
 
         } catch (Exception e) {
@@ -1046,9 +1036,6 @@ public class GomokuGUI extends JFrame {
             this.isVisible = false;
         }
 
-        public void setBackgroundColor(Color backgroundColor) {
-            this.backgroundColor = backgroundColor;
-        }
 
         @Override
         protected void paintComponent(Graphics g) {
