@@ -1,4 +1,5 @@
 package domain;
+import javax.swing.Timer;
 import java.awt.*;
 import java.io.Serializable;
 import java.util.*;
@@ -9,6 +10,8 @@ public class Board implements Serializable {
     protected Cell[][] cells;
     protected Player[] players;
     protected boolean turn;
+    private Timer timer;
+    private int segundosTranscurridos;
     private int specialPercentage;
     public Board(int rows, int columns, int specialPercentage) throws Exception {
         turn = true;
@@ -17,6 +20,11 @@ public class Board implements Serializable {
         fillCells();
         Class<? extends Cell>[] clasesEspeciales = new Class[]{Mine.class, Golden.class, Teleport.class};
         placeSpecialCells(clasesEspeciales,specialPercentage);
+        this.segundosTranscurridos = 0;
+        this.timer = new Timer(1000, e -> {
+            segundosTranscurridos++;
+        });
+        this.timer.start();
     }
 
     public final void setPlayers(Player[] players) {
@@ -260,7 +268,15 @@ public class Board implements Serializable {
             return 0;
         }
     }
+    public int getSegundosTranscurridos() {
+        return segundosTranscurridos;
+    }
 
+    public void detenerTimer() {
+        if (timer != null && timer.isRunning()) {
+            timer.stop();
+        }
+    }
     public int getSpecialPercentage() {
         return specialPercentage;
     }

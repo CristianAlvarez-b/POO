@@ -10,10 +10,12 @@ import java.io.File;
 import java.util.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import java.text.DecimalFormat;
+import javax.swing.Timer;
 
 public class GomokuGUI extends JFrame {
     private JPanel configuraciones;
-
+    private Timer timer;
     private JLabel numNormalJ1;
     private JLabel numPesadaJ1;
     private JLabel numTemporaryJ1;
@@ -24,6 +26,7 @@ public class GomokuGUI extends JFrame {
     private JLabel name2;
     private JLabel puntuacionJ1;
     private JLabel puntuacionJ2;
+    private JLabel tiempoLabel;
     private Gomoku gomoku;
     private CardLayout cardLayout;
     private JPanel cardPanel;
@@ -36,7 +39,7 @@ public class GomokuGUI extends JFrame {
     private Piedra piedra1;
     private Piedra piedra2;
     private int size = 15;
-    private int stoneLimit = size;
+    private int stoneLimit = size * size;
     private int timeLimit = -1;
     private int porcentajeEspeciales = 50;
     public static Color colorJ1 = Color.BLACK;
@@ -373,7 +376,7 @@ public class GomokuGUI extends JFrame {
                     try {
                         size = Integer.parseInt(sizeTextField.getText());
                         System.out.println("Tamaño del tablero: " + size);
-                        stoneLimit = size;
+                        stoneLimit = size * size;
                     } catch (NumberFormatException e) {
                         JOptionPane.showMessageDialog(null, "No estás ingresando un número válido.");
                         Log.record(e);
@@ -527,11 +530,19 @@ public class GomokuGUI extends JFrame {
     private void addTopPanel() {
         // Crear un panel para la parte superior
         JPanel topPanel = new JPanel(new BorderLayout());
+
         // Agregar el título
         ImageIcon gomoku = new ImageIcon("GomokuImages/tituloImagen.png");
-        ImageIcon resized = new ImageIcon(gomoku.getImage().getScaledInstance(900,100, Image.SCALE_SMOOTH));
+        ImageIcon resized = new ImageIcon(gomoku.getImage().getScaledInstance(900, 100, Image.SCALE_SMOOTH));
+
         JLabel image = new JLabel(resized, JLabel.CENTER);
         topPanel.add(image, BorderLayout.NORTH);
+
+        // Agregar el tiempoLabel al centro
+        tiempoLabel = new JLabel("El tiempo transcurrido es: ", SwingConstants.CENTER);
+        topPanel.add(tiempoLabel, BorderLayout.CENTER);
+
+        // Agregar el topPanel al gamePanel
         gamePanel.add(topPanel, BorderLayout.NORTH);
     }
     private void addLeftPanel() {
@@ -651,9 +662,8 @@ public class GomokuGUI extends JFrame {
 
         JPanel puntuacionTiempo = new JPanel(new BorderLayout());
         puntuacionJ1 = new JLabel("Tu puntuación es: ");
-        JLabel tiempo = new JLabel("El tiempo transcurrido es: ");
         puntuacionTiempo.add(puntuacionJ1, BorderLayout.NORTH);
-        puntuacionTiempo.add(tiempo, BorderLayout.SOUTH);
+
 
 
         // Agregar el JLabel al JPanel
@@ -784,9 +794,7 @@ public class GomokuGUI extends JFrame {
 
         JPanel puntuacionTiempo = new JPanel(new BorderLayout());
         puntuacionJ2 = new JLabel("Tu puntuación es: ");
-        JLabel tiempo = new JLabel("El tiempo transcurrido es: ");
         puntuacionTiempo.add(puntuacionJ2, BorderLayout.NORTH);
-        puntuacionTiempo.add(tiempo, BorderLayout.SOUTH);
 
         // Agregar el JLabel al JPanel
         rightPanel.add(datosJ2, BorderLayout.NORTH);
@@ -1236,11 +1244,20 @@ public class GomokuGUI extends JFrame {
         numTemporaryJ2.setText("Temporales restantes: "+ gomoku.getPlayer2().numOfType(Temporary.class));
         puntuacionJ1.setText("La puntuacion es de: " + gomoku.getPlayer1().getPunctuation());
         puntuacionJ2.setText("La puntuacion es de: " + gomoku.getPlayer2().getPunctuation());
+        tiempoLabel.setText("El tiempo transcurrido es: " + gomoku.getBoard().getSegundosTranscurridos());
+    }
+    private void startTimer() {
+        timer = new Timer(1000, e -> {
+            // Actualiza el tiempoLabel cada segundo
+            tiempoLabel.setText("El tiempo transcurrido es: " + gomoku.getBoard().getSegundosTranscurridos());
+        });
+        timer.start();
     }
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             try {
                 GomokuGUI gui = new GomokuGUI();
+                gui.startTimer(); // Inicia el timer
                 gui.setVisible(true);
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, "Paso algo inseperado");

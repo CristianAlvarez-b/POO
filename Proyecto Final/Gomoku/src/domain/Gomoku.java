@@ -12,6 +12,7 @@ public class Gomoku implements Serializable{
     private int timeLimit;
     private int size;
 
+
     public Gomoku(int size, int stoneLimit, int timeLimit, int porcentajeEspeciales) throws Exception {
         if(size < 10){
             throw new GomokuException(GomokuException.INVALID_BOARD_SIZE);
@@ -22,6 +23,7 @@ public class Gomoku implements Serializable{
         this.setPlayers(Human.class, Human.class);
         board.setPlayers(new Player[]{this.player1,this.player2});
         this.size = size;
+
     }
     public void setPlayers(Class<? extends Player> playerClass1, Class<? extends Player> playerClass2) throws Exception {
         this.player1 = playerClass1.getDeclaredConstructor(Color.class, Board.class, int.class).newInstance(Color.BLACK, board, 0);
@@ -82,7 +84,6 @@ public class Gomoku implements Serializable{
     public int getSize() {
         return size;
     }
-
     public Board getBoard() {
         return board;
     }
