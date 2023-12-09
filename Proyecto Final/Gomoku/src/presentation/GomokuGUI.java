@@ -103,8 +103,8 @@ public class GomokuGUI extends JFrame {
         gbc.gridy = 0;
         gbc.insets = new Insets(20, 20, 20, 20); // Espacio entre los botones
 
-        JButton button1 = new JButton("SINGLE PLAYER");
-        JButton button2 = new JButton("TWO PLAYERS");
+        JButton button1 = new JButton("NEW GAME");
+        JButton button2 = new JButton("CONTINUE");
         JButton button3 = new JButton("RULES");
 
         // Configurar el tamaño de los botones
