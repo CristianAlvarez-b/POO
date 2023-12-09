@@ -21,7 +21,6 @@ public class Log {
             FileHandler fileHandler = new FileHandler(file.toString(), true);
             fileHandler.setFormatter(new SimpleFormatter());
             logger.addHandler(fileHandler);
-
             logger.log(Level.SEVERE, e.toString(), e);
             fileHandler.close();
         } catch (Exception oe) {
