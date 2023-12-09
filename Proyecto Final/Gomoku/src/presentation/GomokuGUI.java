@@ -114,7 +114,18 @@ public class GomokuGUI extends JFrame {
         button3.setPreferredSize(buttonSize);
 
         // Añadir ActionListeners según sea necesario
-        button1.addActionListener(e -> cardLayout.show(cardPanel, "config"));
+        button1.addActionListener(e -> {
+            cardLayout.show(cardPanel, "config");
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+            // Calcular el tamaño deseado de la ventana (ajustar según tus necesidades)
+            int windowWidth = (int) (screenSize.width * 0.3);
+            int windowHeight = (int) (screenSize.height * 0.5);
+
+            // Establecer el tamaño de la ventana
+            setSize(new Dimension(windowWidth, windowHeight));
+            setResizable(false);
+            setLocationRelativeTo(null);
+        });
         button2.addActionListener(e -> {
             optionOpen();
         });
@@ -183,82 +194,83 @@ public class GomokuGUI extends JFrame {
 
 
     private JPanel crearPanelJ1() {
-        ImagePanel fondo = new ImagePanel("GomokuImages/config.jpg");
         HashMap<String, Color> coloresMap = new HashMap<>();
         coloresMap.put("NEGRO", Color.BLACK);
         coloresMap.put("GRIS", new Color(64, 64, 64));
         coloresMap.put("AZUL", new Color(0, 0, 128));
         coloresMap.put("VERDE", new Color(0, 100, 0));
-        coloresMap.put("PURPURA", new Color(128, 0, 128)); // Puedes ajustar estos valores según tus preferencias
+        coloresMap.put("PURPURA", new Color(128, 0, 128));
         coloresMap.put("ROJO", Color.RED);
-        JPanel jugador1 = new JPanel();
-        jugador1.setLayout(new BoxLayout(jugador1, BoxLayout.Y_AXIS));
+
+        JPanel jugador1 = new JPanel(new GridBagLayout());
+        jugador1.setOpaque(false);
+        GridBagConstraints gbc = new GridBagConstraints();
+
         JLabel titulo = new JLabel("JUGADOR 1", SwingConstants.CENTER);
         titulo.setFont(new Font("Arial", Font.BOLD, 18));
-        GridBagConstraints gbc = new GridBagConstraints();
-        // Add the label "Ingresa tu nombre:"
-        JLabel nombreLabel = new JLabel("Ingresa tu nombre:");
-        nombreLabel.setOpaque(false);
-        JTextField nombre = new JTextField();
 
+        JLabel nombreLabel = new JLabel("Ingresa tu nombre:");
+        nombreLabel.setFont(new Font("Arial", Font.BOLD, 15));
+        JTextField nombre = new JTextField();
+        nombre.setColumns(20);
 
         // Agregar DocumentListener al JTextField
         nombre.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                if(nombre.getText().isEmpty()){
-                    nombreJ1 = "Jugador 1";
-                }else{
-                    nombreJ1 = nombre.getText();
-                }
+                actualizarNombreJ1();
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                if(nombre.getText().isEmpty()){
-                    nombreJ1 = "Jugador 1";
-                }else{
-                    nombreJ1 = nombre.getText();
-                }
+                actualizarNombreJ1();
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-                if(nombre.getText().isEmpty()){
-                    nombreJ1 = "Jugador 1";
-                }else{
-                    nombreJ1 = nombre.getText();
-                }
+                actualizarNombreJ1();
+            }
+
+            private void actualizarNombreJ1() {
+                SwingUtilities.invokeLater(() -> {
+                    nombreJ1 = nombre.getText().isEmpty() ? "Jugador 1" : nombre.getText();
+                });
             }
         });
+
         JPanel selectColorFicha = new JPanel(new FlowLayout());
+        selectColorFicha.setOpaque(false);
         JLabel colorLabel1 = new JLabel("Selecciona el color de ficha:");
+        colorLabel1.setFont(new Font("Arial", Font.BOLD, 13));
         String[] coloresJ1 = {"NEGRO", "GRIS", "AZUL", "VERDE", "PURPURA", "ROJO"};
         JComboBox<String> ficha1 = new JComboBox<>(coloresJ1);
+
         selectColorFicha.add(colorLabel1);
         selectColorFicha.add(ficha1);
-
-        jugador1.add(titulo, BorderLayout.NORTH);
-
-        // Add the nombreLabel and nombre to jugador1
-        jugador1.add(nombreLabel, BorderLayout.WEST);
-        jugador1.add(nombre, BorderLayout.CENTER);
 
         ficha1.addActionListener(e -> {
             String colorSeleccionado = (String) ficha1.getSelectedItem();
             colorJ1 = coloresMap.get(colorSeleccionado);
         });
-        jugador1.add(selectColorFicha, BorderLayout.SOUTH);
-        jugador1.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
 
+        // Configuración de GridBagConstraints
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.gridwidth = 2;
-        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.anchor = GridBagConstraints.NORTH;
+        jugador1.add(titulo, gbc);
 
-        //configuraciones.add(jugador1, gbc);
-        fondo.add(jugador1);
-        return fondo;
+        gbc.gridy = 1;
+        jugador1.add(nombreLabel, gbc);
+
+        gbc.gridy = 2;
+        jugador1.add(nombre, gbc);
+
+        gbc.gridy = 3;
+        jugador1.add(selectColorFicha, gbc);
+
+        return jugador1;
     }
 
     private JPanel crearPanelJ2() {
@@ -270,86 +282,109 @@ public class GomokuGUI extends JFrame {
         coloresMap.put("ROSA", new Color(128, 0, 128));
         coloresMap.put("ROJO", new Color(255, 192, 203));
 
-        JPanel jugador2 = new JPanel();
-        jugador2.setLayout(new BoxLayout(jugador2, BoxLayout.Y_AXIS)); // Set layout to BoxLayout
+        JPanel jugador2 = new JPanel(new GridBagLayout());
+        jugador2.setOpaque(false);
+        GridBagConstraints gbc = new GridBagConstraints();
 
         JLabel titulo = new JLabel("JUGADOR 2", SwingConstants.CENTER);
         titulo.setFont(new Font("Arial", Font.BOLD, 18));
 
-        GridBagConstraints gbc = new GridBagConstraints();
-
         JLabel nombreLabel = new JLabel("Ingresa tu nombre:");
+        nombreLabel.setFont(new Font("Arial", Font.BOLD, 13));
         JTextField nombre = new JTextField();
         nombre.setColumns(20);
+
         nombre.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                if(nombre.getText().isEmpty()){
-                    nombreJ2 = "Jugador 2";
-                }else{
-                    nombreJ2 = nombre.getText();
-                }
+                actualizarNombreJ2();
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                if(nombre.getText().isEmpty()){
-                    nombreJ2 = "Jugador 2";
-                }else{
-                    nombreJ2 = nombre.getText();
-                }
+                actualizarNombreJ2();
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-                if(nombre.getText().isEmpty()){
-                    nombreJ2 = "Jugador 2";
-                }else{
-                    nombreJ2 = nombre.getText();
-                }
+                actualizarNombreJ2();
+            }
+
+            private void actualizarNombreJ2() {
+                SwingUtilities.invokeLater(() -> {
+                    nombreJ2 = nombre.getText().isEmpty() ? "Jugador 2" : nombre.getText();
+                });
             }
         });
 
         JPanel selectColorFicha = new JPanel(new FlowLayout());
+        selectColorFicha.setOpaque(false);
         JLabel colorLabel1 = new JLabel("Selecciona el color de ficha:");
+        colorLabel1.setFont(new Font("Arial", Font.BOLD, 15));
         String[] coloresJ2 = {"BLANCO", "AMARILLO", "AZUL", "VERDE", "ROSA", "ROJO"};
         JComboBox<String> ficha2 = new JComboBox<>(coloresJ2);
 
         JCheckBox jugadorCheckBox = new JCheckBox("Jugar contra maquina");
-        jugadorCheckBox.setSelected(false);  // Default to human player
+        jugadorCheckBox.setFont(new Font("Arial", Font.BOLD, 13));
+        jugadorCheckBox.setSelected(false);
+
+        JPanel maquinaPanel = new JPanel(new FlowLayout());
+        maquinaPanel.setOpaque(false);
+        JLabel maquinaLabel = new JLabel("Selecciona la máquina:");
+        maquinaLabel.setFont(new Font("Arial", Font.BOLD, 13));
+        String[] opcionesMaquina = {"Agresiva", "Miedosa", "Experta"};
+        JComboBox<String> maquinaComboBox = new JComboBox<>(opcionesMaquina);
+
+        // Configuración de JComboBox para la máquina
+        maquinaComboBox.setEnabled(false);  // Inicialmente desactivado
+        maquinaPanel.add(maquinaLabel);
+        maquinaPanel.add(maquinaComboBox);
+
+        jugadorCheckBox.addItemListener(e -> {
+            maquinaComboBox.setEnabled(jugadorCheckBox.isSelected());
+        });
 
         selectColorFicha.add(colorLabel1);
         selectColorFicha.add(ficha2);
 
-        ficha2.addActionListener(e -> {
-            String colorSeleccionado = (String) ficha2.getSelectedItem();
-            colorJ2 = coloresMap.get(colorSeleccionado);
-        });
-
-        jugador2.add(titulo, BorderLayout.NORTH);
-        jugador2.add(nombreLabel, BorderLayout.WEST);
-        jugador2.add(nombre, BorderLayout.CENTER);
-
-        jugador2.add(selectColorFicha);
-        jugador2.add(jugadorCheckBox);
-        jugador2.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
-
+        // Configuración de GridBagConstraints
         gbc.gridx = 0;
-        gbc.gridy = 1; // Assuming the second panel goes below the first one
-        gbc.gridwidth = 2;
-        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.gridy = 0;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.anchor = GridBagConstraints.NORTH;
+        jugador2.add(titulo, gbc);
 
-        //configuraciones.add(jugador2, gbc);
+        gbc.gridy = 1;
+        jugador2.add(nombreLabel, gbc);
+
+        gbc.gridy = 2;
+        jugador2.add(nombre, gbc);
+
+        gbc.gridy = 3;
+        jugador2.add(selectColorFicha, gbc);
+
+        gbc.gridy = 4;
+        jugador2.add(jugadorCheckBox, gbc);
+
+        gbc.gridy = 5;
+        jugador2.add(maquinaPanel, gbc);
+
         return jugador2;
     }
+
+
     private JPanel crearPanelSize() {
         JPanel panelSize = new JPanel(new GridBagLayout());
+        panelSize.setOpaque(false);
         GridBagConstraints gbc = new GridBagConstraints();
 
-        // Primer TextField
-        JLabel sizeLabel = new JLabel("Tamaño del tablero:");
-        JTextField sizeTextField = new JTextField();
+        // Agregar relleno alrededor de los componentes
+        Insets insets = new Insets(5, 5, 5, 5);
 
+        JLabel sizeLabel = new JLabel("Tamaño del tablero:");
+        sizeLabel.setFont(new Font("Arial", Font.BOLD, 15));
+        JTextField sizeTextField = new JTextField();
         sizeTextField.setColumns(10);
 
         sizeTextField.getDocument().addDocumentListener(new DocumentListener() {
@@ -383,8 +418,8 @@ public class GomokuGUI extends JFrame {
             }
         });
 
-        // Segundo TextField
         JLabel especialesLabel = new JLabel("Porcentaje de especiales:");
+        especialesLabel.setFont(new Font("Arial", Font.BOLD, 15));
         JTextField especialesTextField = new JTextField();
         especialesTextField.setColumns(10);
         especialesTextField.getDocument().addDocumentListener(new DocumentListener() {
@@ -424,14 +459,18 @@ public class GomokuGUI extends JFrame {
                 empezarJuego();
             } catch (Exception ex) {
                 Log.record(ex);
-                JOptionPane.showMessageDialog(null,"Algo elegiste mal");
+                JOptionPane.showMessageDialog(null, "Algo elegiste mal");
             }
         });
 
-        // Agregar componentes al panel de configuraciones
+        // Configuración de GridBagConstraints
+        gbc.insets = insets;
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.anchor = GridBagConstraints.WEST;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.anchor = GridBagConstraints.NORTH;
+
         panelSize.add(sizeLabel, gbc);
 
         gbc.gridy = 1;
@@ -446,10 +485,13 @@ public class GomokuGUI extends JFrame {
         gbc.gridy = 4;
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(10, 10, 10, 10);
         panelSize.add(boton, gbc);
 
         return panelSize;
     }
+
+
 
     private void empezarJuego() throws Exception {
         updateRemainingLabels();
@@ -458,6 +500,7 @@ public class GomokuGUI extends JFrame {
     }
     private JPanel createGamePanel() throws Exception {
         gamePanel = new JPanel(new BorderLayout());
+        gamePanel.setBackground(new Color(255, 192, 203));
         addTopPanel();
         addLeftPanel();
         addRightPanel();
@@ -528,23 +571,21 @@ public class GomokuGUI extends JFrame {
         // Crear un panel para la parte superior
         JPanel topPanel = new JPanel(new BorderLayout());
 
-        // Agregar el título
-        ImageIcon gomoku = new ImageIcon("GomokuImages/tituloImagen.png");
-        ImageIcon resized = new ImageIcon(gomoku.getImage().getScaledInstance(900, 100, Image.SCALE_SMOOTH));
-
-        JLabel image = new JLabel(resized, JLabel.CENTER);
-        topPanel.add(image, BorderLayout.NORTH);
 
         // Agregar el tiempoLabel al centro
-        tiempoLabel = new JLabel("El tiempo transcurrido es: ", SwingConstants.CENTER);
+        tiempoLabel = new JLabel("EL TIEMPO TRANSCURRIDO ES: ", SwingConstants.CENTER);
         topPanel.add(tiempoLabel, BorderLayout.CENTER);
 
         // Agregar el topPanel al gamePanel
         gamePanel.add(topPanel, BorderLayout.NORTH);
     }
     private void addLeftPanel() {
+        ImagePanel fondo = new ImagePanel("GomokuImages/playerPanels.png");
+
         JPanel leftPanel = new JPanel(new BorderLayout());
+        leftPanel.setOpaque(false);
         JPanel datosJ1 = new JPanel(new GridBagLayout());
+        datosJ1.setOpaque(false);
         GridBagConstraints gbcDatosJ1 = new GridBagConstraints();
         gbcDatosJ1.insets = new Insets(5, 5, 5, 5); // Márgenes entre los componentes
 
@@ -585,13 +626,18 @@ public class GomokuGUI extends JFrame {
         datosJ1.add(piedraJ1, gbcDatosJ1);
 
         JPanel piedrasJ1 = new JPanel(new GridBagLayout());
+        piedrasJ1.setOpaque(false);
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5); // Márgenes entre los componentes
+        gbc.insets = new Insets(17, 17, 17, 17); // Márgenes entre los componentes
 
         JLabel normalRemaining = new JLabel("Escoge la ficha que vas a utilizar: ");
+        normalRemaining.setForeground(Color.WHITE);
         numNormalJ1 = new JLabel();
+        numNormalJ1.setForeground(Color.WHITE);
         numPesadaJ1 = new JLabel();
+        numPesadaJ1.setForeground(Color.WHITE);
         numTemporaryJ1 = new JLabel();
+        numTemporaryJ1.setForeground(Color.WHITE);
         JButton normal = new JButton("NORMAL");
         JButton pesada = new JButton("HEAVY");
         JButton temporal = new JButton("TEMPORARY");
@@ -616,11 +662,12 @@ public class GomokuGUI extends JFrame {
                 // Acción para el botón TEMPORARY
                 selectedStoneJ1 = new Temporary(colorJ1);
                 piedra1.setType('t');
+                piedra1.setLife(7);
                 piedra1.repaint();
             }
         });
 
-        Dimension buttonSize = new Dimension(120, 30); // Tamaño deseado para los botones
+        Dimension buttonSize = new Dimension(120, 40); // Tamaño deseado para los botones
         normal.setPreferredSize(buttonSize);
         pesada.setPreferredSize(buttonSize);
         temporal.setPreferredSize(buttonSize);
@@ -667,18 +714,21 @@ public class GomokuGUI extends JFrame {
         leftPanel.add(datosJ1, BorderLayout.NORTH);
         leftPanel.add(piedrasJ1, BorderLayout.CENTER);
         leftPanel.add(puntuacionTiempo, BorderLayout.SOUTH);
-        leftPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+        fondo.add(leftPanel);
 
         // Agregar el JPanel al contenedor principal (mainPanel)
-        gamePanel.add(leftPanel, BorderLayout.WEST);
+        gamePanel.add(fondo, BorderLayout.WEST);
     }
 
 
     private void addRightPanel() {
+        ImagePanel fondo = new ImagePanel("GomokuImages/playerPanels.png");
         JPanel rightPanel = new JPanel(new BorderLayout());
+        rightPanel.setOpaque(false);
 
         // Cargar la imagen
         JPanel datosJ2 = new JPanel(new GridBagLayout());
+        datosJ2.setOpaque(false);
         GridBagConstraints gbcDatosJ2 = new GridBagConstraints();
         gbcDatosJ2.insets = new Insets(5, 5, 5, 5); // Márgenes entre los componentes
 
@@ -718,13 +768,19 @@ public class GomokuGUI extends JFrame {
         datosJ2.add(piedraJ2, gbcDatosJ2);
 
         JPanel piedrasJ2 = new JPanel(new GridBagLayout());
+        piedrasJ2.setOpaque(false);
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5); // Márgenes entre los componentes
+        gbc.insets = new Insets(10, 10, 10, 10); // Márgenes entre los componentes
 
         JLabel normalRemaining = new JLabel("Escoge la ficha que vas a utilizar: ");
+        normalRemaining.setForeground(Color.WHITE);
+        normalRemaining.setOpaque(false);
         numNormalJ2 = new JLabel();
+        numNormalJ2.setForeground(Color.WHITE);
         numPesadaJ2 = new JLabel();
+        numPesadaJ2.setForeground(Color.WHITE);
         numTemporaryJ2 = new JLabel();
+        numTemporaryJ2.setForeground(Color.WHITE);
         JButton normal = new JButton("NORMAL");
         JButton pesada = new JButton("HEAVY");
         JButton temporal = new JButton("TEMPORARY");
@@ -749,10 +805,11 @@ public class GomokuGUI extends JFrame {
                 // Acción para el botón TEMPORARY
                 selectedStoneJ2 = new Temporary(colorJ2);
                 piedra2.setType('t');
+                piedra2.setLife(7);
                 piedra2.repaint();
             }
         });
-        Dimension buttonSize = new Dimension(120, 30); // Tamaño deseado para los botones
+        Dimension buttonSize = new Dimension(120, 40); // Tamaño deseado para los botones
         normal.setPreferredSize(buttonSize);
         pesada.setPreferredSize(buttonSize);
         temporal.setPreferredSize(buttonSize);
@@ -797,10 +854,9 @@ public class GomokuGUI extends JFrame {
         rightPanel.add(datosJ2, BorderLayout.NORTH);
         rightPanel.add(piedrasJ2, BorderLayout.CENTER);
         rightPanel.add(puntuacionTiempo, BorderLayout.SOUTH);
-        rightPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
-
         // Agregar el JPanel al contenedor principal (mainPanel)
-        gamePanel.add(rightPanel, BorderLayout.EAST);
+        fondo.add(rightPanel);
+        gamePanel.add(fondo, BorderLayout.EAST);
     }
     private void addBottomPanel() {
         // Crear un panel para la parte inferior
@@ -885,7 +941,7 @@ public class GomokuGUI extends JFrame {
         getJMenuBar().getMenu(0).getItem(6).addActionListener(e -> {
             Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
             // Calcular el tamaño deseado de la ventana (ajustar según tus necesidades)
-            int windowWidth = (int) (screenSize.width * 0.5);
+            int windowWidth = (int) (screenSize.width * 0.3);
             int windowHeight = (int) (screenSize.height * 0.5);
 
             // Establecer el tamaño de la ventana
@@ -1008,75 +1064,84 @@ public class GomokuGUI extends JFrame {
     }
     private void ponerFicha(int row, int col) throws Exception {
         Stone selectedStone;
-        if (turn) {
-            if(!gomoku.getPlayer1().getExtraStones().isEmpty()){
-                Stone extraStone = gomoku.getPlayer1().getExtraStones().get(0);
-                gomoku.getPlayer1().getRemainingStones().add(extraStone);
-                selectedStoneJ1 = getFirstStoneOfType(gomoku.getPlayer1().getExtraStones(), extraStone.getClass());
-                gomoku.getPlayer1().eliminateStone(gomoku.getPlayer1().getExtraStones(), gomoku.getPlayer1().getExtraStones().get(0).getClass());
-                selectedStone = selectedStoneJ1;
-                selectedStoneJ1 = null;
-            }else{
-                if(selectedStoneJ1 == null){
-                    selectedStoneJ1 = getFirstStoneOfType(gomoku.getPlayer1().getRemainingStones(), Stone.class);
-                }
-                turn = false;
-                selectedStone = selectedStoneJ1;
-            }
-        } else {
-            if(!gomoku.getPlayer2().getExtraStones().isEmpty()){
-                Stone extraStone = gomoku.getPlayer2().getExtraStones().get(0);
-                gomoku.getPlayer2().getRemainingStones().add(extraStone);
-                selectedStoneJ2 = getFirstStoneOfType(gomoku.getPlayer2().getExtraStones(), extraStone.getClass());
-                gomoku.getPlayer2().eliminateStone(gomoku.getPlayer2().getExtraStones(), gomoku.getPlayer2().getExtraStones().get(0).getClass());
-                selectedStone = selectedStoneJ2;
-                selectedStoneJ2 = null;
-            }else{
-                if(selectedStoneJ2 == null){
-                    selectedStoneJ2 = getFirstStoneOfType(gomoku.getPlayer2().getRemainingStones(), Stone.class);
-                }
-                turn = true;
-                selectedStone = selectedStoneJ2;
-            }
-        }
+
+        Player currentPlayer = turn ? gomoku.getPlayer1() : gomoku.getPlayer2();
+        Player opponentPlayer = turn ? gomoku.getPlayer2() : gomoku.getPlayer1();
+        Stone[] selectedStoneArray = new Stone[]{turn ? selectedStoneJ1 : selectedStoneJ2};
+
         try {
+            if (!currentPlayer.getExtraStones().isEmpty()) {
+                selectedStone = handleExtraStones(currentPlayer, selectedStoneArray);
+                turn = !turn;
+            } else {
+                selectedStone = handleRemainingStones(currentPlayer, selectedStoneArray);
+                turn = !turn;
+            }
             if(gomoku.play(row, col, selectedStone)){
-                if(!gomoku.getBoard().getTurn()){
+                if (!gomoku.getBoard().getTurn()) {
                     refresh();
-                    JOptionPane.showMessageDialog(null, "GANAASTEEEEEEEE. "+gomoku.getPlayer1().getName());
-                    //cardLayout.show(cardPanel, "initial");
-                }else{
+                    JOptionPane.showMessageDialog(null, "GANAASTEEEEEEEE. " + gomoku.getPlayer1().getName());
+                } else {
                     refresh();
-                    JOptionPane.showMessageDialog(null, "GANAASTEEEEEEEE. "+gomoku.getPlayer2().getName());
-                    //cardLayout.show(cardPanel, "initial");
+                    JOptionPane.showMessageDialog(null, "GANAASTEEEEEEEE. " + gomoku.getPlayer2().getName());
                 }
             }
             gomoku.getBoard().setTurn(turn);
             refresh();
             if (cellMatrix[row][col] instanceof Golden) {
                 String message;
-                if(turn){
-                    message = "Obtuviste una ficha: " + gomoku.getPlayer2().getExtraStones().get(0).getClass().getSimpleName() + " debes usarla en el siguiente turno.";
+                if(currentPlayer.getExtraStones().get(0).getClass().getSimpleName().equals("Stone")){
+                    message = "Obtuviste una ficha: Stone. Estas obligado a jugar 2 normales en tu siguiente turno.";
                 }else{
-                    message = "Obtuviste una ficha: " + gomoku.getPlayer1().getExtraStones().get(0).getClass().getSimpleName() + " debes usarla en el siguiente turno.";
+                    message = "Obtuviste una ficha: " + currentPlayer.getExtraStones().get(0).getClass().getSimpleName();
                 }
                 JOptionPane.showMessageDialog(null, message);
             }
 
-        } catch (Exception e) {
-            if(e.getMessage().equals(GomokuException.STONE_OVERLOAP)){
-                turn = !turn;
-                JOptionPane.showMessageDialog(null, e.getMessage());
-                Log.record(e);
-            } else if (e.getMessage().equals(GomokuException.FULL_BOARD)) {
-                refresh();
-                JOptionPane.showMessageDialog(null, "Empate.");
-            } else{
-                throw new Exception(e.getMessage());
-            }
+        } catch (GomokuException e) {
+            handleException(e);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
+            Log.record(ex);
         }
-
     }
+
+    private Stone handleExtraStones(Player currentPlayer, Stone[] selectedStoneArray) throws Exception {
+        Stone extraStone = currentPlayer.getExtraStones().get(0);
+        currentPlayer.getRemainingStones().add(extraStone);
+        if (extraStone.getClass() == Stone.class) {
+            selectedStoneArray[0] = getFirstStoneOfType(currentPlayer.getExtraStones(), extraStone.getClass());
+            currentPlayer.eliminateStone(currentPlayer.getExtraStones(), extraStone.getClass());
+            turn = !turn;
+            return selectedStoneArray[0];
+        }
+        if (selectedStoneArray[0] == null) {
+            handleRemainingStones(currentPlayer, selectedStoneArray);
+        }
+        currentPlayer.eliminateStone(currentPlayer.getExtraStones(), extraStone.getClass());
+        return selectedStoneArray[0];
+    }
+
+    private Stone handleRemainingStones(Player currentPlayer, Stone[] selectedStoneArray){
+        if (selectedStoneArray[0] == null) {
+            selectedStoneArray[0] = getFirstStoneOfType(currentPlayer.getRemainingStones(), Stone.class);
+        }
+        return selectedStoneArray[0];
+    }
+
+    private void handleException(GomokuException e) throws Exception {
+        if (e.getMessage().equals(GomokuException.STONE_OVERLOAP)) {
+            turn = !turn;
+            JOptionPane.showMessageDialog(null, e.getMessage());
+            Log.record(e);
+        } else if (e.getMessage().equals(GomokuException.FULL_BOARD)) {
+            refresh();
+            JOptionPane.showMessageDialog(null, "Empate.");
+        } else {
+            throw new Exception(e.getMessage());
+        }
+    }
+
     public char chooseCharForAStone(Stone stone){
         if(stone instanceof Heavy){
             return 'h';
@@ -1118,6 +1183,10 @@ public class GomokuGUI extends JFrame {
         public void setBackType(char backType){this.backType = backType;}
         public void setPiedraColor(Color piedraColor) {
             this.piedraColor = piedraColor;
+        }
+
+        public void setLife(int life) {
+            this.life = life;
         }
 
         public void makeVisible() {
@@ -1255,7 +1324,9 @@ public class GomokuGUI extends JFrame {
         piedra1.setPiedraColor(colorJ1);
         piedra2.setPiedraColor(colorJ2);
         name1.setText(gomoku.getPlayer1().getName());
+        name1.setForeground(Color.WHITE);
         name2.setText(gomoku.getPlayer2().getName());
+        name2.setForeground(Color.WHITE);
         numNormalJ1.setText("Normales restantes: "+ gomoku.getPlayer1().numOfType(Stone.class));
         numPesadaJ1.setText("Pesadas restantes: "+ gomoku.getPlayer1().numOfType(Heavy.class));
         numTemporaryJ1.setText("Temporales restantes: "+ gomoku.getPlayer1().numOfType(Temporary.class));
