@@ -376,6 +376,7 @@ public class GomokuGUI extends JFrame {
                         stoneLimit = size;
                     } catch (NumberFormatException e) {
                         JOptionPane.showMessageDialog(null, "No estás ingresando un número válido.");
+                        Log.record(e);
                         sizeTextField.setText("");
                     }
                 });
@@ -409,6 +410,7 @@ public class GomokuGUI extends JFrame {
                         System.out.println("Porcentaje especiales: " + porcentajeEspeciales);
                     } catch (NumberFormatException e) {
                         JOptionPane.showMessageDialog(null, "No estás ingresando un número válido.");
+                        Log.record(e);
                         especialesTextField.setText("");
                     }
                 });
@@ -421,6 +423,7 @@ public class GomokuGUI extends JFrame {
             try {
                 empezarJuego();
             } catch (Exception ex) {
+                Log.record(ex);
                 JOptionPane.showMessageDialog(null,"Algo elegiste mal");
             }
         });
@@ -805,6 +808,7 @@ public class GomokuGUI extends JFrame {
             try {
                 optionNew();
             } catch (Exception ex) {
+                Log.record(ex);
                 throw new RuntimeException(ex);
             }
         });
@@ -862,6 +866,7 @@ public class GomokuGUI extends JFrame {
             try {
                 optionNew();
             } catch (Exception ex) {
+                Log.record(ex);
                 JOptionPane.showMessageDialog(null, "Error inesperado");
             }
         });
@@ -928,6 +933,7 @@ public class GomokuGUI extends JFrame {
             }
         }catch (Exception e){
             JOptionPane.showMessageDialog(this, e.getMessage());
+            Log.record(e);
         }
     }
     private void optionSave() {
@@ -945,6 +951,7 @@ public class GomokuGUI extends JFrame {
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
+            Log.record(e);
         }
     }
     private void optionExit(){
@@ -965,6 +972,7 @@ public class GomokuGUI extends JFrame {
                 ponerFicha(row, col);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, ex.getMessage());
+                Log.record(ex);
             }
         }
     }
@@ -1029,6 +1037,7 @@ public class GomokuGUI extends JFrame {
             if(e.getMessage().equals(GomokuException.STONE_OVERLOAP)){
                 turn = !turn;
                 JOptionPane.showMessageDialog(null, e.getMessage());
+                Log.record(e);
             } else if (e.getMessage().equals(GomokuException.FULL_BOARD)) {
                 refresh();
                 JOptionPane.showMessageDialog(null, "Empate.");
@@ -1233,6 +1242,7 @@ public class GomokuGUI extends JFrame {
                 gui.setVisible(true);
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, "Paso algo inseperado");
+                Log.record(e);
             }
         });
     }
