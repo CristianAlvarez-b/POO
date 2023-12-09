@@ -55,10 +55,8 @@ public class GomokuGUI extends JFrame {
 
     private void prepareElements() throws Exception {
         prepareScreens();
-        prepareActionsMenu();
         setTitle("Gomoku");
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-
         // Calcular el tamaño deseado de la ventana (ajustar según tus necesidades)
         int windowWidth = (int) (screenSize.width * 0.5);
         int windowHeight = (int) (screenSize.height * 0.5);
@@ -864,7 +862,7 @@ public class GomokuGUI extends JFrame {
     private void prepareActionsMenu(){
         getJMenuBar().getMenu(0).getItem(0).addActionListener(e -> {
             try {
-                optionNew();
+                cardLayout.show(cardPanel, "initial");
             } catch (Exception ex) {
                 Log.record(ex);
                 JOptionPane.showMessageDialog(null, "Error inesperado");
@@ -940,6 +938,7 @@ public class GomokuGUI extends JFrame {
         try {
             if (gomoku != null) {  // Asegurarse de que gomoku esté inicializado
                 JFileChooser fileChooser = new JFileChooser();
+                fileChooser.setCurrentDirectory(new File("Slots/"));
                 int result = fileChooser.showSaveDialog(this);
                 if (result == JFileChooser.APPROVE_OPTION) {
                     File selectedFile = fileChooser.getSelectedFile();
