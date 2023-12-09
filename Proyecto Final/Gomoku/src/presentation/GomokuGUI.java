@@ -115,7 +115,9 @@ public class GomokuGUI extends JFrame {
 
         // Añadir ActionListeners según sea necesario
         button1.addActionListener(e -> cardLayout.show(cardPanel, "config"));
-
+        button2.addActionListener(e -> {
+            optionOpen();
+        });
         // Añadir los botones al panel con GridBagLayout
         buttonPanel.add(button1, gbc);
 
