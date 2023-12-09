@@ -10,12 +10,9 @@ import java.io.File;
 import java.util.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import java.text.DecimalFormat;
 import javax.swing.Timer;
 
 public class GomokuGUI extends JFrame {
-    private JPanel configuraciones;
-    private Timer timer;
     private JLabel numNormalJ1;
     private JLabel numPesadaJ1;
     private JLabel numTemporaryJ1;
@@ -24,8 +21,8 @@ public class GomokuGUI extends JFrame {
     private JLabel numTemporaryJ2;
     private JLabel name1;
     private JLabel name2;
-    private JLabel puntuacionJ1;
-    private JLabel puntuacionJ2;
+    private JLabel punctuationJ1;
+    private JLabel punctuationJ2;
     private JLabel tiempoLabel;
     private Gomoku gomoku;
     private CardLayout cardLayout;
@@ -106,8 +103,8 @@ public class GomokuGUI extends JFrame {
         gbc.gridy = 0;
         gbc.insets = new Insets(20, 20, 20, 20); // Espacio entre los botones
 
-        JButton button1 = new JButton("NEW GAME");
-        JButton button2 = new JButton("CONTINUE");
+        JButton button1 = new JButton("SINGLE PLAYER");
+        JButton button2 = new JButton("TWO PLAYERS");
         JButton button3 = new JButton("RULES");
 
         // Configurar el tamaño de los botones
@@ -147,7 +144,7 @@ public class GomokuGUI extends JFrame {
 
     private JPanel createConfiguraciones() {
         ImagePanel fondo = new ImagePanel("GomokuImages/configuraciones.jpg");
-        configuraciones = new JPanel(new GridBagLayout());
+        JPanel configuraciones = new JPanel(new GridBagLayout());
         configuraciones.setOpaque(false);
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -661,8 +658,8 @@ public class GomokuGUI extends JFrame {
 
 
         JPanel puntuacionTiempo = new JPanel(new BorderLayout());
-        puntuacionJ1 = new JLabel("Tu puntuación es: ");
-        puntuacionTiempo.add(puntuacionJ1, BorderLayout.NORTH);
+        punctuationJ1 = new JLabel("Tu puntuación es: ");
+        puntuacionTiempo.add(punctuationJ1, BorderLayout.NORTH);
 
 
 
@@ -793,8 +790,8 @@ public class GomokuGUI extends JFrame {
 
 
         JPanel puntuacionTiempo = new JPanel(new BorderLayout());
-        puntuacionJ2 = new JLabel("Tu puntuación es: ");
-        puntuacionTiempo.add(puntuacionJ2, BorderLayout.NORTH);
+        punctuationJ2 = new JLabel("Tu puntuación es: ");
+        puntuacionTiempo.add(punctuationJ2, BorderLayout.NORTH);
 
         // Agregar el JLabel al JPanel
         rightPanel.add(datosJ2, BorderLayout.NORTH);
@@ -872,7 +869,7 @@ public class GomokuGUI extends JFrame {
     private void prepareActionsMenu(){
         getJMenuBar().getMenu(0).getItem(0).addActionListener(e -> {
             try {
-                cardLayout.show(cardPanel, "initial");
+                optionNewInicio();
             } catch (Exception ex) {
                 Log.record(ex);
                 JOptionPane.showMessageDialog(null, "Error inesperado");
@@ -885,8 +882,31 @@ public class GomokuGUI extends JFrame {
             optionSave();
         });
         getJMenuBar().getMenu(0).getItem(5).addActionListener(e -> cardLayout.show(cardPanel, "initial"));
-        getJMenuBar().getMenu(0).getItem(6).addActionListener(e -> cardLayout.show(cardPanel, "config"));
+        getJMenuBar().getMenu(0).getItem(6).addActionListener(e -> {
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+            // Calcular el tamaño deseado de la ventana (ajustar según tus necesidades)
+            int windowWidth = (int) (screenSize.width * 0.5);
+            int windowHeight = (int) (screenSize.height * 0.5);
+
+            // Establecer el tamaño de la ventana
+            setSize(new Dimension(windowWidth, windowHeight));
+            setResizable(false);
+            setLocationRelativeTo(null);
+            cardLayout.show(cardPanel, "config");
+        });
         getJMenuBar().getMenu(0).getItem(8).addActionListener(e -> optionExit());
+    }
+    private void optionNewInicio(){
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        // Calcular el tamaño deseado de la ventana (ajustar según tus necesidades)
+        int windowWidth = (int) (screenSize.width * 0.5);
+        int windowHeight = (int) (screenSize.height * 0.5);
+
+        // Establecer el tamaño de la ventana
+        setSize(new Dimension(windowWidth, windowHeight));
+        setResizable(false);
+        setLocationRelativeTo(null);
+        cardLayout.show(cardPanel, "initial");
     }
     private void optionNew() throws Exception {
         // Eliminar el componente boardPanel del gamePanel
@@ -1242,12 +1262,13 @@ public class GomokuGUI extends JFrame {
         numNormalJ2.setText("Normales restantes: "+ gomoku.getPlayer2().numOfType(Stone.class));
         numPesadaJ2.setText("Pesadas restantes: "+ gomoku.getPlayer2().numOfType(Heavy.class));
         numTemporaryJ2.setText("Temporales restantes: "+ gomoku.getPlayer2().numOfType(Temporary.class));
-        puntuacionJ1.setText("La puntuacion es de: " + gomoku.getPlayer1().getPunctuation());
-        puntuacionJ2.setText("La puntuacion es de: " + gomoku.getPlayer2().getPunctuation());
+        punctuationJ1.setText("La puntuacion es de: " + gomoku.getPlayer1().getPunctuation());
+        punctuationJ2.setText("La puntuacion es de: " + gomoku.getPlayer2().getPunctuation());
         tiempoLabel.setText("El tiempo transcurrido es: " + gomoku.getBoard().getSegundosTranscurridos());
     }
     private void startTimer() {
-        timer = new Timer(1000, e -> {
+        // Actualiza el tiempoLabel cada segundo
+        Timer timer = new Timer(1000, e -> {
             // Actualiza el tiempoLabel cada segundo
             tiempoLabel.setText("El tiempo transcurrido es: " + gomoku.getBoard().getSegundosTranscurridos());
         });
@@ -1257,7 +1278,7 @@ public class GomokuGUI extends JFrame {
         SwingUtilities.invokeLater(() -> {
             try {
                 GomokuGUI gui = new GomokuGUI();
-                gui.startTimer(); // Inicia el timer
+                gui.startTimer();
                 gui.setVisible(true);
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, "Paso algo inseperado");
