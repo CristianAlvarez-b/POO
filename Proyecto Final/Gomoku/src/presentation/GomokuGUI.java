@@ -1068,7 +1068,6 @@ public class GomokuGUI extends JFrame {
         Player currentPlayer = turn ? gomoku.getPlayer1() : gomoku.getPlayer2();
         Player opponentPlayer = turn ? gomoku.getPlayer2() : gomoku.getPlayer1();
         Stone[] selectedStoneArray = new Stone[]{turn ? selectedStoneJ1 : selectedStoneJ2};
-
         try {
             if (!currentPlayer.getExtraStones().isEmpty()) {
                 selectedStone = handleExtraStones(currentPlayer, selectedStoneArray);
