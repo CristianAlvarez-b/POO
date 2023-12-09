@@ -916,6 +916,7 @@ public class GomokuGUI extends JFrame {
     private void optionOpen(){
         try{
             JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setCurrentDirectory(new File("Slots/"));
             int result = fileChooser.showOpenDialog(this);
             if (result == 0) {
                 File selectedFile = fileChooser.getSelectedFile();
