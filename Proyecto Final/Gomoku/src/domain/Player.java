@@ -106,6 +106,10 @@ public abstract class Player implements Serializable {
         return extraStones;
     }
 
+    public int getPunctuation() {
+        return punctuation;
+    }
+
     public void setCanRefill(boolean canRefill) {
         this.canRefill = canRefill;
     }

@@ -22,6 +22,8 @@ public class GomokuGUI extends JFrame {
     private JLabel numTemporaryJ2;
     private JLabel name1;
     private JLabel name2;
+    private JLabel puntuacionJ1;
+    private JLabel puntuacionJ2;
     private Gomoku gomoku;
     private CardLayout cardLayout;
     private JPanel cardPanel;
@@ -34,7 +36,7 @@ public class GomokuGUI extends JFrame {
     private Piedra piedra1;
     private Piedra piedra2;
     private int size = 15;
-    private int stoneLimit = size * size;
+    private int stoneLimit = size;
     private int timeLimit = -1;
     private int porcentajeEspeciales = 50;
     public static Color colorJ1 = Color.BLACK;
@@ -141,14 +143,47 @@ public class GomokuGUI extends JFrame {
 
 
     private JPanel createConfiguraciones() {
+        ImagePanel fondo = new ImagePanel("GomokuImages/configuraciones.jpg");
         configuraciones = new JPanel(new GridBagLayout());
-        crearPanelJ1();
-        crearPanelJ2();
-        crearPanelSize();
-        return configuraciones;
+        configuraciones.setOpaque(false);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0; // Inicia en la fila 0
+
+        // Crear espacio vertical de 20 píxeles
+        configuraciones.add(Box.createVerticalStrut(20), gbc);
+
+        // Crear y centrar el panel J1
+        JPanel panelJ1 = crearPanelJ1();
+        gbc.gridy++;
+        gbc.anchor = GridBagConstraints.CENTER;
+        configuraciones.add(panelJ1, gbc);
+
+        // Crear espacio vertical de 20 píxeles
+        gbc.gridy++;
+        configuraciones.add(Box.createVerticalStrut(20), gbc);
+
+        // Crear y centrar el panel J2
+        JPanel panelJ2 = crearPanelJ2();
+        gbc.gridy++;
+        configuraciones.add(panelJ2, gbc);
+
+        // Crear espacio vertical de 20 píxeles
+        gbc.gridy++;
+        configuraciones.add(Box.createVerticalStrut(20), gbc);
+
+        // Crear y centrar el panel Size
+        JPanel panelSize = crearPanelSize();
+        gbc.gridy++;
+        configuraciones.add(panelSize, gbc);
+
+        fondo.add(configuraciones);
+        return fondo;
     }
 
-    private void crearPanelJ1() {
+
+    private JPanel crearPanelJ1() {
+        ImagePanel fondo = new ImagePanel("GomokuImages/config.jpg");
         HashMap<String, Color> coloresMap = new HashMap<>();
         coloresMap.put("NEGRO", Color.BLACK);
         coloresMap.put("GRIS", new Color(64, 64, 64));
@@ -156,13 +191,14 @@ public class GomokuGUI extends JFrame {
         coloresMap.put("VERDE", new Color(0, 100, 0));
         coloresMap.put("PURPURA", new Color(128, 0, 128)); // Puedes ajustar estos valores según tus preferencias
         coloresMap.put("ROJO", Color.RED);
-        JPanel jugador1 = new JPanel(new BorderLayout());
+        JPanel jugador1 = new JPanel();
+        jugador1.setLayout(new BoxLayout(jugador1, BoxLayout.Y_AXIS));
         JLabel titulo = new JLabel("JUGADOR 1", SwingConstants.CENTER);
         titulo.setFont(new Font("Arial", Font.BOLD, 18));
         GridBagConstraints gbc = new GridBagConstraints();
         // Add the label "Ingresa tu nombre:"
         JLabel nombreLabel = new JLabel("Ingresa tu nombre:");
-
+        nombreLabel.setOpaque(false);
         JTextField nombre = new JTextField();
 
 
@@ -213,16 +249,19 @@ public class GomokuGUI extends JFrame {
             colorJ1 = coloresMap.get(colorSeleccionado);
         });
         jugador1.add(selectColorFicha, BorderLayout.SOUTH);
+        jugador1.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
 
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
 
-        configuraciones.add(jugador1, gbc);
+        //configuraciones.add(jugador1, gbc);
+        fondo.add(jugador1);
+        return fondo;
     }
 
-    private void crearPanelJ2() {
+    private JPanel crearPanelJ2() {
         HashMap<String, Color> coloresMap = new HashMap<>();
         coloresMap.put("BLANCO", Color.WHITE);
         coloresMap.put("AMARILLO", Color.YELLOW);
@@ -293,25 +332,27 @@ public class GomokuGUI extends JFrame {
 
         jugador2.add(selectColorFicha);
         jugador2.add(jugadorCheckBox);
+        jugador2.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
 
         gbc.gridx = 0;
         gbc.gridy = 1; // Assuming the second panel goes below the first one
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
 
-        configuraciones.add(jugador2, gbc);
+        //configuraciones.add(jugador2, gbc);
+        return jugador2;
     }
-    private void crearPanelSize() {
+    private JPanel crearPanelSize() {
+        JPanel panelSize = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 
         // Primer TextField
-        JLabel SizeLabel = new JLabel("Tamaño del tablero:");
-        JTextField SizeTextField = new JTextField();
+        JLabel sizeLabel = new JLabel("Tamaño del tablero:");
+        JTextField sizeTextField = new JTextField();
 
-        SizeTextField.setColumns(10);
-        SizeTextField.setColumns(10); // Puedes ajustar el tamaño según tus preferencias
+        sizeTextField.setColumns(10);
 
-        SizeTextField.getDocument().addDocumentListener(new DocumentListener() {
+        sizeTextField.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
                 updateSize();
@@ -326,15 +367,16 @@ public class GomokuGUI extends JFrame {
             public void changedUpdate(DocumentEvent e) {
                 updateSize();
             }
+
             private void updateSize() {
                 SwingUtilities.invokeLater(() -> {
                     try {
-                        size = Integer.parseInt(SizeTextField.getText());
+                        size = Integer.parseInt(sizeTextField.getText());
                         System.out.println("Tamaño del tablero: " + size);
-                        stoneLimit = size * size;
+                        stoneLimit = size;
                     } catch (NumberFormatException e) {
                         JOptionPane.showMessageDialog(null, "No estás ingresando un número válido.");
-                        SizeTextField.setText("");
+                        sizeTextField.setText("");
                     }
                 });
             }
@@ -359,6 +401,7 @@ public class GomokuGUI extends JFrame {
             public void changedUpdate(DocumentEvent e) {
                 actualizarEspeciales();
             }
+
             private void actualizarEspeciales() {
                 SwingUtilities.invokeLater(() -> {
                     try {
@@ -384,24 +427,27 @@ public class GomokuGUI extends JFrame {
 
         // Agregar componentes al panel de configuraciones
         gbc.gridx = 0;
-        gbc.gridy = 2;
+        gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.WEST;
-        configuraciones.add(SizeLabel, gbc);
+        panelSize.add(sizeLabel, gbc);
+
+        gbc.gridy = 1;
+        panelSize.add(sizeTextField, gbc);
+
+        gbc.gridy = 2;
+        panelSize.add(especialesLabel, gbc);
 
         gbc.gridy = 3;
-        configuraciones.add(SizeTextField, gbc);
+        panelSize.add(especialesTextField, gbc);
 
         gbc.gridy = 4;
-        configuraciones.add(especialesLabel, gbc);
-
-        gbc.gridy = 5;
-        configuraciones.add(especialesTextField, gbc);
-
-        gbc.gridy = 6;
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
-        configuraciones.add(boton, gbc);
+        panelSize.add(boton, gbc);
+
+        return panelSize;
     }
+
     private void empezarJuego() throws Exception {
         updateRemainingLabels();
         optionNew();
@@ -463,7 +509,7 @@ public class GomokuGUI extends JFrame {
                 for (int j = 0; j < cellMatrix[0].length; j++) {
                     Piedra piedra = new Piedra(false);
                     piedras[i][j] = piedra;
-                    //piedra.setBackType(chooseColorOfBackgroundPiedra(cellMatrix[i][j]));
+                    piedra.setBackType(chooseColorOfBackgroundPiedra(cellMatrix[i][j]));
                     piedra.addMouseListener(new CellClickListener(i, j));
                     //piedra.setOpaque(false);
                     boardPanel.add(piedra);
@@ -601,9 +647,9 @@ public class GomokuGUI extends JFrame {
 
 
         JPanel puntuacionTiempo = new JPanel(new BorderLayout());
-        JLabel puntuacion = new JLabel("Tu puntuación es: ");
+        puntuacionJ1 = new JLabel("Tu puntuación es: ");
         JLabel tiempo = new JLabel("El tiempo transcurrido es: ");
-        puntuacionTiempo.add(puntuacion, BorderLayout.NORTH);
+        puntuacionTiempo.add(puntuacionJ1, BorderLayout.NORTH);
         puntuacionTiempo.add(tiempo, BorderLayout.SOUTH);
 
 
@@ -734,11 +780,10 @@ public class GomokuGUI extends JFrame {
 
 
         JPanel puntuacionTiempo = new JPanel(new BorderLayout());
-        JLabel puntuacion = new JLabel("Tu puntuación es: ");
+        puntuacionJ2 = new JLabel("Tu puntuación es: ");
         JLabel tiempo = new JLabel("El tiempo transcurrido es: ");
-        puntuacionTiempo.add(puntuacion, BorderLayout.NORTH);
+        puntuacionTiempo.add(puntuacionJ2, BorderLayout.NORTH);
         puntuacionTiempo.add(tiempo, BorderLayout.SOUTH);
-
 
         // Agregar el JLabel al JPanel
         rightPanel.add(datosJ2, BorderLayout.NORTH);
@@ -927,8 +972,12 @@ public class GomokuGUI extends JFrame {
         Stone selectedStone;
         if (turn) {
             if(!gomoku.getPlayer1().getExtraStones().isEmpty()){
-                selectedStone = gomoku.getPlayer1().getExtraStones().get(0);
-                gomoku.getPlayer1().eliminateStone(gomoku.getPlayer1().getExtraStones(), selectedStone.getClass());
+                Stone extraStone = gomoku.getPlayer1().getExtraStones().get(0);
+                gomoku.getPlayer1().getRemainingStones().add(extraStone);
+                selectedStoneJ1 = getFirstStoneOfType(gomoku.getPlayer1().getExtraStones(), extraStone.getClass());
+                gomoku.getPlayer1().eliminateStone(gomoku.getPlayer1().getExtraStones(), gomoku.getPlayer1().getExtraStones().get(0).getClass());
+                selectedStone = selectedStoneJ1;
+                selectedStoneJ1 = null;
             }else{
                 if(selectedStoneJ1 == null){
                     selectedStoneJ1 = getFirstStoneOfType(gomoku.getPlayer1().getRemainingStones(), Stone.class);
@@ -938,8 +987,12 @@ public class GomokuGUI extends JFrame {
             }
         } else {
             if(!gomoku.getPlayer2().getExtraStones().isEmpty()){
-                selectedStone = gomoku.getPlayer2().getExtraStones().get(0);
-                gomoku.getPlayer2().eliminateStone(gomoku.getPlayer2().getExtraStones(), selectedStone.getClass());
+                Stone extraStone = gomoku.getPlayer2().getExtraStones().get(0);
+                gomoku.getPlayer2().getRemainingStones().add(extraStone);
+                selectedStoneJ2 = getFirstStoneOfType(gomoku.getPlayer2().getExtraStones(), extraStone.getClass());
+                gomoku.getPlayer2().eliminateStone(gomoku.getPlayer2().getExtraStones(), gomoku.getPlayer2().getExtraStones().get(0).getClass());
+                selectedStone = selectedStoneJ2;
+                selectedStoneJ2 = null;
             }else{
                 if(selectedStoneJ2 == null){
                     selectedStoneJ2 = getFirstStoneOfType(gomoku.getPlayer2().getRemainingStones(), Stone.class);
@@ -1170,6 +1223,8 @@ public class GomokuGUI extends JFrame {
         numNormalJ2.setText("Normales restantes: "+ gomoku.getPlayer2().numOfType(Stone.class));
         numPesadaJ2.setText("Pesadas restantes: "+ gomoku.getPlayer2().numOfType(Heavy.class));
         numTemporaryJ2.setText("Temporales restantes: "+ gomoku.getPlayer2().numOfType(Temporary.class));
+        puntuacionJ1.setText("La puntuacion es de: " + gomoku.getPlayer1().getPunctuation());
+        puntuacionJ2.setText("La puntuacion es de: " + gomoku.getPlayer2().getPunctuation());
     }
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
