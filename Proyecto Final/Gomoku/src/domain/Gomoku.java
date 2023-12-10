@@ -13,11 +13,23 @@ public class Gomoku implements Serializable{
     private int size;
 
 
-    public Gomoku(int size, int stoneLimit, int timeLimit, int porcentajeEspeciales) throws Exception {
+    public Gomoku(int size, int stoneLimit, int timeLimit, int porcentajeEspeciales, String gameMode) throws Exception {
         if(size < 10){
             throw new GomokuException(GomokuException.INVALID_BOARD_SIZE);
         }
-        board = new Board(size, size, porcentajeEspeciales);
+        switch (gameMode){
+            case "normal":
+                board = new Board(size, size, porcentajeEspeciales);
+                break;
+            case "limitedStones":
+                board = new LimitedStones(size,size);
+                break;
+            case "quickTime":
+                board = new QuickTime(size,size,porcentajeEspeciales,timeLimit);
+                break;
+            default:
+                throw new GomokuException(GomokuException.INVALID_GAME_MODE);
+        }
         this.stoneLimit = stoneLimit;
         this.timeLimit = timeLimit;
         this.setPlayers(Human.class, Human.class);
