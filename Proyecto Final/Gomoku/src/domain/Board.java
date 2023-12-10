@@ -171,6 +171,11 @@ public class Board implements Serializable {
         int rows = cells.length;
         int columns = cells[0].length;
         Color playerColor = turn ? players[0].getColor() : players[1].getColor();
+        if(playerColor.equals(players[0].getColor())){
+            playerColor = Color.BLACK;
+        }else{
+            playerColor = Color.WHITE;
+        }
 
         // Iterar sobre las filas del tablero
         for (int row = 0; row < rows; row++) {
@@ -194,6 +199,11 @@ public class Board implements Serializable {
         int rows = cells.length;
         int columns = cells[0].length;
         Color playerColor = turn ? players[0].getColor() : players[1].getColor();
+        if(playerColor.equals(players[0].getColor())){
+            playerColor = Color.BLACK;
+        }else{
+            playerColor = Color.WHITE;
+        }
 
         for (int column = 0; column < columns; column++) {
             int stoneCount = 0;
@@ -215,6 +225,11 @@ public class Board implements Serializable {
         int rows = cells.length;
         int columns = cells[0].length;
         Color playerColor = turn ? players[0].getColor() : players[1].getColor();
+        if(playerColor.equals(players[0].getColor())){
+            playerColor = Color.BLACK;
+        }else{
+            playerColor = Color.WHITE;
+        }
 
         for (int k = 0; k < rows + columns - 1; k++) {
             int startRow = Math.max(0, k - columns + 1);
@@ -239,6 +254,11 @@ public class Board implements Serializable {
         int rows = cells.length;
         int columns = cells[0].length;
         Color playerColor = turn ? players[0].getColor() : players[1].getColor();
+        if(playerColor.equals(players[0].getColor())){
+            playerColor = Color.BLACK;
+        }else{
+            playerColor = Color.WHITE;
+        }
 
         for (int k = 0; k < rows + columns - 1; k++) {
             int startRow = Math.max(0, k - columns + 1);
