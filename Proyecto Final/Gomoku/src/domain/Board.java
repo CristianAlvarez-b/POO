@@ -273,6 +273,12 @@ public class Board implements Serializable {
     public int getSegundosTranscurridos() {
         return segundosTranscurridos;
     }
+    public String obtenerTiempoActual() {
+        int minutos = segundosTranscurridos / 60;
+        int segundosRestantes = segundosTranscurridos % 60;
+//        System.out.println(String.format("%02d:%02d", minutos, segundosRestantes));
+        return String.format("%02d:%02d", minutos, segundosRestantes);
+    }
 
     public void detenerTimer() {
         if (timer != null && timer.isRunning()) {

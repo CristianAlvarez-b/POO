@@ -46,7 +46,7 @@ public class GomokuGUI extends JFrame {
     private String nombreJ1;
     private String nombreJ2;
     private boolean canRefill;
-    private String gameMode = "LimitedStones";
+    private String gameMode = "Normal";
 
 
     public GomokuGUI() throws Exception {
@@ -520,10 +520,13 @@ public class GomokuGUI extends JFrame {
         if (seleccion == JOptionPane.CLOSED_OPTION) {
             System.out.println("Diálogo cerrado sin selección");
         } else if (opciones[seleccion] == "Normal"){
+            gameMode = "Normal";
             empezarJuego();
-            
         } else if (opciones[seleccion] == "Piedras Limitadas") {
             String cantidadPiedras = JOptionPane.showInputDialog("Ingresa la cantidad de piedras de limite:");
+            stoneLimit = size*size;
+            gameMode = "LimitedStones";
+
             try{
                 stoneLimit = Integer.parseInt(cantidadPiedras);
                 porcentajeEspeciales = 0;
@@ -1379,13 +1382,13 @@ public class GomokuGUI extends JFrame {
         numTemporaryJ2.setText("Temporales restantes: "+ gomoku.getPlayer2().numOfType(Temporary.class));
         punctuationJ1.setText("La puntuacion es de: " + gomoku.getPlayer1().getPunctuation());
         punctuationJ2.setText("La puntuacion es de: " + gomoku.getPlayer2().getPunctuation());
-        tiempoLabel.setText("El tiempo transcurrido es: " + gomoku.getBoard().getSegundosTranscurridos());
+        tiempoLabel.setText("El tiempo transcurrido es: " + gomoku.getBoard().obtenerTiempoActual());
     }
     private void startTimer() {
         // Actualiza el tiempoLabel cada segundo
         Timer timer = new Timer(1000, e -> {
             // Actualiza el tiempoLabel cada segundo
-            tiempoLabel.setText("El tiempo transcurrido es: " + gomoku.getBoard().getSegundosTranscurridos());
+            tiempoLabel.setText("El tiempo transcurrido es: " + gomoku.getBoard().obtenerTiempoActual());
         });
         timer.start();
     }
