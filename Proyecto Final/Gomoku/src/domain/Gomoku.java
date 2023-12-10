@@ -8,9 +8,10 @@ public class Gomoku implements Serializable{
     private Board board;
     private Player player1;
     private Player player2;
-    private int stoneLimit = 800;
+    private int stoneLimit;
     private int timeLimit;
     private int size;
+    private int specialPercentage;
 
 
     public Gomoku(int size, int stoneLimit, int timeLimit, int porcentajeEspeciales, String gameMode) throws Exception {
@@ -32,16 +33,15 @@ public class Gomoku implements Serializable{
         }
         this.stoneLimit = stoneLimit;
         this.timeLimit = timeLimit;
+        this.specialPercentage = porcentajeEspeciales;
         this.setPlayers(Human.class, Human.class);
         board.setPlayers(new Player[]{this.player1,this.player2});
         this.size = size;
 
     }
     public void setPlayers(Class<? extends Player> playerClass1, Class<? extends Player> playerClass2) throws Exception {
-        this.player1 = playerClass1.getDeclaredConstructor(Color.class, Board.class, int.class).newInstance(Color.BLACK, board, 0);
-        this.player2 = playerClass2.getDeclaredConstructor(Color.class, Board.class, int.class).newInstance(Color.WHITE, board, 0);
-        player1.refillStones(stoneLimit, board.getSpecialPercentage());
-        player2.refillStones(stoneLimit, board.getSpecialPercentage());
+        this.player1 = playerClass1.getDeclaredConstructor(Color.class, Board.class, int.class, int.class).newInstance(Color.BLACK, board, specialPercentage, stoneLimit);
+        this.player2 = playerClass2.getDeclaredConstructor(Color.class, Board.class, int.class, int.class).newInstance(Color.WHITE, board, specialPercentage, stoneLimit);
         board.setPlayers(new Player[]{this.player1,this.player2});
     }
     public boolean play(int row, int column, Stone stone) throws Exception {

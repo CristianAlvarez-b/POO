@@ -4,19 +4,15 @@ import java.util.ArrayList;
 import java.awt.*;
 
 public class Agressive extends Machine{
-    public Agressive(Color color, Board board) {
+    public Agressive(Color color, Board board, int specialStonesPercentage, int stoneLimit) {
         this.color = color;
         this.board = board;
         extraStones = new ArrayList<>();
         remainingStones = new ArrayList<>();
-        refillStones(board.getDimension()[0]*board.getDimension()[1], 0);
+        refillStones(stoneLimit, specialStonesPercentage);
         punctuation = 0;
     }
 
-    public Agressive(Color color, Board board, int stoneLimit) {
-        this(color, board);
-        refillStones(stoneLimit, 0);
-    }
 
     @Override
     public void play() throws Exception {

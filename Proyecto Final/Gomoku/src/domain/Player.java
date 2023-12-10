@@ -7,7 +7,7 @@ import java.awt.*;
 public abstract class Player implements Serializable {
     protected String name;
     protected ArrayList<Stone> remainingStones;
-    protected boolean canRefill = true;
+    protected boolean canRefill;
     protected Color color;
     protected ArrayList<Stone> extraStones;
     protected Board board;
