@@ -46,7 +46,7 @@ public class GomokuGUI extends JFrame {
     private String nombreJ1;
     private String nombreJ2;
     private boolean canRefill;
-    private Timer timer;
+    private String gameMode = "normal";
 
 
     public GomokuGUI() throws Exception {
@@ -453,7 +453,7 @@ public class GomokuGUI extends JFrame {
             }
         });
 
-        JComboBox<String> modosJuego = new JComboBox<>(new String[]{"Modo1", "Modo2", "Modo3"});
+        JComboBox<String> modosJuego = new JComboBox<>(new String[]{"Normal", "Modo2", "Modo3"});
 
         // Configuración de GridBagConstraints
         gbc.insets = insets;
@@ -551,7 +551,7 @@ public class GomokuGUI extends JFrame {
     }
     private void prepareElementsBoard() throws Exception {
         if (boardPanel == null) {
-            gomoku = new Gomoku(size, stoneLimit, timeLimit, porcentajeEspeciales);
+            gomoku = new Gomoku(size, stoneLimit, timeLimit, porcentajeEspeciales, gameMode);
             // Si el tablero aún no se ha creado, crearlo y agregarlo al mainPanel
             cellMatrix = gomoku.board();
             boardPanel = new JPanel(new GridLayout(cellMatrix.length, cellMatrix[0].length));
@@ -569,7 +569,6 @@ public class GomokuGUI extends JFrame {
             }
             gamePanel.add(boardPanel, BorderLayout.CENTER);
         } else {
-
             refresh();
         }
     }
@@ -979,7 +978,7 @@ public class GomokuGUI extends JFrame {
         boardPanel = null;
         turn = true;
         // Crear un nuevo tablero y panel
-        gomoku = new Gomoku(size, stoneLimit, timeLimit, porcentajeEspeciales);
+        gomoku = new Gomoku(size, stoneLimit, timeLimit, porcentajeEspeciales, gameMode);
         prepareElementsBoard();
         piedra1.setType('n');
         piedra2.setType('n');
@@ -1344,7 +1343,7 @@ public class GomokuGUI extends JFrame {
     }
     private void startTimer() {
         // Actualiza el tiempoLabel cada segundo
-        timer = new Timer(1000, e -> {
+        Timer timer = new Timer(1000, e -> {
             // Actualiza el tiempoLabel cada segundo
             tiempoLabel.setText("El tiempo transcurrido es: " + gomoku.getBoard().getSegundosTranscurridos());
         });
