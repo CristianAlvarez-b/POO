@@ -29,7 +29,7 @@ public class Board implements Serializable {
         });
         this.timer.start();
     }
-    public final void setPlayers(Player[] players) {
+    public void setPlayers(Player[] players) {
         this.players = players;
     }
 
