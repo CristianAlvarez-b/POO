@@ -25,6 +25,15 @@ public class GomokuTest {
         assertNotNull(gomoku.getPlayer1());
         assertNotNull(gomoku.getPlayer2());
     }
+    @Test
+    void testmachine() throws Exception {
+        Gomoku gomoku = new Gomoku(15, 800, 60, 0, "Normal");
+        assertDoesNotThrow(() -> gomoku.setPlayers(Human.class, Fearful.class));
+        gomoku.play(0, 0, new Stone(Color.BLACK));
+        gomoku.play(1, 0, new Stone(Color.WHITE));
+        gomoku.getBoard();
+        System.out.println("No se que esta pasando");
+    }
 
     @Test
     void shouldPlay() throws Exception {

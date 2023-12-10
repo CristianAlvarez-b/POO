@@ -46,6 +46,7 @@ public class GomokuGUI extends JFrame {
     private String nombreJ1;
     private String nombreJ2;
     private boolean canRefill;
+    private Class<? extends Player> machineType = Human.class;
     private String gameMode = "Normal";
 
 
@@ -342,6 +343,27 @@ public class GomokuGUI extends JFrame {
 
         // Configuración de JComboBox para la máquina
         maquinaComboBox.setEnabled(false);  // Inicialmente desactivado
+        maquinaComboBox.addActionListener(e -> {
+            // Acciones a realizar cuando se selecciona un elemento en el JComboBox
+            String seleccion = (String) maquinaComboBox.getSelectedItem();
+            System.out.println("Se seleccionó la opción: " + seleccion);
+
+            // Luego puedes realizar acciones adicionales según la selección
+            if ("Agresiva".equals(seleccion)) {
+                // Acciones para la opción "Agresiva"
+            } else if ("Miedosa".equals(seleccion)) {
+                try {
+                    machineType = Fearful.class;
+                } catch (Exception ex) {
+                    Log.record(ex);
+                    throw new RuntimeException(ex);
+                }
+                // Acciones para la opción "Miedosa"
+            } else if ("Experta".equals(seleccion)) {
+                // Acciones para la opción "Experta"
+            }
+        });
+
         maquinaPanel.add(maquinaLabel);
         maquinaPanel.add(maquinaComboBox);
 
@@ -596,6 +618,7 @@ public class GomokuGUI extends JFrame {
         if (boardPanel == null) {
             gomoku = new Gomoku(size, stoneLimit, timeLimit, porcentajeEspeciales, gameMode);
             // Si el tablero aún no se ha creado, crearlo y agregarlo al mainPanel
+            gomoku.setPlayers(Human.class, machineType);
             cellMatrix = gomoku.board();
             boardPanel = new JPanel(new GridLayout(cellMatrix.length, cellMatrix[0].length));
             Piedra[][] piedras = new Piedra[cellMatrix.length][cellMatrix[0].length];
@@ -1044,7 +1067,7 @@ public class GomokuGUI extends JFrame {
         boardPanel = null;
         turn = true;
         // Crear un nuevo tablero y panel
-        gomoku = new Gomoku(size, stoneLimit, timeLimit, porcentajeEspeciales, gameMode);
+        //gomoku = new Gomoku(size, stoneLimit, timeLimit, porcentajeEspeciales, gameMode);
         prepareElementsBoard();
         piedra1.setType('n');
         piedra2.setType('n');
@@ -1416,6 +1439,13 @@ public class GomokuGUI extends JFrame {
         Timer timer = new Timer(1000, e -> {
             // Actualiza el tiempoLabel cada segundo
             tiempoLabel.setText("El tiempo transcurrido es: " + gomoku.getBoard().obtenerTiempoActual());
+            if(!turn && gomoku.getPlayer2() instanceof Machine){
+                try {
+                    ponerFicha(0,0);
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
         });
         timer.start();
     }
