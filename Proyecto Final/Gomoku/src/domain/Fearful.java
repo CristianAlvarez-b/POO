@@ -26,8 +26,7 @@ public class Fearful extends Machine {
         // Encontrar la posición más alejada del otro jugador
         Point posicionMasAlejada = encontrarPosicionMasAlejada(posicionesDisponibles, posicionesOcupadasOtroJugador);
         //Stone selectedStone = getRemainingStones().get(0);
-        Stone selectedStone = new Stone(color);
-        ArrayList<Stone> prueba = getRemainingStones();
+        Stone selectedStone = getRemainingStones().get(0);
         // Jugar la piedra en la posición más alejada
         if (posicionMasAlejada != null) {
             play(posicionMasAlejada.x, posicionMasAlejada.y, selectedStone);

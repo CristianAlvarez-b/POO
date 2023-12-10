@@ -350,7 +350,12 @@ public class GomokuGUI extends JFrame {
 
             // Luego puedes realizar acciones adicionales según la selección
             if ("Agresiva".equals(seleccion)) {
-                // Acciones para la opción "Agresiva"
+                try {
+                    machineType = Agressive.class;
+                } catch (Exception ex) {
+                    Log.record(ex);
+                    throw new RuntimeException(ex);
+                }
             } else if ("Miedosa".equals(seleccion)) {
                 try {
                     machineType = Fearful.class;
