@@ -910,12 +910,27 @@ public class GomokuGUI extends JFrame {
         // Crear un panel para la parte inferior
         JPanel bottomPanel = new JPanel();
         // Agregar los botones "Finalizar" y "Resetear"
-        JButton guardarFichaButton = new JButton("RESETEAR");
+        JButton guardarFichaButton = new JButton("FINALIZAR JUEGO");
 
         // Agregar ActionListener a los botones según sea necesario
         guardarFichaButton.addActionListener(e -> {
             try {
-                optionNew();
+                int respuesta = confirmarEleccion();
+
+                // Si el usuario confirma, ejecutar la acción
+                if (respuesta == JOptionPane.YES_OPTION) {
+                    optionNew();
+                    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+                    // Calcular el tamaño deseado de la ventana (ajustar según tus necesidades)
+                    int windowWidth = (int) (screenSize.width * 0.5);
+                    int windowHeight = (int) (screenSize.height * 0.5);
+
+                    // Establecer el tamaño de la ventana
+                    setSize(new Dimension(windowWidth, windowHeight));
+                    setResizable(false);
+                    setLocationRelativeTo(null);
+                    cardLayout.show(cardPanel, "initial");
+                }
             } catch (Exception ex) {
                 Log.record(ex);
                 throw new RuntimeException(ex);
@@ -924,6 +939,14 @@ public class GomokuGUI extends JFrame {
         bottomPanel.add(guardarFichaButton);
         // Agregar el panel inferior a la parte inferior de la pantalla principal
         gamePanel.add(bottomPanel, BorderLayout.SOUTH);
+    }
+    private int confirmarEleccion() {
+        // Mostrar un cuadro de diálogo de confirmación
+        return JOptionPane.showConfirmDialog(
+                this,
+                "¿Estás seguro de que deseas finalizar el juego?",
+                "Confirmación",
+                JOptionPane.YES_NO_OPTION);
     }
     private void reset() {
         cellMatrix = gomoku.board();
