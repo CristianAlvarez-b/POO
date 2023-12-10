@@ -185,8 +185,10 @@ public class GomokuGUI extends JFrame {
 
         // Crear y centrar el panel Size
         JPanel panelSize = crearPanelSize();
+        panelSize.setOpaque(false);
         gbc.gridy++;
         configuraciones.add(panelSize, gbc);
+        configuraciones.setOpaque(false);
 
         fondo.add(configuraciones);
         return fondo;
@@ -414,7 +416,7 @@ public class GomokuGUI extends JFrame {
                         stoneLimit = size * size;
                     } catch (NumberFormatException e) {
                         JOptionPane.showMessageDialog(null, "No estás ingresando un número válido.");
-                        Log.record(e);
+                        // Log.record(e);
                         sizeTextField.setText("");
                     }
                 });
@@ -449,14 +451,13 @@ public class GomokuGUI extends JFrame {
                         System.out.println("Porcentaje especiales: " + porcentajeEspeciales);
                     } catch (NumberFormatException e) {
                         JOptionPane.showMessageDialog(null, "No estás ingresando un número válido.");
-                        Log.record(e);
+                        // Log.record(e);
                         especialesTextField.setText("");
                     }
                 });
             }
         });
 
-        JComboBox<String> modosJuego = new JComboBox<>(new String[]{"Modo1", "Modo2", "Modo3"});
 
         // Configuración de GridBagConstraints
         gbc.insets = insets;
@@ -478,24 +479,66 @@ public class GomokuGUI extends JFrame {
         gbc.gridx = 1;
         panelSize.add(especialesTextField, gbc);
 
-        gbc.gridy = 4;
+        gbc.gridx = 0;
+        gbc.gridy = 2;
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.insets = new Insets(3, 3, 3, 3);
-        JButton button1 = new JButton("Iniciar Juego");
-        button1.addActionListener(e -> {
+
+        gbc.gridy = 3;
+        JButton modosJuego = new JButton("Iniciar Juego");
+        modosJuego.addActionListener(e -> {
             try {
-                empezarJuego();
+                mostrarDialogo();
             } catch (Exception ex) {
+                Log.record(ex);
                 throw new RuntimeException(ex);
             }
         });
-        panelSize.add(button1, gbc);
+        panelSize.add(modosJuego, gbc);
+
+        gbc.gridx = 1; // Nueva posición para el botón
+        gbc.gridy = 5; // Mismo nivel que el JComboBox
+        gbc.gridwidth = 1; // Restaurar gridwidth a 1
+        gbc.anchor = GridBagConstraints.EAST; // Alineación a la derecha
 
         return panelSize;
     }
+    private void mostrarDialogo() throws Exception {
+        Object[] opciones = {"Normal", "Piedras Limitadas", "Tiempo Limitado"};
+        int seleccion = JOptionPane.showOptionDialog(
+                null,
+                "Selecciona el modo de juego:",
+                "Modo de Juego",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                opciones,
+                opciones[0]);
 
+        // Aquí puedes manejar la opción seleccionada
+        if (seleccion == JOptionPane.CLOSED_OPTION) {
+            System.out.println("Diálogo cerrado sin selección");
+        } else if (opciones[seleccion] == "Normal"){
+            empezarJuego();
+            
+        } else if (opciones[seleccion] == "Piedras Limitadas") {
+            String cantidadPiedras = JOptionPane.showInputDialog("Ingresa la cantidad de piedras de limite:");
+            try{
+                stoneLimit = Integer.parseInt(cantidadPiedras);
+                porcentajeEspeciales = 0;
+                empezarJuego();
+            }catch (Exception e){
+                Log.record(e);
+                JOptionPane.showMessageDialog(null, "No ingresaste un numero válido");
+            }
 
+            System.out.println("Cantidad de piedras seleccionada: " + cantidadPiedras);
+        } else {
+            System.out.println("Modo seleccionado: " + opciones[seleccion]);
+            // Puedes realizar acciones adicionales según la opción seleccionada
+        }
+    }
     private void empezarJuego() throws Exception {
         updateRemainingLabels();
         optionNew();
