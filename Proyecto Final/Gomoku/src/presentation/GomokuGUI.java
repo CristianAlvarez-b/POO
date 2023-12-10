@@ -771,7 +771,7 @@ public class GomokuGUI extends JFrame {
         JPanel piedrasJ2 = new JPanel(new GridBagLayout());
         piedrasJ2.setOpaque(false);
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10); // Márgenes entre los componentes
+        gbc.insets = new Insets(17, 17, 17, 17); // Márgenes entre los componentes
 
         JLabel normalRemaining = new JLabel("Escoge la ficha que vas a utilizar: ");
         normalRemaining.setForeground(Color.WHITE);
