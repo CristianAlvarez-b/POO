@@ -164,7 +164,6 @@ public class GomokuGUI extends JFrame {
 
         // Crear espacio vertical de 20 píxeles
         configuraciones.add(Box.createVerticalStrut(20), gbc);
-
         // Crear y centrar el panel J1
         JPanel panelJ1 = crearPanelJ1();
         gbc.gridy++;
@@ -417,6 +416,7 @@ public class GomokuGUI extends JFrame {
                     }
                 });
             }
+
         });
 
         JLabel especialesLabel = new JLabel("Porcentaje de especiales:");
@@ -453,16 +453,7 @@ public class GomokuGUI extends JFrame {
             }
         });
 
-        JButton boton = new JButton("Iniciar Juego");
-
-        boton.addActionListener(e -> {
-            try {
-                empezarJuego();
-            } catch (Exception ex) {
-                Log.record(ex);
-                JOptionPane.showMessageDialog(null, "Algo elegiste mal");
-            }
-        });
+        JComboBox<String> modosJuego = new JComboBox<>(new String[]{"Modo1", "Modo2", "Modo3"});
 
         // Configuración de GridBagConstraints
         gbc.insets = insets;
@@ -474,20 +465,34 @@ public class GomokuGUI extends JFrame {
 
         panelSize.add(sizeLabel, gbc);
 
-        gbc.gridy = 1;
+        gbc.gridx = 1;
         panelSize.add(sizeTextField, gbc);
 
-        gbc.gridy = 2;
+        gbc.gridx = 0;
+        gbc.gridy = 1;
         panelSize.add(especialesLabel, gbc);
 
-        gbc.gridy = 3;
+        gbc.gridx = 1;
         panelSize.add(especialesTextField, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(3, 3, 3, 3);
+        JLabel text = new JLabel("Selecciona el modo de juego:");
+        text.setForeground(Color.white);
+        text.setFont(new Font("Arial", Font.BOLD, 15));
+        panelSize.add(text, gbc);
+
+        gbc.gridy = 3;
+        panelSize.add(modosJuego, gbc);
 
         gbc.gridy = 4;
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
-        gbc.insets = new Insets(10, 10, 10, 10);
-        panelSize.add(boton, gbc);
+        gbc.insets = new Insets(3, 3, 3, 3);
+        panelSize.add(new JButton("Iniciar Juego"), gbc);
 
         return panelSize;
     }
