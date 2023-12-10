@@ -18,10 +18,10 @@ public class Gomoku implements Serializable{
             throw new GomokuException(GomokuException.INVALID_BOARD_SIZE);
         }
         switch (gameMode){
-            case "normal":
+            case "Normal":
                 board = new Board(size, size, porcentajeEspeciales);
                 break;
-            case "limitedStones":
+            case "LimitedStones":
                 board = new LimitedStones(size,size);
                 break;
             case "quickTime":

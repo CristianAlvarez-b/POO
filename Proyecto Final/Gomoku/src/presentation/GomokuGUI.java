@@ -46,7 +46,7 @@ public class GomokuGUI extends JFrame {
     private String nombreJ1;
     private String nombreJ2;
     private boolean canRefill;
-    private String gameMode = "normal";
+    private String gameMode = "Normal";
 
 
     public GomokuGUI() throws Exception {
@@ -120,7 +120,7 @@ public class GomokuGUI extends JFrame {
             Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
             // Calcular el tamaño deseado de la ventana (ajustar según tus necesidades)
             int windowWidth = (int) (screenSize.width * 0.3);
-            int windowHeight = (int) (screenSize.height * 0.5);
+            int windowHeight = (int) (screenSize.height * 0.7);
 
             // Establecer el tamaño de la ventana
             setSize(new Dimension(windowWidth, windowHeight));
@@ -411,7 +411,6 @@ public class GomokuGUI extends JFrame {
                         stoneLimit = size * size;
                     } catch (NumberFormatException e) {
                         JOptionPane.showMessageDialog(null, "No estás ingresando un número válido.");
-                        Log.record(e);
                         sizeTextField.setText("");
                     }
                 });
@@ -446,14 +445,11 @@ public class GomokuGUI extends JFrame {
                         System.out.println("Porcentaje especiales: " + porcentajeEspeciales);
                     } catch (NumberFormatException e) {
                         JOptionPane.showMessageDialog(null, "No estás ingresando un número válido.");
-                        Log.record(e);
                         especialesTextField.setText("");
                     }
                 });
             }
         });
-
-        JComboBox<String> modosJuego = new JComboBox<>(new String[]{"Normal", "Modo2", "Modo3"});
 
         // Configuración de GridBagConstraints
         gbc.insets = insets;
@@ -485,18 +481,82 @@ public class GomokuGUI extends JFrame {
         text.setFont(new Font("Arial", Font.BOLD, 15));
         panelSize.add(text, gbc);
 
+        // JCheckBox y JTextField
+        JCheckBox checkBox1 = new JCheckBox("Opción 1");
+        JCheckBox checkBox2 = new JCheckBox("Opción 2");
+        JCheckBox checkBox3 = new JCheckBox("Opción 3");
+
+        JTextField textField1 = new JTextField();
+        JTextField textField2 = new JTextField();
+        JTextField textField3 = new JTextField();
+
+        checkBox1.setEnabled(false);
+        checkBox2.setEnabled(false);
+        checkBox3.setEnabled(false);
+
         gbc.gridy = 3;
-        panelSize.add(modosJuego, gbc);
+        panelSize.add(checkBox1, gbc);
 
         gbc.gridy = 4;
+        panelSize.add(checkBox2, gbc);
+
+        gbc.gridy = 5;
+        panelSize.add(checkBox3, gbc);
+
+        // Configuración de ActionListener para activar/desactivar JTextField
+
+        checkBox1.addActionListener(e -> {
+            if (checkBox1.isSelected()) {
+                textField1.setEnabled(true);
+            } else {
+                textField1.setEnabled(false);
+                textField1.setText("");
+            }
+        });
+        checkBox2.addActionListener(e -> {
+            if (checkBox2.isSelected()) {
+                textField2.setEnabled(true);
+            } else {
+                textField2.setEnabled(false);
+                textField2.setText("");
+            }
+        });
+        checkBox3.addActionListener(e -> {
+            if (checkBox2.isSelected()) {
+                textField2.setEnabled(true);
+            } else {
+                textField2.setEnabled(false);
+                textField2.setText("");
+            }
+        });
+
+        // Añadir JTextFields
+        gbc.gridx = 1;
+        gbc.gridy = 3;
+        panelSize.add(textField1, gbc);
+
+        gbc.gridy = 4;
+        panelSize.add(textField2, gbc);
+
+        gbc.gridy = 5;
+        panelSize.add(textField3, gbc);
+
+        gbc.gridy = 6;
         gbc.gridwidth = 2;
-        gbc.anchor = GridBagConstraints.CENTER;
-        gbc.insets = new Insets(3, 3, 3, 3);
-        panelSize.add(new JButton("Iniciar Juego"), gbc);
+        gbc.anchor = GridBagConstraints.EAST;
+        JButton button1 = new JButton("Iniciar Juego");
+        button1.addActionListener(e -> {
+            try {
+                //empezarJuego();
+                System.out.println("Iniciar juego");
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+        panelSize.add(button1, gbc);
 
         return panelSize;
     }
-
 
 
     private void empezarJuego() throws Exception {
