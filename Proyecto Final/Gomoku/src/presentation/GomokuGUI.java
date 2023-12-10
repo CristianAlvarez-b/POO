@@ -46,6 +46,7 @@ public class GomokuGUI extends JFrame {
     private String nombreJ1;
     private String nombreJ2;
     private boolean canRefill;
+    private Timer timer;
 
 
     public GomokuGUI() throws Exception {
@@ -1014,6 +1015,7 @@ public class GomokuGUI extends JFrame {
                 this.gomoku = temporal;
                 refresh();
                 turn = gomoku.getTurn();
+                gomoku.getBoard().starTimer();
                 cardLayout.show(cardPanel, "game");
             }
         }catch (Exception e){
@@ -1036,8 +1038,8 @@ public class GomokuGUI extends JFrame {
                 JOptionPane.showMessageDialog(this, "La instancia de Gomoku no está inicializada.");
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
             Log.record(e);
+            JOptionPane.showMessageDialog(this, e.getMessage());
         }
     }
     private void optionExit(){
@@ -1064,7 +1066,6 @@ public class GomokuGUI extends JFrame {
     }
     private void ponerFicha(int row, int col) throws Exception {
         Stone selectedStone;
-
         Player currentPlayer = turn ? gomoku.getPlayer1() : gomoku.getPlayer2();
         Player opponentPlayer = turn ? gomoku.getPlayer2() : gomoku.getPlayer1();
         Stone[] selectedStoneArray = new Stone[]{turn ? selectedStoneJ1 : selectedStoneJ2};
@@ -1338,7 +1339,7 @@ public class GomokuGUI extends JFrame {
     }
     private void startTimer() {
         // Actualiza el tiempoLabel cada segundo
-        Timer timer = new Timer(1000, e -> {
+        timer = new Timer(1000, e -> {
             // Actualiza el tiempoLabel cada segundo
             tiempoLabel.setText("El tiempo transcurrido es: " + gomoku.getBoard().getSegundosTranscurridos());
         });

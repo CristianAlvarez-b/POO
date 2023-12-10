@@ -21,12 +21,14 @@ public class Board implements Serializable {
         Class<? extends Cell>[] clasesEspeciales = new Class[]{Mine.class, Golden.class, Teleport.class};
         placeSpecialCells(clasesEspeciales,specialPercentage);
         this.segundosTranscurridos = 0;
+        starTimer();
+    }
+    public void starTimer(){
         this.timer = new Timer(1000, e -> {
             segundosTranscurridos++;
         });
         this.timer.start();
     }
-
     public final void setPlayers(Player[] players) {
         this.players = players;
     }
