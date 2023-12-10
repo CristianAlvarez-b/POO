@@ -17,7 +17,7 @@ public class LimitedStones extends Board{
     public boolean verifyGame(boolean turn) throws GomokuException {
         boolean gameOver = super.verifyGame(turn);
         if(!gameOver){
-            if(turn && players[0].getRemainingStones().isEmpty() && players[1].getRemainingStones().isEmpty()){
+            if(players[0].getRemainingStones().isEmpty() && players[1].getRemainingStones().isEmpty()){
                 throw new GomokuException(GomokuException.DRAW);
             }
         }

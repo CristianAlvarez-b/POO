@@ -1184,7 +1184,11 @@ public class GomokuGUI extends JFrame {
         } else if (e.getMessage().equals(GomokuException.FULL_BOARD)) {
             refresh();
             JOptionPane.showMessageDialog(null, "Empate.");
-        } else {
+        }else if(e.getMessage().equals(GomokuException.DRAW)) {
+            refresh();
+            JOptionPane.showMessageDialog(null, "Empate.");
+        }
+        else {
             throw new Exception(e.getMessage());
         }
     }
