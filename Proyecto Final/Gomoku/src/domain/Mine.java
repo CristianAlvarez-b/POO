@@ -12,31 +12,44 @@ public class Mine extends Cell{
     }
 
     @Override
-    public int updateState(boolean turn){
+    public int updateState(boolean turn) {
         super.updateTemporaryStoneLife();
         int punctuationCurrentPlayer = 0;
         int punctuationOtherPlayer = 0;
-        if(stone != null && active){
+
+        if (stone != null && active) {
             active = false;
             punctuationCurrentPlayer -= 50;
+
             List<int[]> adjacentCells = board.getAdjacentCellPositions(position[0], position[1]);
-            for (int[] position : adjacentCells) {
-                Cell currentCell = board.getCells()[position[0]][position[1]];
-                if(currentCell.getStone() != null && currentCell.getStone().getColor() == stone.getColor()){
-                    punctuationCurrentPlayer -= 50;
-                }else {
-                    punctuationCurrentPlayer += 100;
-                    punctuationOtherPlayer -= 50;
+
+            for (int[] adjacentPosition : adjacentCells) {
+                Cell adjacentCell = board.getCells()[adjacentPosition[0]][adjacentPosition[1]];
+
+                if (adjacentCell.getStone() != null) {
+                    if (adjacentCell.getStone().getColor() == stone.getColor()) {
+                        // Piedra propia perdida
+                        punctuationCurrentPlayer -= 50;
+                    } else {
+                        // Piedra del contrincante explotada
+                        punctuationCurrentPlayer += 100;
+                        punctuationOtherPlayer -= 50;
+                    }
+
+                    adjacentCell.setStone(null);  // Limpiar la piedra de la celda adyacente
                 }
-                currentCell.setStone(null);
             }
-            this.stone = null;
+
+            this.stone = null;  // Limpiar la piedra de la mina
         }
-        if (turn){
+
+        if (turn) {
             board.getPlayers()[1].addPunctuation(punctuationOtherPlayer);
-        }else {
+        } else {
             board.getPlayers()[0].addPunctuation(punctuationOtherPlayer);
         }
+
         return punctuationCurrentPlayer;
     }
+
 }
