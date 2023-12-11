@@ -86,6 +86,16 @@ public abstract class Player implements Serializable {
     public ArrayList<Stone> getRemainingStones() {
         return remainingStones;
     }
+    public boolean contieneStone(Class<? extends Stone> tipo) {
+        boolean contiene = false;
+        for (Stone stone : remainingStones) {
+            if (tipo.isInstance(stone)) {
+                contiene = true;
+                break;
+            }
+        }
+        return contiene;
+    }
     public int numOfType(Class<? extends Stone> stoneType) {
         int count = 0;
         for (Stone stone : remainingStones) {

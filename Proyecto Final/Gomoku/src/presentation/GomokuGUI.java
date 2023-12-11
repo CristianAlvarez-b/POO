@@ -55,7 +55,6 @@ public class GomokuGUI extends JFrame {
         prepareElements();
         prepareActions();
     }
-
     private void prepareElements() throws Exception {
         prepareScreens();
         setTitle("Gomoku");
@@ -1195,7 +1194,7 @@ public class GomokuGUI extends JFrame {
             gomoku.getBoard().setTurn(turn);
             Cell[][] cellMatrix = gomoku.board();
             refresh();
-            if (cellMatrix[row][col] instanceof Golden) {
+            if (cellMatrix[row][col] instanceof Golden && !(gomoku.getPlayer2()instanceof Machine)) {
                 String message;
                 if(currentPlayer.getExtraStones().get(0).getClass().getSimpleName().equals("Stone")){
                     message = "Obtuviste una ficha: Stone. Estas obligado a jugar 2 normales en tu siguiente turno.";
@@ -1231,7 +1230,7 @@ public class GomokuGUI extends JFrame {
 
     private Stone handleRemainingStones(Player currentPlayer, Stone[] selectedStoneArray){
         if (selectedStoneArray[0] == null) {
-            selectedStoneArray[0] = getFirstStoneOfType(currentPlayer.getRemainingStones(), Stone.class);
+            selectedStoneArray[0] = getFirstStoneOfType(currentPlayer.getRemainingStones(), currentPlayer.getRemainingStones().get(currentPlayer.getRemainingStones().size() - 1).getClass());
         }
         return selectedStoneArray[0];
     }
@@ -1461,6 +1460,13 @@ public class GomokuGUI extends JFrame {
             }
             if(!turn && gomoku.getPlayer2() instanceof Machine){
                 try {
+                    if(gomoku.getPlayer2().contieneStone(Stone.class)){
+                        selectedStoneJ2 = new Stone(colorJ2);
+                    }else if(gomoku.getPlayer2().contieneStone(Heavy.class)){
+                        selectedStoneJ2 = new Heavy(colorJ2);
+                    }else {
+                        selectedStoneJ2 = new Temporary(colorJ2);
+                    }
                     ponerFicha(0,0);
                 } catch (Exception ex) {
                     throw new RuntimeException(ex);
@@ -1513,8 +1519,6 @@ public class GomokuGUI extends JFrame {
                 break;
         }
     }
-
-
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             try {
