@@ -34,6 +34,13 @@ public class GomokuTest {
         gomoku.getBoard();
         System.out.println("No se que esta pasando");
     }
+    @Test
+    void testQuickTime() throws  Exception{
+        Gomoku gomoku = new Gomoku(15, 800, 100, 0, "QuickTime");
+        gomoku.play(0, 0, new Stone(Color.BLACK));
+        gomoku.play(1, 0, new Stone(Color.WHITE));
+        System.out.println(gomoku.getBoard().getSegundosTranscurridos());
+    }
 
     @Test
     void shouldPlay() throws Exception {

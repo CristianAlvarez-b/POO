@@ -10,8 +10,8 @@ public class Board implements Serializable {
     protected Cell[][] cells;
     protected Player[] players;
     protected boolean turn;
-    private Timer timer;
-    private int segundosTranscurridos;
+    protected Timer timer;
+    protected int segundosTranscurridos;
     private int specialPercentage;
     public Board(int rows, int columns, int specialPercentage) throws Exception {
         turn = true;
@@ -293,11 +293,10 @@ public class Board implements Serializable {
     public int getSegundosTranscurridos() {
         return segundosTranscurridos;
     }
-    public String obtenerTiempoActual() {
+    public String obtenerTiempoActual() throws GomokuException{
         int minutos = segundosTranscurridos / 60;
         int segundosRestantes = segundosTranscurridos % 60;
-//        System.out.println(String.format("%02d:%02d", minutos, segundosRestantes));
-        return String.format("%02d:%02d", minutos, segundosRestantes);
+        return ("TIEMPO: " + String.format("%02d:%02d", minutos, segundosRestantes));
     }
 
     public void detenerTimer() {

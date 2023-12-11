@@ -25,7 +25,7 @@ public class Gomoku implements Serializable{
             case "LimitedStones":
                 board = new LimitedStones(size,size);
                 break;
-            case "quickTime":
+            case "QuickTime":
                 board = new QuickTime(size,size,porcentajeEspeciales,timeLimit);
                 break;
             default:

@@ -21,6 +21,7 @@ public class LimitedStones extends Board{
                 throw new GomokuException(GomokuException.DRAW);
             }
         }
+
         return gameOver;
     }
 }

@@ -11,6 +11,7 @@ public class GomokuException extends Exception implements Serializable {
     public static final String NO_STONE_FOUND = "Piedra no encontrada.";
     public static final String MAXIMUS_LIFE = "Vida maxima alcanzada";
     public static final String DRAW = "Empate";
+    public static final String TIME = "Te quedaste sin tiempo!";
     public static final String INVALID_GAME_MODE = "Modo de juego no valido.";
 
     public GomokuException(String message){

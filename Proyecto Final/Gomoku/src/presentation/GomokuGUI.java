@@ -29,7 +29,7 @@ public class GomokuGUI extends JFrame {
     private JPanel cardPanel;
     private JPanel gamePanel;
     private JPanel boardPanel;
-    private Cell[][] cellMatrix;
+
     private JPanel piedraJ1;
     private JPanel piedraJ2;
     private boolean turn = true;
@@ -45,9 +45,10 @@ public class GomokuGUI extends JFrame {
     private Stone selectedStoneJ2 = null;
     private String nombreJ1;
     private String nombreJ2;
-    private boolean canRefill;
     private Class<? extends Player> machineType = Human.class;
     private String gameMode = "Normal";
+    private Timer timerGUI;
+    private static boolean clickEnabled = true;
 
 
     public GomokuGUI() throws Exception {
@@ -553,7 +554,6 @@ public class GomokuGUI extends JFrame {
             String cantidadPiedras = JOptionPane.showInputDialog("Ingresa la cantidad de piedras de limite:");
             stoneLimit = size*size;
             gameMode = "LimitedStones";
-
             try{
                 stoneLimit = Integer.parseInt(cantidadPiedras);
                 porcentajeEspeciales = 0;
@@ -562,16 +562,23 @@ public class GomokuGUI extends JFrame {
                 Log.record(e);
                 JOptionPane.showMessageDialog(null, "No ingresaste un numero válido");
             }
-
             System.out.println("Cantidad de piedras seleccionada: " + cantidadPiedras);
         } else {
-            System.out.println("Modo seleccionado: " + opciones[seleccion]);
-            // Puedes realizar acciones adicionales según la opción seleccionada
+            String tiempoLimite = JOptionPane.showInputDialog("Ingresa la cantidad de segundos que deseas jugar:");
+            try{
+                gameMode = "QuickTime";
+                timeLimit = Integer.parseInt(tiempoLimite);
+                empezarJuego();
+            }catch (Exception e){
+                Log.record(e);
+                JOptionPane.showMessageDialog(null, "No ingresaste un numero válido");
+            }
         }
     }
     private void empezarJuego() throws Exception {
         updateRemainingLabels();
         optionNew();
+        timerGUI.start();
         cardLayout.show(cardPanel, "game");
     }
     private JPanel createGamePanel() throws Exception {
@@ -624,7 +631,7 @@ public class GomokuGUI extends JFrame {
             gomoku = new Gomoku(size, stoneLimit, timeLimit, porcentajeEspeciales, gameMode);
             // Si el tablero aún no se ha creado, crearlo y agregarlo al mainPanel
             gomoku.setPlayers(Human.class, machineType);
-            cellMatrix = gomoku.board();
+            Cell[][] cellMatrix = gomoku.board();
             boardPanel = new JPanel(new GridLayout(cellMatrix.length, cellMatrix[0].length));
             Piedra[][] piedras = new Piedra[cellMatrix.length][cellMatrix[0].length];
 
@@ -948,15 +955,8 @@ public class GomokuGUI extends JFrame {
                 // Si el usuario confirma, ejecutar la acción
                 if (respuesta == JOptionPane.YES_OPTION) {
                     optionNew();
-                    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-                    // Calcular el tamaño deseado de la ventana (ajustar según tus necesidades)
-                    int windowWidth = (int) (screenSize.width * 0.5);
-                    int windowHeight = (int) (screenSize.height * 0.5);
-
-                    // Establecer el tamaño de la ventana
-                    setSize(new Dimension(windowWidth, windowHeight));
-                    setResizable(false);
-                    setLocationRelativeTo(null);
+                    optionNewInicio();
+                    reiniciarDefault();
                     cardLayout.show(cardPanel, "initial");
                 }
             } catch (Exception ex) {
@@ -977,7 +977,6 @@ public class GomokuGUI extends JFrame {
                 JOptionPane.YES_NO_OPTION);
     }
     private void reset() {
-        cellMatrix = gomoku.board();
         boardPanel.getComponents();
         updateBorders();
         updateRemainingLabels();
@@ -986,7 +985,7 @@ public class GomokuGUI extends JFrame {
     }
     private void refresh() {
         turn = gomoku.getBoard().getTurn();
-        cellMatrix = gomoku.board();
+        Cell[][] cellMatrix = gomoku.board();
         Component[] components = boardPanel.getComponents();
         for (int i = 0; i < cellMatrix.length; i++) {
             for (int j = 0; j < cellMatrix[0].length; j++) {
@@ -1024,6 +1023,7 @@ public class GomokuGUI extends JFrame {
     private void prepareActionsMenu(){
         getJMenuBar().getMenu(0).getItem(0).addActionListener(e -> {
             try {
+                reiniciarDefault();
                 optionNewInicio();
             } catch (Exception ex) {
                 Log.record(ex);
@@ -1068,7 +1068,6 @@ public class GomokuGUI extends JFrame {
         gamePanel.remove(boardPanel);
 
         // Liberar recursos relacionados con el tablero (piedras, etc.)
-        cellMatrix = null;
         boardPanel = null;
         turn = true;
         // Crear un nuevo tablero y panel
@@ -1155,12 +1154,26 @@ public class GomokuGUI extends JFrame {
         @Override
         public void mouseClicked(MouseEvent e) {
             try {
-                ponerFicha(row, col);
+                if (clickEnabled) {
+                    ponerFicha(row, col);
+                } else {
+                    // Desactivado: puedes mostrar un mensaje o realizar otra acción aquí
+                    System.out.println("Click desactivado");
+                }
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, ex.getMessage());
                 Log.record(ex);
             }
         }
+        private static void disableClick() {
+            clickEnabled = false;
+        }
+
+        // Método para activar los clics
+        private static void enableClick() {
+            clickEnabled = true;
+        }
+
     }
     private void ponerFicha(int row, int col) throws Exception {
         Stone selectedStone;
@@ -1176,15 +1189,11 @@ public class GomokuGUI extends JFrame {
                 turn = !turn;
             }
             if(gomoku.play(row, col, selectedStone)){
-                if (!gomoku.getBoard().getTurn()) {
-                    refresh();
-                    JOptionPane.showMessageDialog(null, "GANAASTEEEEEEEE. " + gomoku.getPlayer1().getName());
-                } else {
-                    refresh();
-                    JOptionPane.showMessageDialog(null, "GANAASTEEEEEEEE. " + gomoku.getPlayer2().getName());
-                }
+                winnerOption();
+                showOptionDialog();
             }
             gomoku.getBoard().setTurn(turn);
+            Cell[][] cellMatrix = gomoku.board();
             refresh();
             if (cellMatrix[row][col] instanceof Golden) {
                 String message;
@@ -1437,13 +1446,19 @@ public class GomokuGUI extends JFrame {
         numTemporaryJ2.setText("Temporales restantes: "+ gomoku.getPlayer2().numOfType(Temporary.class));
         punctuationJ1.setText("La puntuacion es de: " + gomoku.getPlayer1().getPunctuation());
         punctuationJ2.setText("La puntuacion es de: " + gomoku.getPlayer2().getPunctuation());
-        tiempoLabel.setText("El tiempo transcurrido es: " + gomoku.getBoard().obtenerTiempoActual());
     }
     private void startTimer() {
         // Actualiza el tiempoLabel cada segundo
-        Timer timer = new Timer(1000, e -> {
+        timerGUI = new Timer(1000, e -> {
             // Actualiza el tiempoLabel cada segundo
-            tiempoLabel.setText("El tiempo transcurrido es: " + gomoku.getBoard().obtenerTiempoActual());
+            try {
+                tiempoLabel.setText(gomoku.getBoard().obtenerTiempoActual());
+            } catch (GomokuException ex) {
+                timerGUI.stop();
+                JOptionPane.showMessageDialog(null, ex.getMessage());
+                winnerOption();
+                showOptionDialog();
+            }
             if(!turn && gomoku.getPlayer2() instanceof Machine){
                 try {
                     ponerFicha(0,0);
@@ -1452,8 +1467,54 @@ public class GomokuGUI extends JFrame {
                 }
             }
         });
-        timer.start();
+        timerGUI.start();
     }
+    private void winnerOption(){
+        if (!gomoku.getBoard().getTurn()) {
+            refresh();
+            JOptionPane.showMessageDialog(null, "GANAASTEEEEEEEE. " + gomoku.getPlayer1().getName());
+            timerGUI.stop();
+        } else {
+            refresh();
+            JOptionPane.showMessageDialog(null, "GANAASTEEEEEEEE. " + gomoku.getPlayer2().getName());
+            timerGUI.stop();
+        }
+    }
+    private void reiniciarDefault(){
+        porcentajeEspeciales = 50;
+        gameMode = "Normal";
+        timeLimit = -1;
+        stoneLimit = size*size;
+    }
+
+    private void showOptionDialog() {
+        String[] options = {"Nuevo Juego", "Cerrar"};
+        int choice = JOptionPane.showOptionDialog(
+                null,
+                "¿Qué deseas hacer?",
+                "Opciones",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[1]); // Índice de la opción predeterminada
+
+        // Procesar la elección del usuario
+        switch (choice) {
+            case 0:
+                reiniciarDefault();
+                optionNewInicio();
+                break;
+            case 1:
+                dispose();
+                break;
+            case JOptionPane.CLOSED_OPTION:
+                CellClickListener.disableClick();
+                break;
+        }
+    }
+
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             try {
