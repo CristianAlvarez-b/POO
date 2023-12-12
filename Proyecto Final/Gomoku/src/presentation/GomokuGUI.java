@@ -1203,20 +1203,20 @@ public class GomokuGUI extends JFrame {
             if(gomoku.play(row, col, selectedStone)){
                 winnerOption();
                 showOptionDialog();
-            }
-            gomoku.getBoard().setTurn(turn);
-            Cell[][] cellMatrix = gomoku.board();
-            refresh();
-            if (cellMatrix[row][col] instanceof Golden && !(gomoku.getPlayer2()instanceof Machine)) {
-                String message;
-                if(currentPlayer.getExtraStones().get(0).getClass().getSimpleName().equals("Stone")){
-                    message = "Obtuviste una ficha: Stone. Estas obligado a jugar 2 normales en tu siguiente turno.";
-                }else{
-                    message = "Obtuviste una ficha: " + currentPlayer.getExtraStones().get(0).getClass().getSimpleName();
+            }else{
+                gomoku.getBoard().setTurn(turn);
+                Cell[][] cellMatrix = gomoku.board();
+                refresh();
+                if (cellMatrix[row][col] instanceof Golden && !(gomoku.getPlayer2()instanceof Machine)) {
+                    String message;
+                    if(currentPlayer.getExtraStones().get(0).getClass().getSimpleName().equals("Stone")){
+                        message = "Obtuviste una ficha: Stone. Estas obligado a jugar 2 normales en tu siguiente turno.";
+                    }else{
+                        message = "Obtuviste una ficha: " + currentPlayer.getExtraStones().get(0).getClass().getSimpleName();
+                    }
+                    JOptionPane.showMessageDialog(null, message);
                 }
-                JOptionPane.showMessageDialog(null, message);
             }
-
         } catch (GomokuException e) {
             handleException(e);
         } catch (Exception ex) {
@@ -1532,6 +1532,7 @@ public class GomokuGUI extends JFrame {
                 break;
         }
     }
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             try {

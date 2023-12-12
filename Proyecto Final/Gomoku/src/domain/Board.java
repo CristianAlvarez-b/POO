@@ -180,18 +180,15 @@ public class Board implements Serializable {
         // Iterar sobre las filas del tablero
         for (int row = 0; row < rows; row++) {
             int stoneCount = 0;
-
             // Iterar sobre las columnas de la fila actual
             for (int column = 0; column < columns; column++) {
                 stoneCount = updateStoneCount(stoneCount, cells[row][column], playerColor);
-
                 // Verificar si el jugador actual ha alcanzado 5 piedras consecutivas
                 if (stoneCount == 5) {
                     return true;  // El jugador actual ha ganado
                 }
             }
         }
-
         return false;  // No se encontraron secuencias ganadoras en las filas
     }
 
@@ -311,4 +308,5 @@ public class Board implements Serializable {
     public final Player[] getPlayers() {
         return players;
     }
+
 }
