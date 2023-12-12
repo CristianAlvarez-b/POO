@@ -93,8 +93,8 @@ public class Agressive extends Machine {
             // Simular la adición de una piedra del otro jugador en la posición disponible
             posicionesOcupadasOtroJugador.add(disponible);
 
-            // Verificar si el otro jugador ganaría al jugar en la posición disponible
-            if (!verificarAmenazaVictoria(posicionesOcupadasOtroJugador)) {
+            // Verificar si el otro jugador tendría cuatro piedras en fila al jugar en la posición disponible
+            if (verificarAmenazaVictoria(posicionesOcupadasOtroJugador)) {
                 // Deshacer la simulación
                 posicionesOcupadasOtroJugador.remove(disponible);
                 return disponible;
@@ -104,8 +104,8 @@ public class Agressive extends Machine {
             posicionesOcupadasOtroJugador.remove(disponible);
         }
 
-        // Si no se encuentra ninguna posición de bloqueo, devuelve null
-        return null;
+        // Si no se encuentra ninguna posición de bloqueo, devuelve la posición más cercana
+        return encontrarPosicionMasCercana(posicionesDisponibles, posicionesOcupadasOtroJugador);
     }
 
     private boolean verificarAmenazaVictoria(List<Point> posicionesOcupadasOtroJugador) {
