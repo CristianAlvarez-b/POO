@@ -651,7 +651,7 @@ public class GomokuGUI extends JFrame {
                 for (int j = 0; j < cellMatrix[0].length; j++) {
                     Piedra piedra = new Piedra(false);
                     piedras[i][j] = piedra;
-                    piedra.setBackType(chooseColorOfBackgroundPiedra(cellMatrix[i][j]));
+                    //piedra.setBackType(chooseColorOfBackgroundPiedra(cellMatrix[i][j]));
                     piedra.addMouseListener(new CellClickListener(i, j));
                     //piedra.setOpaque(false);
                     boardPanel.add(piedra);
@@ -1190,7 +1190,6 @@ public class GomokuGUI extends JFrame {
     private void ponerFicha(int row, int col) throws Exception {
         Stone selectedStone;
         Player currentPlayer = turn ? gomoku.getPlayer1() : gomoku.getPlayer2();
-        Player opponentPlayer = turn ? gomoku.getPlayer2() : gomoku.getPlayer1();
         Stone[] selectedStoneArray = new Stone[]{turn ? selectedStoneJ1 : selectedStoneJ2};
         try {
             if (!currentPlayer.getExtraStones().isEmpty()) {
@@ -1203,19 +1202,19 @@ public class GomokuGUI extends JFrame {
             if(gomoku.play(row, col, selectedStone)){
                 winnerOption();
                 showOptionDialog();
-            }else{
-                gomoku.getBoard().setTurn(turn);
-                Cell[][] cellMatrix = gomoku.board();
-                refresh();
-                if (cellMatrix[row][col] instanceof Golden && !(gomoku.getPlayer2()instanceof Machine)) {
-                    String message;
-                    if(currentPlayer.getExtraStones().get(0).getClass().getSimpleName().equals("Stone")){
-                        message = "Obtuviste una ficha: Stone. Estas obligado a jugar 2 normales en tu siguiente turno.";
-                    }else{
-                        message = "Obtuviste una ficha: " + currentPlayer.getExtraStones().get(0).getClass().getSimpleName();
-                    }
-                    JOptionPane.showMessageDialog(null, message);
+            }
+            gomoku.getBoard().setTurn(turn);
+            Cell[][] cellMatrix = gomoku.board();
+            refresh();
+            if (cellMatrix[row][col] instanceof Golden && !(gomoku.getPlayer2()instanceof Machine)) {
+                String message;
+                if(currentPlayer.getExtraStones().get(0).getClass().getSimpleName().equals("Stone")){
+                    message = "Obtuviste una ficha: Stone. Estas obligado a jugar 2 normales en tu siguiente turno.";
+                }else{
+                    message = "Obtuviste una ficha: " + currentPlayer.getExtraStones().get(0).getClass().getSimpleName();
                 }
+                JOptionPane.showMessageDialog(null, message);
+
             }
         } catch (GomokuException e) {
             handleException(e);
