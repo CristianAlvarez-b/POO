@@ -1504,6 +1504,7 @@ public class GomokuGUI extends JFrame {
         }
     }
     private void reiniciarDefault(){
+        CellClickListener.enableClick();
         porcentajeEspeciales = 50;
         gameMode = "Normal";
         timeLimit = -1;
