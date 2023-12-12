@@ -23,7 +23,9 @@ public class Expert extends Machine{
 
         // Prioriza la jugada ganadora si es posible
         if (winningPosition != null) {
-            Stone selectedStone = remainingStones.isEmpty() ? new Stone(color) : remainingStones.get(0);
+            Random random = new Random();
+            int randomIndex = random.nextInt(remainingStones.size());
+            Stone selectedStone = remainingStones.isEmpty() ? new Stone(color) : remainingStones.get(randomIndex);
             play(winningPosition[0], winningPosition[1], selectedStone);
         } else {
             int[] bestAdjacentMove = findBestAdjacentMove(color);
@@ -191,6 +193,10 @@ public class Expert extends Machine{
         if (myStone.getClass() != Stone.class){
             punctuation += 100; //Si se usa una piedra especial
         }
-        punctuation += board.addStone(row, column, stone);
+        punctuation += board.addStone(row, column, myStone);
+        if(punctuation >= 1000){
+            super.addRandomStone();
+            punctuation -= 1000;
+        }
     }
 }

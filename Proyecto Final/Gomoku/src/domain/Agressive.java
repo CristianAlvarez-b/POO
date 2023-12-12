@@ -6,6 +6,7 @@ import java.awt.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Agressive extends Machine {
     public Agressive(Color color, Board board, int specialStonesPercentage, int stoneLimit) {
@@ -29,9 +30,14 @@ public class Agressive extends Machine {
         // Encontrar la posición de bloqueo para evitar la victoria del otro jugador
         Point posicionBloqueo = encontrarPosicionBloqueo(posicionesDisponibles, posicionesOcupadasOtroJugador);
         Point posicionMasCercana = encontrarPosicionMasCercana(posicionesDisponibles, posicionesOcupadasOtroJugador);
-
-        Stone selectedStone = new Stone(color);
-        // Si hay una posición de bloqueo, jugar la piedra ahí; de lo contrario, jugar normalmente
+        Stone selectedStone;
+        if (!remainingStones.isEmpty()) {
+            Random random = new Random();
+            int randomIndex = random.nextInt(remainingStones.size());
+            selectedStone = remainingStones.get(randomIndex);
+        }else{
+            selectedStone = new Stone(color);
+        }
         play(posicionMasCercana.x, posicionMasCercana.y, selectedStone); // Jugar normalmente
     }
     private List<Point> obtenerPosicionesOcupadasOtroJugador() {
@@ -188,6 +194,10 @@ public class Agressive extends Machine {
         if (myStone.getClass() != Stone.class){
             punctuation += 100; //Si se usa una piedra especial
         }
-        punctuation += board.addStone(row, column, stone);
+        punctuation += board.addStone(row, column, myStone);
+        if(punctuation >= 1000){
+            super.addRandomStone();
+            punctuation -= 1000;
+        }
     }
 }
