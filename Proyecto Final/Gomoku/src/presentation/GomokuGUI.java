@@ -1487,7 +1487,19 @@ public class GomokuGUI extends JFrame {
                     }else {
                         selectedStoneJ2 = new Temporary(colorJ2);
                     }
-                    ponerFicha(0,0);
+                    if(gameMode == "QuickTime"){
+                        try
+                        {
+                            Thread.sleep(1000);
+                            ponerFicha(0,0);
+                        }
+                        catch (InterruptedException ie)
+                        {
+                            ie.printStackTrace();
+                        }
+                    }else{
+                        ponerFicha(0,0);
+                    }
 
                 } catch (Exception ex) {
                     throw new RuntimeException(ex);
