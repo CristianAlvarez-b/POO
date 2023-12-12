@@ -3,6 +3,7 @@ package domain;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Fearful extends Machine {
     public Fearful(Color color, Board board, int specialStonesPercentage, int stoneLimit) {
@@ -28,7 +29,9 @@ public class Fearful extends Machine {
         //Stone selectedStone = getRemainingStones().get(0);
         Stone selectedStone;
         if (!remainingStones.isEmpty()) {
-            selectedStone = remainingStones.get(remainingStones.size() - 1);
+            Random random = new Random();
+            int randomIndex = random.nextInt(remainingStones.size());
+            selectedStone = remainingStones.get(randomIndex);
         }else{
             selectedStone = new Stone(color);
         }

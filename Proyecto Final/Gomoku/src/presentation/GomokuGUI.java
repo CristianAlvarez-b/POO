@@ -11,6 +11,8 @@ import java.util.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.Timer;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 public class GomokuGUI extends JFrame {
     private JLabel numNormalJ1;
@@ -334,6 +336,17 @@ public class GomokuGUI extends JFrame {
         jugadorCheckBox.setFont(new Font("Arial", Font.BOLD, 13));
         jugadorCheckBox.setSelected(false);
 
+        jugadorCheckBox.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.DESELECTED) {
+                    // Se ejecuta cuando el JCheckBox se desactiva
+                    machineType = Human.class;
+                    System.out.println("Se seleccionó la opción: " + machineType);
+                    // Realiza aquí las acciones que necesites al desactivar el JCheckBox
+                }
+            }
+        });
         JPanel maquinaPanel = new JPanel(new FlowLayout());
         maquinaPanel.setOpaque(false);
         JLabel maquinaLabel = new JLabel("Selecciona la máquina:");
@@ -1214,7 +1227,7 @@ public class GomokuGUI extends JFrame {
 
     private Stone handleExtraStones(Player currentPlayer, Stone[] selectedStoneArray) throws Exception {
         Stone extraStone = currentPlayer.getExtraStones().get(0);
-        currentPlayer.getRemainingStones().add(extraStone);
+        currentPlayer.getRemainingStones().add(0, extraStone);
         if (extraStone.getClass() == Stone.class) {
             selectedStoneArray[0] = getFirstStoneOfType(currentPlayer.getExtraStones(), extraStone.getClass());
             currentPlayer.eliminateStone(currentPlayer.getExtraStones(), extraStone.getClass());
