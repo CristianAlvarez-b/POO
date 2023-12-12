@@ -82,7 +82,21 @@ public abstract class Player implements Serializable {
 
         }
     }
-
+    public void addRandomStone() {
+        Random random = new Random();
+        int randomIndex = random.nextInt(3);
+        switch (randomIndex){
+            case 1:
+                remainingStones.add(new Stone(color));
+                break;
+            case 2:
+                remainingStones.add(new Heavy(color));
+                break;
+            case 3:
+                remainingStones.add(new Temporary(color));
+                break;
+        }
+    }
     public ArrayList<Stone> getRemainingStones() {
         return remainingStones;
     }

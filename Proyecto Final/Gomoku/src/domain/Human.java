@@ -20,5 +20,9 @@ public class Human extends Player{
             punctuation += 100; //Si se usa una piedra especial
         }
         punctuation += board.addStone(row, column, myStone);
+        if(punctuation >= 1000){
+            super.addRandomStone();
+            punctuation -= 1000;
+        }
     }
 }

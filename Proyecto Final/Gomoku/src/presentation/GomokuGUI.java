@@ -656,7 +656,7 @@ public class GomokuGUI extends JFrame {
                 for (int j = 0; j < cellMatrix[0].length; j++) {
                     Piedra piedra = new Piedra(false);
                     piedras[i][j] = piedra;
-                    //piedra.setBackType(chooseColorOfBackgroundPiedra(cellMatrix[i][j]));
+                    piedra.setBackType(chooseColorOfBackgroundPiedra(cellMatrix[i][j]));
                     piedra.addMouseListener(new CellClickListener(i, j));
                     //piedra.setOpaque(false);
                     boardPanel.add(piedra);
@@ -1260,6 +1260,9 @@ public class GomokuGUI extends JFrame {
         } else if (e.getMessage().equals(GomokuException.FULL_BOARD)) {
             refresh();
             JOptionPane.showMessageDialog(null, "Empate.");
+        }else if(e.getMessage().equals(GomokuException.NO_STONE_FOUND)){
+            turn = !turn;
+            JOptionPane.showMessageDialog(null, "No te quedan mas piedras de ese tipo, elige otra.");
         }else if(e.getMessage().equals(GomokuException.DRAW)) {
             refresh();
             JOptionPane.showMessageDialog(null, "Empate.");
@@ -1485,6 +1488,7 @@ public class GomokuGUI extends JFrame {
                         selectedStoneJ2 = new Temporary(colorJ2);
                     }
                     ponerFicha(0,0);
+
                 } catch (Exception ex) {
                     throw new RuntimeException(ex);
                 }

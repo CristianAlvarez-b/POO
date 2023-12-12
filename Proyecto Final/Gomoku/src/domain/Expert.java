@@ -40,26 +40,6 @@ public class Expert extends Machine{
     }
 
 
-//    private void playAdjacentMove(Cell cell) throws Exception {
-//        List<int[]> adjacentPositions = board.getAdjacentCellPositions(cell.getPosition()[0], cell.getPosition()[1]);
-//
-//        // Busca una posición adyacente libre y realiza la jugada
-//        for (int[] position : adjacentPositions) {
-//            int row = position[0];
-//            int column = position[1];
-//
-//            try {
-//                play(row, column, new Stone(color));
-//                // Si la jugada se realiza con éxito, la máquina ha realizado una jugada
-//                return;
-//            } catch (Exception ignored) {
-//                // Ignoramos excepciones que indiquen que la celda está ocupada
-//            }
-//        }
-//
-//        // Si no se pudo realizar una jugada adyacente, realiza una jugada aleatoria
-//        playRandomMove();
-//    }
 //
     private boolean cellHasOwnStone(Cell cell) {
         return cell.getStone() != null && cell.getStone().getColor().equals(color);
