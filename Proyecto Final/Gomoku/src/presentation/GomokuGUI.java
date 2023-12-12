@@ -109,7 +109,7 @@ public class GomokuGUI extends JFrame {
 
         JButton button1 = new JButton("NEW GAME");
         JButton button2 = new JButton("CONTINUE");
-        JButton button3 = new JButton("RULES");
+        JButton button3 = new JButton("HOW TO PLAY");
 
         // Configurar el tamaño de los botones
         Dimension buttonSize = new Dimension(200, 50);
