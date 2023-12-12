@@ -35,6 +35,10 @@ public class Cell implements Serializable {
         }
     }
 
+    public int[] getPosition() {
+        return position;
+    }
+
     public boolean isActive() {
         return active;
     }

@@ -378,7 +378,12 @@ public class GomokuGUI extends JFrame {
                 }
                 // Acciones para la opción "Miedosa"
             } else if ("Experta".equals(seleccion)) {
-                // Acciones para la opción "Experta"
+                try {
+                    machineType = Expert.class;
+                } catch (Exception ex) {
+                    Log.record(ex);
+                    throw new RuntimeException(ex);
+                }
             }
         });
 

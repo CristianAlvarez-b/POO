@@ -109,7 +109,7 @@ public class Board implements Serializable {
         return row < dimension[0] && column < dimension[1];
     }
 
-    private boolean cellHasStone(Cell cell) {
+    public boolean cellHasStone(Cell cell) {
         return cell.getStone() != null;
     }
 
@@ -167,7 +167,7 @@ public class Board implements Serializable {
         return checkRows(turn) || checkColumns(turn) || checkDiagonalLeftToRight(turn) || checkDiagonalRightToLeft(turn);
     }
 
-    private boolean checkRows(boolean turn) {
+    public boolean checkRows(boolean turn) {
         int rows = cells.length;
         int columns = cells[0].length;
         Color playerColor = turn ? players[0].getColor() : players[1].getColor();
@@ -192,7 +192,7 @@ public class Board implements Serializable {
         return false;  // No se encontraron secuencias ganadoras en las filas
     }
 
-    private boolean checkColumns(boolean turn) {
+    public boolean checkColumns(boolean turn) {
         int rows = cells.length;
         int columns = cells[0].length;
         Color playerColor = turn ? players[0].getColor() : players[1].getColor();
@@ -301,6 +301,7 @@ public class Board implements Serializable {
             timer.stop();
         }
     }
+
     public int getSpecialPercentage() {
         return specialPercentage;
     }
