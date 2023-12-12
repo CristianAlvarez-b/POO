@@ -1205,6 +1205,7 @@ public class GomokuGUI extends JFrame {
                 turn = !turn;
             }
             if(gomoku.play(row, col, selectedStone)){
+                timerGUI.stop();
                 winnerOption();
                 showOptionDialog();
             }
@@ -1219,7 +1220,6 @@ public class GomokuGUI extends JFrame {
                     message = "Obtuviste una ficha: " + currentPlayer.getExtraStones().get(0).getClass().getSimpleName();
                 }
                 JOptionPane.showMessageDialog(null, message);
-
             }
         } catch (GomokuException e) {
             handleException(e);
@@ -1512,11 +1512,11 @@ public class GomokuGUI extends JFrame {
         if (!gomoku.getBoard().getTurn()) {
             refresh();
             JOptionPane.showMessageDialog(null, "GANAASTEEEEEEEE. " + gomoku.getPlayer1().getName());
-            timerGUI.stop();
+
         } else {
             refresh();
             JOptionPane.showMessageDialog(null, "GANAASTEEEEEEEE. " + gomoku.getPlayer2().getName());
-            timerGUI.stop();
+
         }
     }
     private void reiniciarDefault(){
