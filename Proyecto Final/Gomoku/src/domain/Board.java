@@ -278,11 +278,9 @@ public class Board implements Serializable {
         return false;
     }
 
-
-
     private int updateStoneCount(int stoneCount, Cell cell, Color playerColor) {
         if (cell.getStone() != null) {
-            return playerColor.equals(cell.getStone().getColor()) ? stoneCount + 1 : 0;
+            return playerColor.equals(cell.getStone().getColor()) ? stoneCount + cell.getStone().getValue() : 0;
         } else {
             return 0;
         }

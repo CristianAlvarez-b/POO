@@ -1,7 +1,4 @@
 package domain;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.awt.*;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -185,9 +182,6 @@ public class Agressive extends Machine {
         }
         return false;
     }
-
-
-
     @Override
     public void play(int row, int column, Stone stone) throws Exception {
         Stone myStone = super.eliminateStone(remainingStones, stone.getClass());
