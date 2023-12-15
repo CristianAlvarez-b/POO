@@ -41,8 +41,6 @@ public class Expert extends Machine{
         }
     }
 
-
-//
     private boolean cellHasOwnStone(Cell cell) {
         return cell.getStone() != null && cell.getStone().getColor().equals(color);
     }
@@ -161,14 +159,6 @@ public class Expert extends Machine{
     }
 
     private boolean canWin(int row, int column, Color playerColor) {
-        // Puedes implementar la lógica específica para determinar si jugar en la posición (row, column)
-        // resultaría en una victoria para el jugador con el color playerColor.
-        // Esto puede implicar verificar si hay una secuencia ganadora en filas, columnas o diagonales.
-
-        // Aquí estoy utilizando un esquema de ejemplo, necesitarás ajustar esto según tu lógica específica.
-        // Puedes llamar a los métodos de la clase Board o implementar la lógica aquí.
-
-        // Ejemplo: Verificar si hay una secuencia ganadora en la fila actual
         int consecutiveStones = 0;
         for (int j = 0; j < board.getDimension()[1]; j++) {
             if (board.cellHasStone(board.getCells()[row][column]) && board.getCells()[row][j].getStone().getColor().equals(playerColor)) {

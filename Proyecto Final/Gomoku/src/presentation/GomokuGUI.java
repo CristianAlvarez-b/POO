@@ -1,5 +1,4 @@
 package presentation;
-
 import domain.*;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -12,9 +11,13 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.Timer;
 import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+
 
 public class GomokuGUI extends JFrame {
+    private float volumen = 0.1f;
     private JLabel numNormalJ1;
     private JLabel numPesadaJ1;
     private JLabel numTemporaryJ1;
@@ -130,9 +133,7 @@ public class GomokuGUI extends JFrame {
             setResizable(false);
             setLocationRelativeTo(null);
         });
-        button2.addActionListener(e -> {
-            optionOpen();
-        });
+        button2.addActionListener(e -> optionOpen());
         // Añadir los botones al panel con GridBagLayout
         buttonPanel.add(button1, gbc);
 
@@ -237,9 +238,7 @@ public class GomokuGUI extends JFrame {
             }
 
             private void actualizarNombreJ1() {
-                SwingUtilities.invokeLater(() -> {
-                    nombreJ1 = nombre.getText().isEmpty() ? "Jugador 1" : nombre.getText();
-                });
+                SwingUtilities.invokeLater(() -> nombreJ1 = nombre.getText().isEmpty() ? "Jugador 1" : nombre.getText());
             }
         });
 
@@ -316,9 +315,7 @@ public class GomokuGUI extends JFrame {
             }
 
             private void actualizarNombreJ2() {
-                SwingUtilities.invokeLater(() -> {
-                    nombreJ2 = nombre.getText().isEmpty() ? "Jugador 2" : nombre.getText();
-                });
+                SwingUtilities.invokeLater(() -> nombreJ2 = nombre.getText().isEmpty() ? "Jugador 2" : nombre.getText());
             }
         });
 
@@ -336,15 +333,12 @@ public class GomokuGUI extends JFrame {
         jugadorCheckBox.setFont(new Font("Arial", Font.BOLD, 13));
         jugadorCheckBox.setSelected(false);
 
-        jugadorCheckBox.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                if (e.getStateChange() == ItemEvent.DESELECTED) {
-                    // Se ejecuta cuando el JCheckBox se desactiva
-                    machineType = Human.class;
-                    System.out.println("Se seleccionó la opción: " + machineType);
-                    // Realiza aquí las acciones que necesites al desactivar el JCheckBox
-                }
+        jugadorCheckBox.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.DESELECTED) {
+                // Se ejecuta cuando el JCheckBox se desactiva
+                machineType = Human.class;
+                System.out.println("Se seleccionó la opción: " + machineType);
+                // Realiza aquí las acciones que necesites al desactivar el JCheckBox
             }
         });
         JPanel maquinaPanel = new JPanel(new FlowLayout());
@@ -390,9 +384,7 @@ public class GomokuGUI extends JFrame {
         maquinaPanel.add(maquinaLabel);
         maquinaPanel.add(maquinaComboBox);
 
-        jugadorCheckBox.addItemListener(e -> {
-            maquinaComboBox.setEnabled(jugadorCheckBox.isSelected());
-        });
+        jugadorCheckBox.addItemListener(e -> maquinaComboBox.setEnabled(jugadorCheckBox.isSelected()));
 
         selectColorFicha.add(colorLabel1);
         selectColorFicha.add(ficha2);
@@ -525,7 +517,6 @@ public class GomokuGUI extends JFrame {
         panelSize.add(especialesTextField, gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 2;
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.insets = new Insets(3, 3, 3, 3);
@@ -639,8 +630,40 @@ public class GomokuGUI extends JFrame {
         menu.add(configuracionesMenuItem);
         menu.add(separator3);
         menu.add(salirMenuItem);
-
         menuBar.add(menu);
+
+        JMenu menuConfiguraciones = new JMenu("Volumen");
+        JCheckBoxMenuItem menuItemMute = new JCheckBoxMenuItem("Mute");
+        JSlider volumenSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 50);
+        volumenSlider.setMajorTickSpacing(20);
+        volumenSlider.setMinorTickSpacing(5);
+        volumenSlider.setPaintTicks(true);
+        volumenSlider.setPaintLabels(true);
+
+        volumenSlider.addChangeListener(e -> {
+            if (!menuItemMute.isSelected()) {
+                volumen = (float) volumenSlider.getValue() / 100.0f;
+            } else {
+                volumen = 0.0f; // Mute
+            }
+        });
+
+        menuItemMute.addActionListener(e -> {
+            if (menuItemMute.isSelected()) {
+                volumenSlider.setEnabled(false);
+                volumen = 0.0f; // Mute
+            } else {
+                volumenSlider.setEnabled(true);
+                volumen = (float) volumenSlider.getValue() / 100.0f;
+            }
+        });
+
+        menuConfiguraciones.add(menuItemMute);
+        menuConfiguraciones.add(volumenSlider);
+
+        // Agregar menús a la barra de menú
+        menuBar.add(menu);
+        menuBar.add(menuConfiguraciones);
         setJMenuBar(menuBar);
     }
     private void prepareElementsBoard() throws Exception {
@@ -961,13 +984,15 @@ public class GomokuGUI extends JFrame {
     private void addBottomPanel() {
         // Crear un panel para la parte inferior
         JPanel bottomPanel = new JPanel();
+
         // Agregar los botones "Finalizar" y "Resetear"
         JButton guardarFichaButton = new JButton("FINALIZAR JUEGO");
+        JButton resetButton = new JButton("RESET");
 
         // Agregar ActionListener a los botones según sea necesario
         guardarFichaButton.addActionListener(e -> {
             try {
-                int respuesta = confirmarEleccion();
+                int respuesta = confirmarEleccion("¿Estás seguro de que deseas finalizar el juego?");
 
                 // Si el usuario confirma, ejecutar la acción
                 if (respuesta == JOptionPane.YES_OPTION) {
@@ -981,15 +1006,30 @@ public class GomokuGUI extends JFrame {
                 throw new RuntimeException(ex);
             }
         });
+        resetButton.addActionListener(e -> {
+            try {
+                int respuesta = confirmarEleccion("¿Estás seguro de que deseas reiniciar el juego?");
+                // Si el usuario confirma, ejecutar la acción
+                if (respuesta == JOptionPane.YES_OPTION) {
+                    optionNew();
+                }
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
+        // Agregar los botones al panel inferior
         bottomPanel.add(guardarFichaButton);
+        bottomPanel.add(resetButton);
+
         // Agregar el panel inferior a la parte inferior de la pantalla principal
         gamePanel.add(bottomPanel, BorderLayout.SOUTH);
     }
-    private int confirmarEleccion() {
+    private int confirmarEleccion(String message) {
         // Mostrar un cuadro de diálogo de confirmación
         return JOptionPane.showConfirmDialog(
                 this,
-                "¿Estás seguro de que deseas finalizar el juego?",
+                message,
                 "Confirmación",
                 JOptionPane.YES_NO_OPTION);
     }
@@ -1047,12 +1087,8 @@ public class GomokuGUI extends JFrame {
                 JOptionPane.showMessageDialog(null, "Error inesperado");
             }
         });
-        getJMenuBar().getMenu(0).getItem(2).addActionListener(e -> {
-            optionOpen();
-        });
-        getJMenuBar().getMenu(0).getItem(3).addActionListener(e -> {
-            optionSave();
-        });
+        getJMenuBar().getMenu(0).getItem(2).addActionListener(e -> optionOpen());
+        getJMenuBar().getMenu(0).getItem(3).addActionListener(e -> optionSave());
         getJMenuBar().getMenu(0).getItem(5).addActionListener(e -> cardLayout.show(cardPanel, "initial"));
         getJMenuBar().getMenu(0).getItem(6).addActionListener(e -> {
             Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -1173,6 +1209,9 @@ public class GomokuGUI extends JFrame {
             try {
                 if (clickEnabled) {
                     ponerFicha(row, col);
+                    reproducirSonido("GomokuSounds/ponerFicha.wav");
+                    reproducirSonidoCasillas(row, col);
+
                 } else {
                     // Desactivado: puedes mostrar un mensaje o realizar otra acción aquí
                     System.out.println("Click desactivado");
@@ -1192,6 +1231,17 @@ public class GomokuGUI extends JFrame {
         }
 
     }
+    private void reproducirSonido(String filePath) {
+        try {
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(filePath).getAbsoluteFile());
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            clip.start();
+        } catch (Exception e) {
+            Log.record(e);
+        }
+    }
+
     private void ponerFicha(int row, int col) throws Exception {
         Stone selectedStone;
         Player currentPlayer = turn ? gomoku.getPlayer1() : gomoku.getPlayer2();
@@ -1205,6 +1255,7 @@ public class GomokuGUI extends JFrame {
                 turn = !turn;
             }
             if(gomoku.play(row, col, selectedStone)){
+                reproducirSonido("GomokuSounds/victory.wav");
                 timerGUI.stop();
                 winnerOption();
                 showOptionDialog();
@@ -1292,10 +1343,19 @@ public class GomokuGUI extends JFrame {
             return 'c';
         }
     }
+    private void reproducirSonidoCasillas(int row, int column){
+        if(gomoku.board()[row][column] instanceof Teleport){
+            reproducirSonido("GomokuSounds/teleport1.wav");
+        }else if(gomoku.board()[row][column] instanceof Mine){
+            reproducirSonido("GomokuSounds/mine.wav");
+        }else if(gomoku.board()[row][column] instanceof Golden){
+            reproducirSonido("GomokuSounds/golden.wav");
+        }
+    }
 
     public static class Piedra extends JPanel {
         private Color piedraColor;
-        private Color backgroundColor;
+        private final Color backgroundColor;
         private char type;
         private char backType;
         private int life = 6;
@@ -1431,7 +1491,6 @@ public class GomokuGUI extends JFrame {
         }
     }
     private void updateBorders() {
-
         if (turn) {
             // Si es el turno de player1 (izquierda), actualizar el borde de player1 y quitar el borde de player2
             piedraJ1.setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
@@ -1487,20 +1546,21 @@ public class GomokuGUI extends JFrame {
                     }else {
                         selectedStoneJ2 = new Temporary(colorJ2);
                     }
-                    if(gameMode == "QuickTime"){
+                    if(gameMode.equals("QuickTime")){
                         try
                         {
                             Thread.sleep(1000);
                             ponerFicha(0,0);
+                            reproducirSonido("GomokuSounds/ponerFicha.wav");
                         }
                         catch (InterruptedException ie)
                         {
-                            ie.printStackTrace();
+                            Log.record(ie);
                         }
                     }else{
                         ponerFicha(0,0);
+                        reproducirSonido("GomokuSounds/ponerFicha.wav");
                     }
-
                 } catch (Exception ex) {
                     throw new RuntimeException(ex);
                 }
@@ -1553,7 +1613,6 @@ public class GomokuGUI extends JFrame {
                 break;
         }
     }
-
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             try {
