@@ -137,4 +137,12 @@ public abstract class Player implements Serializable {
     public void setCanRefill(boolean canRefill) {
         this.canRefill = canRefill;
     }
+    public static Stone getFirstStoneOfType(ArrayList<Stone> stones,Class<?> type) {
+        for (Stone stone : stones) {
+            if (type.isInstance(stone) && stone.getClass().equals(type)) {
+                return stone;
+            }
+        }
+        return null; // Si no se encuentra un objeto del tipo especificado
+    }
 }

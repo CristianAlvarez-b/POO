@@ -36,7 +36,7 @@ public class Golden extends Cell{
 
         Random random = new Random();
         int randomIndex = random.nextInt(stoneClasses.size());
-        Class<? extends Stone> selectedStoneClass = stoneClasses.get(randomIndex);
+        Class<? extends Stone> selectedStoneClass = stoneClasses.get(0);
 
         return selectedStoneClass.getDeclaredConstructor(Color.class).newInstance(color);
     }

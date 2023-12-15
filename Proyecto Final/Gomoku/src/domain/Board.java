@@ -13,6 +13,7 @@ public class Board implements Serializable {
     protected Timer timer;
     protected int segundosTranscurridos;
     private int specialPercentage;
+    private boolean flag = false;
     public Board(int rows, int columns, int specialPercentage) throws Exception {
         turn = true;
         this.specialPercentage = specialPercentage;
@@ -276,6 +277,32 @@ public class Board implements Serializable {
             }
         }
         return false;
+    }
+    public Stone handleExtraStones(Player currentPlayer, Stone[] selectedStoneArray) throws Exception {
+        Stone extraStone = currentPlayer.getExtraStones().get(0);
+        currentPlayer.getRemainingStones().add(0, extraStone);
+        if (extraStone.getClass() == Stone.class) {
+            selectedStoneArray[0] = Player.getFirstStoneOfType(currentPlayer.getExtraStones(), extraStone.getClass());
+            currentPlayer.eliminateStone(currentPlayer.getExtraStones(), extraStone.getClass());
+            flag = true;
+            return selectedStoneArray[0];
+        }
+        if (selectedStoneArray[0] == null) {
+            handleRemainingStones(currentPlayer, selectedStoneArray);
+        }
+        currentPlayer.eliminateStone(currentPlayer.getExtraStones(), extraStone.getClass());
+        return selectedStoneArray[0];
+    }
+
+    public Stone handleRemainingStones(Player currentPlayer, Stone[] selectedStoneArray){
+        if (selectedStoneArray[0] == null) {
+            selectedStoneArray[0] = Player.getFirstStoneOfType(currentPlayer.getRemainingStones(), currentPlayer.getRemainingStones().get(currentPlayer.getRemainingStones().size() - 1).getClass());
+        }
+        if(flag){
+            selectedStoneArray[0] = Player.getFirstStoneOfType(currentPlayer.getRemainingStones(), Stone.class);
+            flag = false;
+        }
+        return selectedStoneArray[0];
     }
 
     private int updateStoneCount(int stoneCount, Cell cell, Color playerColor) {

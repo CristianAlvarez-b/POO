@@ -1279,10 +1279,9 @@ public class GomokuGUI extends JFrame {
         Stone[] selectedStoneArray = new Stone[]{turn ? selectedStoneJ1 : selectedStoneJ2};
         try {
             if (!currentPlayer.getExtraStones().isEmpty()) {
-                selectedStone = handleExtraStones(currentPlayer, selectedStoneArray);
-                turn = !turn;
+                selectedStone = gomoku.getBoard().handleExtraStones(currentPlayer, selectedStoneArray);
             } else {
-                selectedStone = handleRemainingStones(currentPlayer, selectedStoneArray);
+                selectedStone =  gomoku.getBoard().handleRemainingStones(currentPlayer, selectedStoneArray);
                 turn = !turn;
             }
             if(gomoku.play(row, col, selectedStone)){
@@ -1309,34 +1308,6 @@ public class GomokuGUI extends JFrame {
             JOptionPane.showMessageDialog(null, ex.getMessage());
             Log.record(ex);
         }
-    }
-
-    private Stone handleExtraStones(Player currentPlayer, Stone[] selectedStoneArray) throws Exception {
-        Stone extraStone = currentPlayer.getExtraStones().get(0);
-        currentPlayer.getRemainingStones().add(0, extraStone);
-        if (extraStone.getClass() == Stone.class) {
-            selectedStoneArray[0] = getFirstStoneOfType(currentPlayer.getExtraStones(), extraStone.getClass());
-            currentPlayer.eliminateStone(currentPlayer.getExtraStones(), extraStone.getClass());
-            flag = true;
-            turn = !turn;
-            return selectedStoneArray[0];
-        }
-        if (selectedStoneArray[0] == null) {
-            handleRemainingStones(currentPlayer, selectedStoneArray);
-        }
-        currentPlayer.eliminateStone(currentPlayer.getExtraStones(), extraStone.getClass());
-        return selectedStoneArray[0];
-    }
-
-    private Stone handleRemainingStones(Player currentPlayer, Stone[] selectedStoneArray){
-        if (selectedStoneArray[0] == null) {
-            selectedStoneArray[0] = getFirstStoneOfType(currentPlayer.getRemainingStones(), currentPlayer.getRemainingStones().get(currentPlayer.getRemainingStones().size() - 1).getClass());
-        }
-        if(flag){
-            selectedStoneArray[0] = getFirstStoneOfType(currentPlayer.getRemainingStones(), Stone.class);
-            flag = false;
-        }
-        return selectedStoneArray[0];
     }
 
     private void handleException(GomokuException e) throws Exception {
@@ -1537,14 +1508,7 @@ public class GomokuGUI extends JFrame {
             piedraJ2.setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
         }
     }
-    public Stone getFirstStoneOfType(ArrayList<Stone> stones,Class<?> type) {
-        for (Stone stone : stones) {
-            if (type.isInstance(stone) && stone.getClass().equals(type)) {
-                return stone;
-            }
-        }
-        return null; // Si no se encuentra un objeto del tipo especificado
-    }
+
     private void updateRemainingLabels() {
         piedra1.setPiedraColor(colorJ1);
         piedra2.setPiedraColor(colorJ2);
