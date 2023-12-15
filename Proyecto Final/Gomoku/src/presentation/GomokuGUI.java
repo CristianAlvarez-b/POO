@@ -80,6 +80,8 @@ public class GomokuGUI extends JFrame {
         setTitle("Gomoku.");
         JPanel initialPanel = createInitialPanel();
         cardPanel.add(initialPanel, "initial");
+        JPanel rulePanel = createRulePanel();
+        cardPanel.add(rulePanel, "Rules");
         JPanel configurePanel = createConfiguraciones();
         cardPanel.add(configurePanel, "config");
         JPanel gamePanel = createGamePanel();
@@ -135,6 +137,7 @@ public class GomokuGUI extends JFrame {
         });
         button2.addActionListener(e -> optionOpen());
         // Añadir los botones al panel con GridBagLayout
+        button3.addActionListener(e -> cardLayout.show(cardPanel, "Rules"));
         buttonPanel.add(button1, gbc);
 
         gbc.gridy++;
@@ -156,7 +159,34 @@ public class GomokuGUI extends JFrame {
         fondo.add(initialPanel);
         return fondo;
     }
+    private JPanel createRulePanel() {
+        JPanel rulePanel = new JPanel();
+        rulePanel.setLayout(new GridLayout(1, 3));  // Configura un GridLayout con una fila y tres columnas
 
+        JButton modosDeJuegoButton = new JButton("Modos de juego");
+        JButton tiposDePiedrasButton = new JButton("Tipos de piedras");
+        JButton tiposDeCasillasButton = new JButton("Tipos de casillas");
+
+        // Agrega ActionListener a los botones según sea necesario
+        modosDeJuegoButton.addActionListener(e-> {
+            JOptionPane.showMessageDialog(null, "En construccion.");
+        });
+
+        tiposDePiedrasButton.addActionListener(e-> {
+            JOptionPane.showMessageDialog(null, "En construccion.");
+        });
+
+        tiposDeCasillasButton.addActionListener(e-> {
+            JOptionPane.showMessageDialog(null, "En construccion.");
+        });
+
+        // Agrega los botones al panel
+        rulePanel.add(modosDeJuegoButton);
+        rulePanel.add(tiposDePiedrasButton);
+        rulePanel.add(tiposDeCasillasButton);
+
+        return rulePanel;
+    }
 
     private JPanel createConfiguraciones() {
         ImagePanel fondo = new ImagePanel("GomokuImages/configuraciones.jpg");

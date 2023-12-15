@@ -32,7 +32,9 @@ public class Expert extends Machine{
 
             // Si hay una jugada adyacente que continúa la secuencia más larga, juega esa posición
             if (bestAdjacentMove != null) {
-                Stone selectedStone = remainingStones.isEmpty() ? new Stone(color) : remainingStones.get(0);
+                Random random = new Random();
+                int randomIndex = random.nextInt(remainingStones.size());
+                Stone selectedStone = remainingStones.isEmpty() ? new Stone(color) : remainingStones.get(randomIndex);
                 play(bestAdjacentMove[0], bestAdjacentMove[1], selectedStone);
             } else {
                 // Si no se encontró una piedra propia, realiza una jugada aleatoria
