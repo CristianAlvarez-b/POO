@@ -42,7 +42,6 @@ public class Expert extends Machine{
             }
         }
     }
-
     private boolean cellHasOwnStone(Cell cell) {
         return cell.getStone() != null && cell.getStone().getColor().equals(color);
     }
