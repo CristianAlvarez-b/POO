@@ -48,6 +48,7 @@ public class GomokuGUI extends JFrame {
     public static Color colorJ2 = Color.WHITE;
     private Stone selectedStoneJ1 = null;
     private Stone selectedStoneJ2 = null;
+    boolean flag = false;
     private String nombreJ1;
     private String nombreJ2;
     private Class<? extends Player> machineType = Human.class;
@@ -709,7 +710,7 @@ public class GomokuGUI extends JFrame {
                 for (int j = 0; j < cellMatrix[0].length; j++) {
                     Piedra piedra = new Piedra(false);
                     piedras[i][j] = piedra;
-                    //piedra.setBackType(chooseColorOfBackgroundPiedra(cellMatrix[i][j]));
+                    piedra.setBackType(chooseColorOfBackgroundPiedra(cellMatrix[i][j]));
                     piedra.addMouseListener(new CellClickListener(i, j));
                     //piedra.setOpaque(false);
                     boardPanel.add(piedra);
@@ -1316,6 +1317,7 @@ public class GomokuGUI extends JFrame {
         if (extraStone.getClass() == Stone.class) {
             selectedStoneArray[0] = getFirstStoneOfType(currentPlayer.getExtraStones(), extraStone.getClass());
             currentPlayer.eliminateStone(currentPlayer.getExtraStones(), extraStone.getClass());
+            flag = true;
             turn = !turn;
             return selectedStoneArray[0];
         }
@@ -1329,6 +1331,10 @@ public class GomokuGUI extends JFrame {
     private Stone handleRemainingStones(Player currentPlayer, Stone[] selectedStoneArray){
         if (selectedStoneArray[0] == null) {
             selectedStoneArray[0] = getFirstStoneOfType(currentPlayer.getRemainingStones(), currentPlayer.getRemainingStones().get(currentPlayer.getRemainingStones().size() - 1).getClass());
+        }
+        if(flag){
+            selectedStoneArray[0] = getFirstStoneOfType(currentPlayer.getRemainingStones(), Stone.class);
+            flag = false;
         }
         return selectedStoneArray[0];
     }
