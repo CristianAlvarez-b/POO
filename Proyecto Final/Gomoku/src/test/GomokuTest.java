@@ -239,12 +239,12 @@ public class GomokuTest {
             gomoku.play(4, 1, new Stone(Color.WHITE));
             gomoku.play(1, 1, new Heavy(Color.BLACK));
             gomoku.play(5, 4, new Stone(Color.WHITE));
-            assertTrue(gomoku.play(2, 2, new Heavy(Color.BLACK))); // Assuming winning condition
+            assertTrue(gomoku.play(2, 2, new Heavy(Color.BLACK)));
         }catch (Exception e){
             fail("Algo inesperado ha ocurrido.");
         }
     }
-    //Probando los tipos de maquinas
+    //Probando los tipos de máquinas
     @Test
     void testFearfulmachine()  {
         try{
@@ -290,6 +290,7 @@ public class GomokuTest {
             fail("Algo inesperado ha ocurrido.");
         }
     }
+
     //Probando escenarios de juego
     @Test
     void testShouldPlay(){
@@ -299,8 +300,8 @@ public class GomokuTest {
             gomoku.play(1, 1, new Stone(Color.BLACK));
             gomoku.play(1, 2, new Stone(Color.WHITE));
             // Assuming play method returns true if the game is over
-            assertEquals(gomoku.board()[1][1].getStone().getColor(), Color.BLACK); // Assuming BLACK goes first
-            assertEquals(gomoku.board()[1][2].getStone().getColor(), Color.WHITE); // Assuming BLACK goes first
+            assertEquals(gomoku.board()[1][1].getStone().getColor(), Color.BLACK);
+            assertEquals(gomoku.board()[1][2].getStone().getColor(), Color.WHITE);
         }catch (Exception e){
             fail("Algo inesperado ha ocurrido.");
         }
@@ -329,9 +330,7 @@ public class GomokuTest {
             Gomoku gomoku = new Gomoku(15, 800, 60, 0, "Normal");
             gomoku.setPlayers(Human.class, Human.class);
 
-            // Place a stone in a valid position
-            gomoku.play(1, 1, new Stone(Color.BLACK)); // Assuming BLACK goes first
-            // Attempt to place a stone in the same position, should throw an exception
+            gomoku.play(1, 1, new Stone(Color.BLACK));
             gomoku.play(1, 1, new Stone(Color.WHITE));
         }catch (Exception e){
             assertEquals(e.getMessage(), GomokuException.STONE_OVERLOAP);
@@ -343,7 +342,6 @@ public class GomokuTest {
         try{
             Gomoku gomoku = new Gomoku(15, 800, 60, 0, "Normal");
             gomoku.setPlayers(Human.class, Human.class);
-            // Attempt to place a stone outside the board bounds, should throw an exception
             gomoku.play(16, 16, new Stone(Color.BLACK));
         }catch (Exception e){
             assertEquals(e.getMessage(), GomokuException.OUT_OF_BOARD);

@@ -15,7 +15,9 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 
-
+/**
+ * Clase que representa la interfaz gráfica de la aplicación Gomoku.
+ */
 public class GomokuGUI extends JFrame {
     private final int windowWidth = Toolkit.getDefaultToolkit().getScreenSize().width;
     private final int windowHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
@@ -50,7 +52,6 @@ public class GomokuGUI extends JFrame {
     public static Color colorJ2 = Color.WHITE;
     private Stone selectedStoneJ1 = null;
     private Stone selectedStoneJ2 = null;
-    boolean flag = false;
     private String nombreJ1;
     private String nombreJ2;
     private Class<? extends Player> machineType = Human.class;
@@ -58,11 +59,18 @@ public class GomokuGUI extends JFrame {
     private Timer timerGUI;
     private static boolean clickEnabled = true;
 
-
+    /**
+     * Constructor de la clase GomokuGUI.
+     * @throws Exception Excepción en caso de algún problema.
+     */
     public GomokuGUI() throws Exception {
         prepareElements();
         prepareActions();
     }
+    /**
+     * Inicializa y prepara los elementos de la interfaz gráfica.
+     * @throws Exception Excepción en caso de algún problema.
+     */
     private void prepareElements() throws Exception {
         prepareScreens();
         setTitle("Gomoku");
@@ -73,7 +81,10 @@ public class GomokuGUI extends JFrame {
         setResizable(false);
         setLocationRelativeTo(null);
     }
-
+    /**
+     * Inicializa y prepara las pantallas de la interfaz gráfica.
+     * @throws Exception Excepción en caso de algún problema.
+     */
     private void prepareScreens() throws Exception {
         cardLayout = new CardLayout();
         cardPanel = new JPanel(cardLayout);
@@ -90,7 +101,10 @@ public class GomokuGUI extends JFrame {
         mainPanel.add(cardPanel, BorderLayout.CENTER);
         setContentPane(mainPanel);
     }
-
+    /**
+     * Crea el panel inicial de la interfaz.
+     * @return Panel inicial de la interfaz.
+     */
     private JPanel createInitialPanel() {
         ImagePanel fondo = new ImagePanel("GomokuImages/inicio.png");
         JPanel initialPanel = new JPanel(new GridBagLayout());
@@ -159,6 +173,10 @@ public class GomokuGUI extends JFrame {
         fondo.add(initialPanel);
         return fondo;
     }
+    /**
+     * Crea el panel de reglas de la interfaz.
+     * @return Panel de reglas de la interfaz.
+     */
     private JPanel createRulePanel() {
         ImagePanel fondo = new ImagePanel("GomokuImages/fondoReglas.jpg");
         JPanel rulePanel = new JPanel(new GridBagLayout());
@@ -420,7 +438,10 @@ public class GomokuGUI extends JFrame {
     }
 
 
-
+    /**
+     * Crea el panel de configuraciones de la interfaz.
+     * @return Panel de configuraciones de la interfaz.
+     */
     private JPanel createConfiguraciones() {
         ImagePanel fondo = new ImagePanel("GomokuImages/configuraciones.jpg");
         JPanel configuraciones = new JPanel(new GridBagLayout());
@@ -461,7 +482,10 @@ public class GomokuGUI extends JFrame {
         return fondo;
     }
 
-
+    /**
+     * Crea el panel del jugador1 de la interfaz.
+     * @return Panel de jugador1 de la interfaz.
+     */
     private JPanel crearPanelJ1() {
         HashMap<String, Color> coloresMap = new HashMap<>();
         coloresMap.put("NEGRO", Color.BLACK);
@@ -539,7 +563,10 @@ public class GomokuGUI extends JFrame {
 
         return jugador1;
     }
-
+    /**
+     * Crea el panel del jugador2 de la interfaz.
+     * @return Panel de jugador2 de la interfaz.
+     */
     private JPanel crearPanelJ2() {
         HashMap<String, Color> coloresMap = new HashMap<>();
         coloresMap.put("BLANCO", Color.WHITE);
@@ -678,7 +705,10 @@ public class GomokuGUI extends JFrame {
         return jugador2;
     }
 
-
+    /**
+     * Crea el panel de la seleccion de size de la interfaz.
+     * @return Panel de la seleccion de size de la interfaz.
+     */
     private JPanel crearPanelSize() {
         JPanel panelSize = new JPanel(new GridBagLayout());
         panelSize.setOpaque(false);
@@ -803,6 +833,10 @@ public class GomokuGUI extends JFrame {
 
         return panelSize;
     }
+    /**
+     * Muestra un diálogo para seleccionar el modo de juego y maneja las opciones seleccionadas.
+     * @throws Exception Excepción en caso de algún problema.
+     */
     private void mostrarDialogo() throws Exception {
         Object[] opciones = {"Normal", "Piedras Limitadas", "Tiempo Limitado"};
         int seleccion = JOptionPane.showOptionDialog(
@@ -846,12 +880,21 @@ public class GomokuGUI extends JFrame {
             }
         }
     }
+    /**
+     * Inicia el juego con la configuración seleccionada.
+     * @throws Exception Excepción en caso de algún problema.
+     */
     private void empezarJuego() throws Exception {
         updateRemainingLabels();
         optionNew();
         timerGUI.start();
         cardLayout.show(cardPanel, "game");
     }
+    /**
+     * Crea y retorna el panel de juego.
+     * @return Panel de juego.
+     * @throws Exception Excepción en caso de algún problema.
+     */
     private JPanel createGamePanel() throws Exception {
         gamePanel = new JPanel(new BorderLayout());
         gamePanel.setBackground(new Color(255, 192, 203));
@@ -865,6 +908,9 @@ public class GomokuGUI extends JFrame {
         gamePanel.add(Box.createHorizontalStrut((int)(windowWidth * 0.010416667)));
         return gamePanel;
     }
+    /**
+     * Prepara los elementos del menú, incluyendo la barra de menú, opciones de archivo y configuraciones.
+     */
     private void prepareElementsMenu(){
         JMenuBar menuBar = new JMenuBar();
         JMenu menu = new JMenu("Archivo");
@@ -910,6 +956,10 @@ public class GomokuGUI extends JFrame {
         menuBar.add(menuConfiguraciones);
         setJMenuBar(menuBar);
     }
+    /**
+     * Prepara los elementos del tablero, creando el tablero de juego y las piedras asociadas.
+     * @throws Exception Excepción en caso de algún problema.
+     */
     private void prepareElementsBoard() throws Exception {
         if (boardPanel == null) {
             gomoku = new Gomoku(size, stoneLimit, timeLimit, porcentajeEspeciales, gameMode);
@@ -933,18 +983,24 @@ public class GomokuGUI extends JFrame {
             refresh();
         }
     }
+
+    /**
+     * Agrega el panel superior que muestra el tiempo transcurrido.
+     */
     private void addTopPanel() {
-        // Crear un panel para la parte superior
+
         JPanel topPanel = new JPanel(new BorderLayout());
 
 
-        // Agregar el tiempoLabel al centro
         tiempoLabel = new JLabel("EL TIEMPO TRANSCURRIDO ES: ", SwingConstants.CENTER);
         topPanel.add(tiempoLabel, BorderLayout.CENTER);
 
         // Agregar el topPanel al gamePanel
         gamePanel.add(topPanel, BorderLayout.NORTH);
     }
+    /**
+     * Agrega el panel izquierdo que contiene información sobre el jugador 1, como nombre, imagen, tipo de piedra, y puntaje.
+     */
     private void addLeftPanel() {
         ImagePanel fondo = new ImagePanel("GomokuImages/playerPanels.png");
 
@@ -953,7 +1009,6 @@ public class GomokuGUI extends JFrame {
         JPanel datosJ1 = new JPanel(new GridBagLayout());
         datosJ1.setOpaque(false);
         GridBagConstraints gbcDatosJ1 = new GridBagConstraints();
-        //gbcDatosJ1.insets = new Insets((int)(windowHeight * 0.00462963), (int)(windowWidth * 0.002604167), (int)(windowHeight * 0.00462963), (int)(windowWidth * 0.002604167)); // Márgenes entre los componentes
 
         // Cargar la imagen
         ImageIcon imagen = new ImageIcon("GomokuImages/player1.png");
@@ -1086,7 +1141,9 @@ public class GomokuGUI extends JFrame {
         gamePanel.add(fondo, BorderLayout.WEST);
     }
 
-
+    /**
+     * Agrega el panel izquierdo que contiene información sobre el jugador 2, como nombre, imagen, tipo de piedra, y puntaje.
+     */
     private void addRightPanel() {
         ImagePanel fondo = new ImagePanel("GomokuImages/playerPanels.png");
         JPanel rightPanel = new JPanel(new BorderLayout());
@@ -1223,6 +1280,9 @@ public class GomokuGUI extends JFrame {
         fondo.add(rightPanel);
         gamePanel.add(fondo, BorderLayout.EAST);
     }
+    /**
+     * Agrega el panel inferior que contiene botones para finalizar el juego y reiniciar.
+     */
     private void addBottomPanel() {
         // Crear un panel para la parte inferior
         JPanel bottomPanel = new JPanel();
@@ -1267,6 +1327,11 @@ public class GomokuGUI extends JFrame {
         // Agregar el panel inferior a la parte inferior de la pantalla principal
         gamePanel.add(bottomPanel, BorderLayout.SOUTH);
     }
+    /**
+     * Muestra un cuadro de diálogo de confirmación con el mensaje especificado.
+     * @param message El mensaje a mostrar en el cuadro de diálogo.
+     * @return La opción seleccionada por el usuario (JOptionPane.YES_OPTION o JOptionPane.NO_OPTION).
+     */
     private int confirmarEleccion(String message) {
         // Mostrar un cuadro de diálogo de confirmación
         return JOptionPane.showConfirmDialog(
@@ -1275,6 +1340,9 @@ public class GomokuGUI extends JFrame {
                 "Confirmación",
                 JOptionPane.YES_NO_OPTION);
     }
+    /**
+     * Reinicia el estado del tablero y lo actualiza visualmente.
+     */
     private void reset() {
         boardPanel.getComponents();
         updateBorders();
@@ -1282,6 +1350,9 @@ public class GomokuGUI extends JFrame {
         boardPanel.revalidate(); // Asegurar que el panel se redibuje correctamente
         boardPanel.repaint();
     }
+    /**
+     * Actualiza la apariencia del tablero y las piedras en función del estado actual del juego.
+     */
     private void refresh() {
         turn = gomoku.getBoard().getTurn();
         Cell[][] cellMatrix = gomoku.board();
@@ -1307,18 +1378,22 @@ public class GomokuGUI extends JFrame {
                 }
             }
         }
-        //refreshStoneAppearance(piedra, cellMatrix[row][column].getStone());
         updateBorders();
         updateRemainingLabels();
         boardPanel.revalidate(); // Ensure that the panel is redrawn correctly
         boardPanel.repaint();
     }
 
-
+    /**
+     * Prepara las acciones asociadas al cierre de la ventana principal.
+     */
     private void prepareActions() {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         prepareActionsMenu();
     }
+    /**
+     * Prepara las acciones asociadas al menú de la aplicación.
+     */
     private void prepareActionsMenu(){
         getJMenuBar().getMenu(0).getItem(0).addActionListener(e -> {
             try {
@@ -1342,6 +1417,9 @@ public class GomokuGUI extends JFrame {
         });
         getJMenuBar().getMenu(0).getItem(7).addActionListener(e -> optionExit());
     }
+    /**
+     * Realiza las acciones necesarias para la opción de inicio.
+     */
     private void optionNewInicio(){
 
         // Establecer el tamaño de la ventana
@@ -1350,6 +1428,10 @@ public class GomokuGUI extends JFrame {
         setLocationRelativeTo(null);
         cardLayout.show(cardPanel, "initial");
     }
+    /**
+     * Realiza las acciones necesarias para la opción de inicio de un nuevo juego.
+     * @throws Exception Si ocurre un error durante la preparación del nuevo juego.
+     */
     private void optionNew() throws Exception {
         // Eliminar el componente boardPanel del gamePanel
         gamePanel.remove(boardPanel);
@@ -1357,8 +1439,6 @@ public class GomokuGUI extends JFrame {
         // Liberar recursos relacionados con el tablero (piedras, etc.)
         boardPanel = null;
         turn = true;
-        // Crear un nuevo tablero y panel
-        //gomoku = new Gomoku(size, stoneLimit, timeLimit, porcentajeEspeciales, gameMode);
         prepareElementsBoard();
         piedra1.setType('n');
         piedra2.setType('n');
@@ -1381,6 +1461,9 @@ public class GomokuGUI extends JFrame {
         setResizable(false);
         setLocationRelativeTo(null);
     }
+    /**
+     * Realiza las acciones necesarias para la opción de abrir un juego guardado.
+     */
     private void optionOpen(){
         try{
             JFileChooser fileChooser = new JFileChooser();
@@ -1404,6 +1487,9 @@ public class GomokuGUI extends JFrame {
             Log.record(e);
         }
     }
+    /**
+     * Realiza las acciones necesarias para la opción de guardar la partida.
+     */
     private void optionSave() {
         try {
             if (gomoku != null) {  // Asegurarse de que gomoku esté inicializado

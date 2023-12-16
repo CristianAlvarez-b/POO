@@ -6,14 +6,31 @@ import java.util.*;
 import java.util.List;
 
 public class Board implements Serializable {
+    // Dimensiones del tablero (número de filas y columnas)
     private final int[] dimension;
+    // Matriz de celdas que forman el tablero
     protected Cell[][] cells;
+    // Jugadores que participan en el juego
     protected Player[] players;
+    // Indica el turno actual (true si es el turno del primer jugador, false si es el turno del segundo jugador)
     protected boolean turn;
+    // Temporizador para medir el tiempo transcurrido en el juego
     protected Timer timer;
+    // Segundos transcurridos en el juego
     protected int segundosTranscurridos;
+    // Porcentaje de celdas especiales en el tablero
     private int specialPercentage;
+    // Bandera para indicar si se ha activado una celda especial
     private boolean flag = false;
+
+    /**
+     * Constructor de la clase Board.
+     *
+     * @param rows               Número de filas del tablero.
+     * @param columns            Número de columnas del tablero.
+     * @param specialPercentage Porcentaje de celdas especiales en el tablero.
+     * @throws Exception Posible excepción durante la creación del tablero.
+     */
     public Board(int rows, int columns, int specialPercentage) throws Exception {
         turn = true;
         this.specialPercentage = specialPercentage;
@@ -24,16 +41,26 @@ public class Board implements Serializable {
         this.segundosTranscurridos = 0;
         starTimer();
     }
+    /**
+     * Inicia el temporizador del juego.
+     */
     public void starTimer(){
         this.timer = new Timer(1000, e -> {
             segundosTranscurridos++;
         });
         this.timer.start();
     }
+    /**
+     * Establece los jugadores que participarán en el juego.
+     *
+     * @param players Arreglo de jugadores.
+     */
     public void setPlayers(Player[] players) {
         this.players = players;
     }
-
+    /**
+     * Llena la matriz de celdas con celdas normales.
+     */
     private void fillCells(){
         cells = new Cell[dimension[0]][dimension[1]];
 
@@ -44,8 +71,13 @@ public class Board implements Serializable {
             }
         }
     }
-
-
+    /**
+     * Coloca celdas especiales en el tablero según un porcentaje dado.
+     *
+     * @param specialCellClasses   Clases de celdas especiales disponibles.
+     * @param specialCellPercentage Porcentaje de celdas especiales en el tablero.
+     * @throws Exception Posible excepción durante la colocación de celdas especiales.
+     */
     protected final void placeSpecialCells(Class<? extends Cell>[] specialCellClasses, int specialCellPercentage) throws Exception {
         int totalSpecialCells = dimension[0] * dimension[1] * specialCellPercentage / 100;
 
@@ -66,7 +98,13 @@ public class Board implements Serializable {
             cells[i][j] = selectedSpecialCellClass.getDeclaredConstructor(Board.class, int[].class).newInstance(this, new int[]{i, j});
         }
     }
-
+    /**
+     * Verifica si una celda es una celda especial.
+     *
+     * @param cell                Celda a verificar.
+     * @param specialCellClasses Clases de celdas especiales disponibles.
+     * @return true si la celda es especial, false en caso contrario.
+     */
     private boolean isSpecialCell(Cell cell, Class<? extends Cell>[] specialCellClasses) {
         for (Class<? extends Cell> specialCellClass : specialCellClasses) {
             if (specialCellClass.isInstance(cell)) {
@@ -75,7 +113,15 @@ public class Board implements Serializable {
         }
         return false;
     }
-
+    /**
+     * Agrega una piedra a una posición específica en el tablero.
+     *
+     * @param row    Fila de la posición.
+     * @param column Columna de la posición.
+     * @param stone  Piedra a agregar.
+     * @return Puntuación acumulada después de agregar la piedra.
+     * @throws Exception Posible excepción durante la adición de la piedra.
+     */
     public final int addStone(int row, int column, Stone stone) throws Exception {
         int punctuation = 0;
         if (isValidPosition(row, column)) {
@@ -93,7 +139,12 @@ public class Board implements Serializable {
         turn = !turn;
         return punctuation;
     }
-
+    /**
+     * Actualiza el estado de todas las celdas en el tablero.
+     * Este método invoca el método `updateState` de cada celda en el tablero.
+     *
+     * @throws Exception Posible excepción durante la actualización del estado.
+     */
     public final void updateStateForAllCells() throws Exception {
         for (int i = 0; i < dimension[0]; i++) {
             for (int j = 0; j < dimension[1]; j++) {
@@ -102,18 +153,34 @@ public class Board implements Serializable {
             }
         }
     }
-
+    /**
+     * Verifica si una posición dada es válida en el tablero.
+     *
+     * @param row    Fila de la posición.
+     * @param column Columna de la posición.
+     * @return true si la posición es válida, false en caso contrario.
+     * @throws GomokuException Si la posición es negativa.
+     */
     private boolean isValidPosition(int row, int column) throws GomokuException{
         if(row < 0 || column < 0){
             throw new GomokuException(GomokuException.NEGATIVE_POSITION);
         }
         return row < dimension[0] && column < dimension[1];
     }
-
+    /**
+     * Verifica si una celda tiene una piedra.
+     *
+     * @param cell Celda a verificar.
+     * @return true si la celda tiene una piedra, false en caso contrario.
+     */
     public boolean cellHasStone(Cell cell) {
         return cell.getStone() != null;
     }
-
+    /**
+     * Verifica si el tablero está completamente lleno, es decir, si todas las celdas tienen una piedra.
+     *
+     * @return true si el tablero está lleno, false en caso contrario.
+     */
     private boolean isBoardFull() {
         for (int i = 0; i < dimension[0]; i++) {
             for (int j = 0; j < dimension[1]; j++) {
@@ -124,15 +191,29 @@ public class Board implements Serializable {
         }
         return true; // Todas las celdas tienen piedra, el tablero está lleno
     }
-
+    /**
+     * Obtiene la matriz de celdas del tablero.
+     *
+     * @return Matriz de celdas del tablero.
+     */
     public final Cell[][] getCells() {
         return cells;
     }
-
+    /**
+     * Obtiene las dimensiones del tablero (número de filas y columnas).
+     *
+     * @return Arreglo de dos elementos que representa las dimensiones del tablero.
+     */
     public final int[] getDimension() {
         return dimension;
     }
-
+    /**
+     * Obtiene las posiciones de las celdas adyacentes a una posición dada en el tablero.
+     *
+     * @param row    Fila de la posición.
+     * @param column Columna de la posición.
+     * @return Lista de arreglos de dos elementos que representan las posiciones de las celdas adyacentes.
+     */
     public final List<int[]> getAdjacentCellPositions(int row, int column) {
         List<int[]> positions = new ArrayList<>();
 
@@ -154,20 +235,41 @@ public class Board implements Serializable {
 
         return positions;
     }
+    /**
+     * Obtiene el estado actual del turno en el tablero.
+     *
+     * @return true si es el turno del primer jugador, false si es el turno del segundo jugador.
+     */
     public final boolean getTurn(){return turn;}
-
+    /**
+     * Establece el estado del turno en el tablero.
+     *
+     * @param turn true si es el turno del primer jugador, false si es el turno del segundo jugador.
+     */
     public void setTurn(boolean turn) {
         this.turn = turn;
     }
-
+    /**
+     * Verifica el estado del juego, incluida la condición de tablero lleno.
+     *
+     * @param turn true si es el turno del primer jugador, false si es el turno del segundo jugador.
+     * @return true si hay un ganador, false si no hay ganador o el juego aún no ha terminado.
+     * @throws GomokuException Si el tablero está completamente lleno.
+     */
     public boolean verifyGame(boolean turn) throws GomokuException {
-        // Verificar ganador en filas
+        // Verificar si el tablero esta lleno
         if(isBoardFull()){
             throw new GomokuException(GomokuException.FULL_BOARD);
         }
+        //Verificar si se gano en alguna direccion
         return checkRows(turn) || checkColumns(turn) || checkDiagonalLeftToRight(turn) || checkDiagonalRightToLeft(turn);
     }
-
+    /**
+     * Verifica la presencia de secuencias ganadoras en las filas del tablero.
+     *
+     * @param turn true si es el turno del primer jugador, false si es el turno del segundo jugador.
+     * @return true si hay una secuencia ganadora en las filas, false si no la hay.
+     */
     public boolean checkRows(boolean turn) {
         int rows = cells.length;
         int columns = cells[0].length;
@@ -192,7 +294,12 @@ public class Board implements Serializable {
         }
         return false;  // No se encontraron secuencias ganadoras en las filas
     }
-
+    /**
+     * Verifica la presencia de secuencias ganadoras en las columnas del tablero.
+     *
+     * @param turn true si es el turno del primer jugador, false si es el turno del segundo jugador.
+     * @return true si hay una secuencia ganadora en las columnas, false si no la hay.
+     */
     public boolean checkColumns(boolean turn) {
         int rows = cells.length;
         int columns = cells[0].length;
@@ -218,7 +325,12 @@ public class Board implements Serializable {
         return false;
     }
 
-
+    /**
+     * Verifica la presencia de secuencias ganadoras en las diagonales de izquierda a derecha del tablero.
+     *
+     * @param turn true si es el turno del primer jugador, false si es el turno del segundo jugador.
+     * @return true si hay una secuencia ganadora en las diagonales de izquierda a derecha, false si no la hay.
+     */
     private boolean checkDiagonalLeftToRight(boolean turn) {
         int rows = cells.length;
         int columns = cells[0].length;
@@ -234,9 +346,9 @@ public class Board implements Serializable {
             int count = Math.min(k + 1, Math.min(rows, columns - startRow));
             int stoneCount = 0;
 
-            for (int j = 0; j < count; j++) {  // Modificado: j inicia desde 0
+            for (int j = 0; j < count; j++) {
                 int row = startRow + j;
-                int col = Math.min(columns - 1, k - j);  // Modificado: Cálculo de col corregido
+                int col = Math.min(columns - 1, k - j);
 
                 stoneCount = updateStoneCount(stoneCount, cells[row][col], playerColor);
 
@@ -247,7 +359,12 @@ public class Board implements Serializable {
         }
         return false;
     }
-
+    /**
+     * Verifica la presencia de secuencias ganadoras en las diagonales de derecha a izquierda del tablero.
+     *
+     * @param turn true si es el turno del primer jugador, false si es el turno del segundo jugador.
+     * @return true si hay una secuencia ganadora en las diagonales de derecha a izquierda, false si no la hay.
+     */
     private boolean checkDiagonalRightToLeft(boolean turn) {
         int rows = cells.length;
         int columns = cells[0].length;
@@ -265,7 +382,7 @@ public class Board implements Serializable {
 
             for (int j = 0; j < count; j++) {
                 int row = startRow + j;
-                int col = columns - 1 - (k - j);  // Ajuste del cálculo de la columna
+                int col = columns - 1 - (k - j);
 
                 if (row >= 0 && row < rows && col >= 0 && col < columns) {
                     stoneCount = updateStoneCount(stoneCount, cells[row][col], playerColor);
@@ -278,6 +395,14 @@ public class Board implements Serializable {
         }
         return false;
     }
+    /**
+     * Maneja la adición de piedras extra al jugador actual.
+     *
+     * @param currentPlayer       El jugador actual que recibe la piedra extra.
+     * @param selectedStoneArray  Un array que almacena la piedra seleccionada.
+     * @return La piedra extra que se ha manejado.
+     * @throws Exception Si hay un problema al manejar las piedras extra.
+     */
     public Stone handleExtraStones(Player currentPlayer, Stone[] selectedStoneArray) throws Exception {
         Stone extraStone = currentPlayer.getExtraStones().get(0);
         currentPlayer.getRemainingStones().add(0, extraStone);
@@ -293,7 +418,13 @@ public class Board implements Serializable {
         currentPlayer.eliminateStone(currentPlayer.getExtraStones(), extraStone.getClass());
         return selectedStoneArray[0];
     }
-
+    /**
+     * Maneja la selección de piedras restantes para el jugador actual.
+     *
+     * @param currentPlayer       El jugador actual que selecciona una piedra restante.
+     * @param selectedStoneArray  Un array que almacena la piedra seleccionada.
+     * @return La piedra seleccionada que se ha manejado.
+     */
     public Stone handleRemainingStones(Player currentPlayer, Stone[] selectedStoneArray){
         if (selectedStoneArray[0] == null) {
             selectedStoneArray[0] = Player.getFirstStoneOfType(currentPlayer.getRemainingStones(), currentPlayer.getRemainingStones().get(currentPlayer.getRemainingStones().size() - 1).getClass());
@@ -304,7 +435,14 @@ public class Board implements Serializable {
         }
         return selectedStoneArray[0];
     }
-
+    /**
+     * Actualiza el conteo de piedras consecutivas en una dirección específica.
+     *
+     * @param stoneCount El conteo actual de piedras consecutivas.
+     * @param cell       La celda actual que se está evaluando.
+     * @param playerColor El color del jugador actual.
+     * @return El nuevo conteo de piedras consecutivas después de evaluar la celda actual.
+     */
     private int updateStoneCount(int stoneCount, Cell cell, Color playerColor) {
         if (cell.getStone() != null) {
             return playerColor.equals(cell.getStone().getColor()) ? stoneCount + cell.getStone().getValue() : 0;
@@ -312,28 +450,48 @@ public class Board implements Serializable {
             return 0;
         }
     }
-
-    public int getSegundosTranscurridos() {
-        return segundosTranscurridos;
-    }
+    /**
+     * Obtiene el tiempo actual transcurrido en el juego en formato de cadena.
+     *
+     * @return Cadena que representa el tiempo transcurrido en el formato "TIEMPO: MM:SS".
+     * @throws GomokuException Si ocurre una excepción relacionada con el juego Gomoku.
+     */
     public String obtenerTiempoActual() throws GomokuException{
         int minutos = segundosTranscurridos / 60;
         int segundosRestantes = segundosTranscurridos % 60;
         return ("TIEMPO: " + String.format("%02d:%02d", minutos, segundosRestantes));
     }
-
+    /**
+     * Establece una celda en una posición específica del tablero.
+     *
+     * @param row  Índice de fila de la celda.
+     * @param col  Índice de columna de la celda.
+     * @param cell La celda que se establecerá en la posición especificada.
+     */
     public void setCell(int row, int col, Cell cell) {
         this.cells[row][col] = cell;
     }
-
+    /**
+     * Verifica si se ha activado la bandera en el tablero.
+     *
+     * @return true si la bandera está activada, false si no lo está.
+     */
     public boolean isFlag() {
         return flag;
     }
-
+    /**
+     * Obtiene el porcentaje de celdas especiales en el tablero.
+     *
+     * @return El porcentaje de celdas especiales en el tablero.
+     */
     public int getSpecialPercentage() {
         return specialPercentage;
     }
-
+    /**
+     * Obtiene la lista de jugadores asociados al tablero.
+     *
+     * @return La lista de jugadores asociados al tablero.
+     */
     public final Player[] getPlayers() {
         return players;
     }

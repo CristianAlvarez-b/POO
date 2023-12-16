@@ -7,9 +7,16 @@ import java.util.logging.Level;
 
 import java.io.File;
 
+/**
+ * Clase que proporciona funciones para el registro de excepciones en un archivo de registro.
+ */
 public class Log {
     public static String nombre = "gomokuLog";
-
+    /**
+     * Método para registrar una excepción en un archivo de registro.
+     *
+     * @param e Excepción a registrar.
+     */
     public static void record(Exception e) {
         try {
             Logger logger = Logger.getLogger(nombre);

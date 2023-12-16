@@ -1,16 +1,33 @@
 package domain;
 import java.util.*;
-
+/**
+ * Clase que representa una celda de teletransporte en el juego Gomoku.
+ */
 public class Teleport extends Cell{
-
+    /**
+     * Constructor de la clase Teleport.
+     *
+     * @param board    Tablero al que pertenece la celda.
+     * @param position Posición de la celda en el tablero.
+     */
     public Teleport(Board board, int[] position){
         super(board, position);
         active = true;
     }
-
+    /**
+     * Establece una piedra en la celda de teletransporte.
+     *
+     * @param stone Piedra a establecer en la celda.
+     */
     public void setStone(Stone stone){
         super.setStone(stone);
     }
+    /**
+     * Actualiza el estado de la celda de teletransporte.
+     *
+     * @param turn Indica el turno actual del juego.
+     * @return Puntuación asociada a la actualización del estado.
+     */
     @Override
     public int updateState(boolean turn){
         super.updateTemporaryStoneLife();

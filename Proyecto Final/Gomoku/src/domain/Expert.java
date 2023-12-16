@@ -4,8 +4,19 @@ import java.awt.*;
 import java.util.Random;
 import java.util.List;
 
-
+/**
+ * Clase que representa una implementación específica de la inteligencia artificial para el juego Gomoku.
+ * Extiende la clase Machine e implementa estrategias avanzadas de juego.
+ */
 public class Expert extends Machine{
+    /**
+     * Constructor de la clase Expert.
+     *
+     * @param color                    Color asignado al jugador experto.
+     * @param board                    Tablero de juego asociado al experto.
+     * @param specialStonesPercentage Porcentaje de piedras especiales en el tablero.
+     * @param stoneLimit               Límite de piedras para el jugador.
+     */
     public Expert(Color color, Board board, int specialStonesPercentage, int stoneLimit) {
         this.canRefill = true;
         this.color = color;
@@ -16,7 +27,11 @@ public class Expert extends Machine{
         punctuation = 0;
     }
 
-
+    /**
+     * Método que implementa la estrategia de juego para el jugador experto.
+     *
+     * @throws Exception Si ocurre una excepción relacionada con el juego Gomoku.
+     */
     @Override
     public void play() throws Exception {
         int[] winningPosition = findWinningPosition(color);
@@ -26,7 +41,7 @@ public class Expert extends Machine{
             Random random = new Random();
             int randomIndex = random.nextInt(remainingStones.size());
             Stone selectedStone = remainingStones.isEmpty() ? new Stone(color) : remainingStones.get(randomIndex);
-            play(winningPosition[0], winningPosition[1], selectedStone);
+            super.play(winningPosition[0], winningPosition[1], selectedStone);
         } else {
             int[] bestAdjacentMove = findBestAdjacentMove(color);
 
@@ -35,17 +50,30 @@ public class Expert extends Machine{
                 Random random = new Random();
                 int randomIndex = random.nextInt(remainingStones.size());
                 Stone selectedStone = remainingStones.isEmpty() ? new Stone(color) : remainingStones.get(randomIndex);
-                play(bestAdjacentMove[0], bestAdjacentMove[1], selectedStone);
+                super.play(bestAdjacentMove[0], bestAdjacentMove[1], selectedStone);
             } else {
-                // Si no se encontró una piedra propia, realiza una jugada aleatoria
+                // Si no se encontró una piedra propia o no hay jugada adyacente posible, realiza una jugada aleatoria
                 playRandomMove();
             }
         }
     }
+
+    /**
+     * Verifica si una celda contiene una piedra propia.
+     *
+     * @param cell La celda a verificar.
+     * @return true si la celda contiene una piedra propia, false de lo contrario.
+     */
     private boolean cellHasOwnStone(Cell cell) {
         return cell.getStone() != null && cell.getStone().getColor().equals(Color.WHITE);
     }
-
+    /**
+     * Encuentra la mejor jugada adyacente que continúa la secuencia más larga.
+     *
+     * @param playerColor El color del jugador actual.
+     * @return Las coordenadas de la mejor jugada adyacente, o null si no se encuentra ninguna.
+     * @throws GomokuException Si ocurre una excepción relacionada con el juego Gomoku.
+     */
     private int[] findBestAdjacentMove(Color playerColor) throws GomokuException {
         int[] bestMove = null;
         int maxLength = 0;
@@ -79,6 +107,11 @@ public class Expert extends Machine{
 
         return bestMove;
     }
+    /**
+     * Realiza una jugada aleatoria.
+     *
+     * @throws Exception Si no se encuentra una posición válida después de 100 intentos.
+     */
     private void playRandomMove() throws Exception {
         Random random = new Random();
 
@@ -90,7 +123,7 @@ public class Expert extends Machine{
             try {
                 // Verifica que la posición esté dentro de los límites y la celda esté vacía
                 if (isValidPosition(row, column) && !board.cellHasStone(board.getCells()[row][column])) {
-                    play(row, column, new Stone(color));
+                    super.play(row, column, new Stone(color));
                     // Si la jugada se realiza con éxito, la máquina ha realizado una jugada
                     return;
                 }
@@ -102,8 +135,16 @@ public class Expert extends Machine{
         // Si no se pudo realizar una jugada válida después de 100 intentos, lanza una excepción
         throw new Exception("No se pudo encontrar una posición válida para la jugada aleatoria.");
     }
+    /**
+     * Calcula la longitud máxima de la secuencia en una dirección específica desde una posición dada.
+     *
+     * @param row         Fila de la posición inicial.
+     * @param column      Columna de la posición inicial.
+     * @param playerColor Color del jugador actual.
+     * @return La longitud máxima de la secuencia en la dirección especificada.
+     * @throws GomokuException Si ocurre una excepción relacionada con el juego Gomoku.
+     */
     private int calculateMaxLength(int row, int column, Color playerColor) throws GomokuException {
-        Cell[][] cells = board.getCells();
         int maxLength = 0;
 
         // Verifica la longitud máxima en la fila horizontal
@@ -120,7 +161,17 @@ public class Expert extends Machine{
 
         return maxLength;
     }
-
+    /**
+     * Calcula la longitud de la secuencia en una dirección específica desde una posición dada.
+     *
+     * @param row           Fila de la posición inicial.
+     * @param column        Columna de la posición inicial.
+     * @param playerColor   Color del jugador actual.
+     * @param rowDirection  Dirección en la fila.
+     * @param colDirection  Dirección en la columna.
+     * @return La longitud de la secuencia en la dirección especificada.
+     * @throws GomokuException Si ocurre una excepción relacionada con el juego Gomoku.
+     */
     private int calculateLengthInDirection(int row, int column, Color playerColor, int rowDirection, int colDirection) throws GomokuException {
         Cell[][] cells = board.getCells();
         int length = 0;
@@ -138,10 +189,24 @@ public class Expert extends Machine{
 
         return length;
     }
-    private boolean isValidPosition(int row, int column) throws GomokuException {
+    /**
+     * Verifica si una posición es válida en el tablero.
+     *
+     * @param row    Fila de la posición.
+     * @param column Columna de la posición.
+     * @return true si la posición es válida, false de lo contrario.
+     */
+    private boolean isValidPosition(int row, int column){
         return row >= 0 && column >= 0 && row < board.getDimension()[0] && column < board.getDimension()[1];
     }
-    private int[] findWinningPosition(Color playerColor) throws GomokuException {
+
+    /**
+     * Encuentra una posición ganadora para el jugador actual.
+     *
+     * @param playerColor Color del jugador actual.
+     * @return Las coordenadas de la posición ganadora, o null si no se encuentra ninguna.
+     */
+    private int[] findWinningPosition(Color playerColor){
         Cell[][] cells = board.getCells();
         int rows = cells.length;
         int columns = cells[0].length;
@@ -159,6 +224,14 @@ public class Expert extends Machine{
         return null;  // No se encontró una posición ganadora
     }
 
+    /**
+     * Verifica si una posición puede llevar a la victoria del jugador actual.
+     *
+     * @param row         Fila de la posición.
+     * @param column      Columna de la posición.
+     * @param playerColor Color del jugador actual.
+     * @return true si la posición puede llevar a la victoria, false de lo contrario.
+     */
     private boolean canWin(int row, int column, Color playerColor) {
         int consecutiveStones = 0;
         for (int j = 0; j < board.getDimension()[1]; j++) {
@@ -172,22 +245,6 @@ public class Expert extends Machine{
                 return true;
             }
         }
-
-        // Puedes agregar lógica similar para verificar columnas y diagonales según tu implementación específica.
-
         return false;  // No hay una secuencia ganadora en la posición actual
-    }
-
-    @Override
-    public void play(int row, int column, Stone stone) throws Exception {
-        Stone myStone = super.eliminateStone(remainingStones, stone.getClass());
-        if (myStone.getClass() != Stone.class){
-            punctuation += 100; //Si se usa una piedra especial
-        }
-        punctuation += board.addStone(row, column, myStone);
-        if(punctuation >= 1000){
-            super.addRandomStone();
-            punctuation -= 1000;
-        }
     }
 }

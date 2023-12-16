@@ -1,16 +1,33 @@
 package domain;
 import java.util.List;
-
+/**
+ * Clase que representa una celda especial llamada "Mina" en el juego Gomoku.
+ */
 public class Mine extends Cell{
+    /**
+     * Constructor de la clase Mine.
+     *
+     * @param board    Tablero al que pertenece la mina.
+     * @param position Posición de la mina en el tablero.
+     */
     public Mine(Board board, int[] position){
         super(board, position);
         active = true;
     }
-
+    /**
+     * Establece la piedra en la mina.
+     *
+     * @param stone Piedra que se establecerá en la mina.
+     */
     public void setStone(Stone stone){
         super.setStone(stone);
     }
-
+    /**
+     * Actualiza el estado de la mina después de cada turno.
+     *
+     * @param turn Turno actual del jugador.
+     * @return Puntuación del jugador actual tras la actualización.
+     */
     @Override
     public int updateState(boolean turn) {
         super.updateTemporaryStoneLife();
@@ -51,5 +68,4 @@ public class Mine extends Cell{
 
         return punctuationCurrentPlayer;
     }
-
 }

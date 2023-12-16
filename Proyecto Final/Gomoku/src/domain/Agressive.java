@@ -5,7 +5,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Clase que representa un jugador automatizado agresivo en un juego de tablero.
+ * Extiende la clase abstracta Machine.
+ */
 public class Agressive extends Machine {
+    /**
+     * Constructor de la clase Agressive.
+     *
+     * @param color                    Color de las piedras del jugador.
+     * @param board                    Tablero en el que se juega.
+     * @param specialStonesPercentage Porcentaje de piedras especiales en el conjunto de piedras.
+     * @param stoneLimit               Límite de piedras que puede tener el jugador.
+     */
     public Agressive(Color color, Board board, int specialStonesPercentage, int stoneLimit) {
         this.canRefill = true;
         this.color = color;
@@ -15,183 +27,163 @@ public class Agressive extends Machine {
         refillStones(stoneLimit, specialStonesPercentage);
         punctuation = 0;
     }
+    /**
+     * Método que realiza la jugada del jugador automatizado agresivo.
+     *
+     * @throws Exception Posible excepción durante el juego.
+     */
 
     @Override
     public void play() throws Exception {
-        // Obtener las posiciones ocupadas por las fichas del otro jugador
-        List<Point> posicionesOcupadasOtroJugador = obtenerPosicionesOcupadasOtroJugador();
 
-        // Generar una lista de posiciones disponibles en el tablero
-        List<Point> posicionesDisponibles = obtenerPosicionesDisponibles();
-
-        // Encontrar la posición de bloqueo para evitar la victoria del otro jugador
-        Point posicionBloqueo = encontrarPosicionBloqueo(posicionesDisponibles, posicionesOcupadasOtroJugador);
-        Point posicionMasCercana = encontrarPosicionMasCercana(posicionesDisponibles, posicionesOcupadasOtroJugador);
-        Stone selectedStone;
-        if (!remainingStones.isEmpty()) {
+        int[] bestAdjacentMove = findBestAdjacentMove(color);
+        // Si hay una jugada adyacente que continúa la secuencia más larga, juega esa posición
+        if (bestAdjacentMove != null) {
             Random random = new Random();
             int randomIndex = random.nextInt(remainingStones.size());
-            selectedStone = remainingStones.get(randomIndex);
-        }else{
-            selectedStone = new Stone(color);
+            Stone selectedStone = remainingStones.isEmpty() ? new Stone(color) : remainingStones.get(randomIndex);
+            super.play(bestAdjacentMove[0], bestAdjacentMove[1], selectedStone);
+        } else {
+            //Si no encuentra, juega random
+            playRandomMove();
         }
-        play(posicionMasCercana.x, posicionMasCercana.y, selectedStone); // Jugar normalmente
     }
-    private List<Point> obtenerPosicionesOcupadasOtroJugador() {
-        List<Point> posicionesOcupadasOtroJugador = new ArrayList<>();
-        Color otroColor = (color == Color.BLACK) ? Color.WHITE : Color.BLACK;
+    /**
+     * Método que verifica si una celda contiene una piedra del oponente.
+     *
+     * @param cell        Celda a verificar.
+     * @param playerColor Color del jugador.
+     * @return true si la celda contiene una piedra del oponente, false en caso contrario.
+     */
+    private boolean cellHasOpponentStone(Cell cell, Color playerColor) {
+        return cell.getStone() != null && !cell.getStone().getColor().equals(playerColor);
+    }
+    /**
+     * Método que realiza una jugada en una posición aleatoria válida.
+     *
+     * @throws Exception Posible excepción durante la jugada.
+     */
+    private void playRandomMove() throws Exception {
+        Random random = new Random();
 
-        for (int i = 0; i < board.getCells().length; i++) {
-            for (int j = 0; j < board.getCells()[0].length; j++) {
-                // Verificar si la celda tiene una piedra y si su color es el del otro jugador
-                if (board.getCells()[i][j].getStone() != null && board.getCells()[i][j].getStone().getColor().equals(otroColor)) {
-                    posicionesOcupadasOtroJugador.add(new Point(i, j));
+        // Realiza hasta 100 intentos para encontrar una posición válida
+        for (int attempt = 0; attempt < 100; attempt++) {
+            int row = random.nextInt(board.getDimension()[0]);
+            int column = random.nextInt(board.getDimension()[1]);
+
+            try {
+                // Verifica que la posición esté dentro de los límites y la celda esté vacía
+                if (isValidPosition(row, column) && !board.cellHasStone(board.getCells()[row][column])) {
+                    super.play(row, column, new Stone(color));
+                    // Si la jugada se realiza con éxito, la máquina ha realizado una jugada
+                    return;
                 }
+            } catch (Exception ignored) {
+                // Ignoramos excepciones que indiquen que la celda está ocupada o fuera de los límites
             }
         }
-
-        return posicionesOcupadasOtroJugador;
+        // Si no se pudo realizar una jugada válida después de 100 intentos, lanza una excepción
+        throw new Exception("No se pudo encontrar una posición válida para la jugada aleatoria.");
     }
-    private Point encontrarPosicionMasCercana(List<Point> posicionesDisponibles, List<Point> posicionesOcupadasOtroJugador) {
-        double distanciaMinima = Double.MAX_VALUE;
-        Point posicionMasCercana = null;
+    /**
+     * Método que encuentra la mejor jugada adyacente que continúa la cadena rival más larga.
+     *
+     * @param playerColor Color del jugador.
+     * @return Arreglo de dos elementos con las coordenadas [fila, columna] de la mejor jugada adyacente.
+     * @throws GomokuException Posible excepción durante la búsqueda.
+     */
+    private int[] findBestAdjacentMove(Color playerColor) throws GomokuException {
+        int[] bestMove = null;
+        int maxLength = 0;
 
-        for (Point disponible : posicionesDisponibles) {
-            for (Point ocupada : posicionesOcupadasOtroJugador) {
-                double distancia = calcularDistancia(disponible, ocupada);
-                if (distancia < distanciaMinima) {
-                    distanciaMinima = distancia;
-                    posicionMasCercana = disponible;
-                }
-            }
-        }
+        // Recorre todas las celdas del tablero
+        for (int i = 0; i < board.getDimension()[0]; i++) {
+            for (int j = 0; j < board.getDimension()[1]; j++) {
+                Cell cell = board.getCells()[i][j];
 
-        return posicionMasCercana;
-    }
+                // Busca una piedra rival en la celda actual
+                if (cellHasOpponentStone(cell, playerColor)) {
+                    // Busca la posición adyacente que continúa la secuencia más larga
+                    List<int[]> adjacentPositions = board.getAdjacentCellPositions(i, j);
 
-    private List<Point> obtenerPosicionesDisponibles() {
-        List<Point> posicionesDisponibles = new ArrayList<>();
+                    for (int[] position : adjacentPositions) {
+                        int row = position[0];
+                        int column = position[1];
 
-        for (int i = 0; i < board.getCells()[0].length; i++) {
-            for (int j = 0; j < board.getCells().length; j++) {
-                if (board.getCells()[i][j].getStone() == null) {
-                    posicionesDisponibles.add(new Point(i, j));
-                }
-            }
-        }
-
-        return posicionesDisponibles;
-    }
-    private double calcularDistancia(Point p1, Point p2) {
-        return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
-    }
-    private Point encontrarPosicionBloqueo(List<Point> posicionesDisponibles, List<Point> posicionesOcupadasOtroJugador) {
-        for (Point disponible : posicionesDisponibles) {
-            // Simular la adición de una piedra del otro jugador en la posición disponible
-            posicionesOcupadasOtroJugador.add(disponible);
-
-            // Verificar si el otro jugador tendría cuatro piedras en fila al jugar en la posición disponible
-            if (verificarAmenazaVictoria(posicionesOcupadasOtroJugador)) {
-                // Deshacer la simulación
-                posicionesOcupadasOtroJugador.remove(disponible);
-                return disponible;
-            }
-
-            // Deshacer la simulación
-            posicionesOcupadasOtroJugador.remove(disponible);
-        }
-
-        // Si no se encuentra ninguna posición de bloqueo, devuelve la posición más cercana
-        return encontrarPosicionMasCercana(posicionesDisponibles, posicionesOcupadasOtroJugador);
-    }
-
-    private boolean verificarAmenazaVictoria(List<Point> posicionesOcupadasOtroJugador) {
-        // Verificar amenaza de victoria en filas, columnas y diagonales
-        return verificarAmenazaEnFilas(posicionesOcupadasOtroJugador)
-                || verificarAmenazaEnColumnas(posicionesOcupadasOtroJugador)
-                || verificarAmenazaEnDiagonales(posicionesOcupadasOtroJugador);
-    }
-
-    private boolean verificarAmenazaEnFilas(List<Point> posicionesOcupadasOtroJugador) {
-        for (int i = 0; i < board.getCells().length; i++) {
-            int consecutivas = 0;
-            for (int j = 0; j < board.getCells()[0].length; j++) {
-                if (posicionesOcupadasOtroJugador.contains(new Point(i, j))) {
-                    consecutivas++;
-                    if (consecutivas == 5) {
-                        return true;
+                        if (isValidPosition(row, column) && !board.cellHasStone(board.getCells()[row][column])) {
+                            int length = calculateMaxLength(row, column);
+                            if (length > maxLength) {
+                                maxLength = length;
+                                bestMove = new int[]{row, column};
+                            }
+                        }
                     }
-                } else {
-                    consecutivas = 0;
                 }
             }
         }
-        return false;
-    }
 
-    private boolean verificarAmenazaEnColumnas(List<Point> posicionesOcupadasOtroJugador) {
-        for (int j = 0; j < board.getCells()[0].length; j++) {
-            int consecutivas = 0;
-            for (int i = 0; i < board.getCells().length; i++) {
-                if (posicionesOcupadasOtroJugador.contains(new Point(i, j))) {
-                    consecutivas++;
-                    if (consecutivas == 5) {
-                        return true;
-                    }
-                } else {
-                    consecutivas = 0;
-                }
-            }
-        }
-        return false;
+        return bestMove;
     }
+    /**
+     * Calcula la longitud máxima de la cadena del jugador en la posición dada.
+     *
+     * @param row         Fila de la posición.
+     * @param column      Columna de la posición.
+     * @return Longitud máxima de la cadena del jugador en la posición dada.
+     * @throws GomokuException Posible excepción durante el cálculo.
+     */
+    private int calculateMaxLength(int row, int column) throws GomokuException {
+        int maxLength = 0;
 
-    private boolean verificarAmenazaEnDiagonales(List<Point> posicionesOcupadasOtroJugador) {
-        return verificarAmenazaEnDiagonalPrincipal(posicionesOcupadasOtroJugador)
-                || verificarAmenazaEnDiagonalSecundaria(posicionesOcupadasOtroJugador);
-    }
+        // Verifica la longitud máxima en la fila horizontal
+        int horizontalLength = calculateLengthInDirection(row, column,  0, 1)
+                + calculateLengthInDirection(row, column,  0, -1);
 
-    private boolean verificarAmenazaEnDiagonalPrincipal(List<Point> posicionesOcupadasOtroJugador) {
-        int consecutivas = 0;
-        for (int i = 0; i < board.getCells().length; i++) {
-            int j = i;
-            if (posicionesOcupadasOtroJugador.contains(new Point(i, j))) {
-                consecutivas++;
-                if (consecutivas == 5) {
-                    return true;
-                }
-            } else {
-                consecutivas = 0;
-            }
-        }
-        return false;
-    }
+        // Verifica la longitud máxima en la columna vertical
+        int verticalLength = calculateLengthInDirection(row, column,  1, 0)
+                + calculateLengthInDirection(row, column,  -1, 0);
 
-    private boolean verificarAmenazaEnDiagonalSecundaria(List<Point> posicionesOcupadasOtroJugador) {
-        int consecutivas = 0;
-        for (int i = 0; i < board.getCells().length; i++) {
-            int j = board.getCells()[0].length - 1 - i;
-            if (posicionesOcupadasOtroJugador.contains(new Point(i, j))) {
-                consecutivas++;
-                if (consecutivas == 5) {
-                    return true;
-                }
-            } else {
-                consecutivas = 0;
-            }
-        }
-        return false;
+        // Actualiza la longitud máxima
+        maxLength = Math.max(maxLength, horizontalLength);
+        maxLength = Math.max(maxLength, verticalLength);
+
+        return maxLength;
     }
-    @Override
-    public void play(int row, int column, Stone stone) throws Exception {
-        Stone myStone = super.eliminateStone(remainingStones, stone.getClass());
-        if (myStone.getClass() != Stone.class){
-            punctuation += 100; //Si se usa una piedra especial
+    /**
+     * Calcula la longitud en una dirección específica desde la posición dada.
+     *
+     * @param row          Fila de la posición.
+     * @param column       Columna de la posición.
+     * @param rowDirection Dirección en la fila (puede ser 1, 0, -1).
+     * @param colDirection Dirección en la columna (puede ser 1, 0, -1).
+     * @return Longitud en la dirección especificada desde la posición dada.
+     * @throws GomokuException Posible excepción durante el cálculo.
+     */
+    private int calculateLengthInDirection(int row, int column, int rowDirection, int colDirection) throws GomokuException {
+        Cell[][] cells = board.getCells();
+        int length = 0;
+
+        int currentRow = row + rowDirection;
+        int currentCol = column + colDirection;
+
+        while (isValidPosition(currentRow, currentCol) &&
+                board.cellHasStone(cells[currentRow][currentCol]) &&
+                cells[currentRow][currentCol].getStone().getColor().equals(Color.BLACK)) {
+            length++;
+            currentRow += rowDirection;
+            currentCol += colDirection;
         }
-        punctuation += board.addStone(row, column, myStone);
-        if(punctuation >= 1000){
-            super.addRandomStone();
-            punctuation -= 1000;
-        }
+
+        return length;
+    }
+    /**
+     * Verifica si la posición dada está dentro de los límites del tablero.
+     *
+     * @param row    Fila de la posición.
+     * @param column Columna de la posición.
+     * @return true si la posición es válida, false en caso contrario.
+     */
+    private boolean isValidPosition(int row, int column){
+        return row >= 0 && column >= 0 && row < board.getDimension()[0] && column < board.getDimension()[1];
     }
 }
