@@ -868,28 +868,26 @@ public class GomokuGUI extends JFrame {
     private void prepareElementsMenu(){
         JMenuBar menuBar = new JMenuBar();
         JMenu menu = new JMenu("Archivo");
-        JMenuItem nuevoMenuItem = new JMenuItem("Nuevo");
+        JMenuItem nuevoMenuItem = new JMenuItem("INICIO");
 
         JSeparator separator1 = new JSeparator();
 
-        JMenuItem abrirMenuItem = new JMenuItem("Abrir");
-        JMenuItem salvarMenuItem = new JMenuItem("Guardar como");
+        JMenuItem abrirMenuItem = new JMenuItem("ABRIR");
+        JMenuItem salvarMenuItem = new JMenuItem("GUARDAR COMO");
 
         JSeparator separator2 = new JSeparator();
 
-        JMenuItem inicioMenuItem = new JMenuItem("Inicio");
-        JMenuItem configuracionesMenuItem = new JMenuItem("Configuraciones");
+        JMenuItem configuracionesMenuItem = new JMenuItem("CONFIGURACIONES");
 
         JSeparator separator3 = new JSeparator();
 
-        JMenuItem salirMenuItem = new JMenuItem("Salir");
+        JMenuItem salirMenuItem = new JMenuItem("SALIR");
 
         menu.add(nuevoMenuItem);
         menu.add(separator1);
         menu.add(abrirMenuItem);
         menu.add(salvarMenuItem);
         menu.add(separator2); // Separador
-        menu.add(inicioMenuItem);
         menu.add(configuracionesMenuItem);
         menu.add(separator3);
         menu.add(salirMenuItem);
@@ -1333,8 +1331,7 @@ public class GomokuGUI extends JFrame {
         });
         getJMenuBar().getMenu(0).getItem(2).addActionListener(e -> optionOpen());
         getJMenuBar().getMenu(0).getItem(3).addActionListener(e -> optionSave());
-        getJMenuBar().getMenu(0).getItem(5).addActionListener(e -> cardLayout.show(cardPanel, "initial"));
-        getJMenuBar().getMenu(0).getItem(6).addActionListener(e -> {
+        getJMenuBar().getMenu(0).getItem(5).addActionListener(e -> {
 
 
             // Establecer el tamaño de la ventana
@@ -1343,7 +1340,7 @@ public class GomokuGUI extends JFrame {
             setLocationRelativeTo(null);
             cardLayout.show(cardPanel, "config");
         });
-        getJMenuBar().getMenu(0).getItem(8).addActionListener(e -> optionExit());
+        getJMenuBar().getMenu(0).getItem(7).addActionListener(e -> optionExit());
     }
     private void optionNewInicio(){
 
