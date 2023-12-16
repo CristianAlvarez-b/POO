@@ -125,8 +125,6 @@ public class GomokuGUI extends JFrame {
         // Añadir ActionListeners según sea necesario
         button1.addActionListener(e -> {
             cardLayout.show(cardPanel, "config");
-            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-            // Calcular el tamaño deseado de la ventana (ajustar según tus necesidades)
             // Establecer el tamaño de la ventana
             setSize(new Dimension((int)(windowWidth * 0.25), (int)(windowHeight * 0.5)));
             setResizable(false);
@@ -134,7 +132,12 @@ public class GomokuGUI extends JFrame {
         });
         button2.addActionListener(e -> optionOpen());
         // Añadir los botones al panel con GridBagLayout
-        button3.addActionListener(e -> cardLayout.show(cardPanel, "Rules"));
+        button3.addActionListener(e -> {
+            cardLayout.show(cardPanel, "Rules");
+            setSize(new Dimension((int)(windowWidth * 0.7), (int)(windowHeight * 0.7)));
+            setResizable(false);
+            setLocationRelativeTo(null);
+        });
         buttonPanel.add(button1, gbc);
 
         gbc.gridy++;
@@ -158,24 +161,265 @@ public class GomokuGUI extends JFrame {
     }
     private JPanel createRulePanel() {
         ImagePanel fondo = new ImagePanel("GomokuImages/fondoReglas.jpg");
-        JPanel rulePanel = new JPanel();
+        JPanel rulePanel = new JPanel(new GridBagLayout());
         rulePanel.setOpaque(false);
-        rulePanel.setLayout(new GridLayout(1, 3));  // Configura un GridLayout con una fila y tres columnas
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weighty = 1.0;
+        gbc.anchor = GridBagConstraints.WEST;
 
-        JPanel modosDeJuego = new JPanel();
-        modosDeJuego.setBackground(Color.BLACK);
-        JPanel tiposDePiedras = new JPanel();
-        tiposDePiedras.setBackground(Color.RED);
+        JPanel howToPlayPanel = new JPanel(new BorderLayout());
+        howToPlayPanel.setOpaque(false);
+        JLabel titulo = new JLabel("HOW TO PLAY",  SwingConstants.CENTER);
+        titulo.setForeground(Color.RED);
+        titulo.setFont(new Font("Arial", Font.BOLD, (int)(windowHeight * 0.016666667)));
+        JLabel ganar = new JLabel(
+                "  - El objetivo es alinear cinco piedras exactas de un color consecutivas en cualquier dirección.\n"
+        );
+        //JLabel defecto = new JLabel("  - El juego se juega en un tablero cuadrado de 15x15 por defecto.");
+        //defecto.setForeground(Color.WHITE);
+        ganar.setForeground(Color.WHITE);
+
+        ImageIcon imagen = new ImageIcon("GomokuImages/victoria.png");
+        ImageIcon resized = new ImageIcon(imagen.getImage().getScaledInstance(
+                (int)(windowWidth * 0.078125),
+                (int)(windowHeight * 0.04),
+                Image.SCALE_SMOOTH
+        ));
+
+        JLabel imagenVictoria = new JLabel(resized);
+
+        howToPlayPanel.add(titulo, BorderLayout.NORTH);
+
+        // Espacio entre imagen y texto
+        JPanel centerPanel = new JPanel(new BorderLayout());
+        centerPanel.setOpaque(false);
+        centerPanel.add(imagenVictoria, BorderLayout.CENTER);
+        centerPanel.add(Box.createRigidArea(new Dimension((int)(windowWidth * 0.005208333), 0)), BorderLayout.WEST);  // Ajusta el tamaño del espacio según sea necesario
+        howToPlayPanel.add(centerPanel, BorderLayout.CENTER);
+
+        howToPlayPanel.add(ganar, BorderLayout.WEST);
+        //howToPlayPanel.add(defecto, BorderLayout.SOUTH);
+        rulePanel.add(howToPlayPanel, gbc);
+        gbc.gridy ++;
+        rulePanel.add(Box.createRigidArea(new Dimension(0, (int)(windowHeight * 0.005))), gbc);
+
+
+        JPanel maquinaPanel = new JPanel(new BorderLayout());
+        maquinaPanel.setOpaque(false);
+
+        JPanel modoJuego = new JPanel();
+        modoJuego.setOpaque(false);
+        modoJuego.setLayout(new BoxLayout(modoJuego, BoxLayout.Y_AXIS));
+        JLabel tituloModoJuego = new JLabel("MODOS DE JUEGO:",  SwingConstants.CENTER);
+        tituloModoJuego.setForeground(Color.RED);
+        JLabel jugadorVsJugador = new JLabel("  - Jugador vs Jugador: En este modo se tendrán dos jugadores humanos.");
+        jugadorVsJugador.setForeground(Color.WHITE);
+
+        JLabel jugadorVsMaquina = new JLabel("  - Jugador vs Máquina: En esta versión uno de los dos jugadores es automático.");
+        jugadorVsMaquina.setForeground(Color.WHITE);
+
+        JPanel tiposMaquina = new JPanel();
+        tiposMaquina.setOpaque(false);
+        tiposMaquina.setLayout(new BoxLayout(tiposMaquina, BoxLayout.Y_AXIS));
+        JLabel tituloTiposMaquina = new JLabel("TIPOS DE MAQUINAS:",  SwingConstants.CENTER);
+        tituloTiposMaquina.setForeground(Color.RED);
+        JLabel agresiva = new JLabel("  - Agresiva: Siempre juega a la defensiva intentando bloquear las piedras del otro jugador.");
+        agresiva.setForeground(Color.WHITE);
+        JLabel experta = new JLabel("  - Experta: Se limita a hacer un 5 en raya sin importar las piedras del otro jugador.");
+        experta.setForeground(Color.WHITE);
+        JLabel miedosa = new JLabel("  - Miedosa: Evita estar cerca a las piedras del otro jugador.");
+        miedosa.setForeground(Color.WHITE);
+        modoJuego.add(tituloModoJuego);
+        modoJuego.add(jugadorVsJugador);
+        modoJuego.add(jugadorVsMaquina);
+
+        tiposMaquina.add(tituloTiposMaquina);
+        tiposMaquina.add(agresiva);
+        tiposMaquina.add(experta);
+        tiposMaquina.add(miedosa);
+
+        maquinaPanel.add(modoJuego, BorderLayout.WEST);
+        maquinaPanel.add(tiposMaquina, BorderLayout.EAST);
+
+        rulePanel.add(maquinaPanel, gbc);
+        gbc.gridy++;
+        //rulePanel.add(Box.createRigidArea(new Dimension(0, (int)(windowHeight * 0.005))));
+
+
+        JPanel tiposDePiedra = new JPanel();
+        JLabel tituloTipos = new JLabel("TIPOS DE PIEDRAS:", SwingConstants.LEFT);
+        tituloTipos.setForeground(Color.RED);
+        tiposDePiedra.setOpaque(false);
+        tiposDePiedra.setLayout(new BoxLayout(tiposDePiedra, BoxLayout.Y_AXIS));
+
+// Panel para piedraNormal
+        JPanel piedraNormal = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        piedraNormal.setOpaque(false);
+        JLabel texto = new JLabel("  - Normal: Ocupa una casilla. Es permanente.");
+        texto.setForeground(Color.WHITE);
+        ImageIcon imagen2 = new ImageIcon("GomokuImages/normalStone.png");
+        ImageIcon resized2 = new ImageIcon(imagen2.getImage().getScaledInstance(
+                (int)(windowHeight * 0.03),
+                (int)(windowHeight * 0.03),
+                Image.SCALE_SMOOTH
+        ));
+
+        JLabel imagenNormal = new JLabel(resized2);
+        piedraNormal.add(texto);
+        piedraNormal.add(imagenNormal);
+
+// Panel para piedraPesada
+        JPanel piedraPesada = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        piedraPesada.setOpaque(false);
+        JLabel texto2 = new JLabel("  - Pesada: Ocupa dos casillas consecutivas en direcciones norte, este y noreste. Es permanente.");
+        texto2.setForeground(Color.WHITE);
+        ImageIcon imagen3 = new ImageIcon("GomokuImages/pesadaStone.png");
+        ImageIcon resized3 = new ImageIcon(imagen3.getImage().getScaledInstance(
+                (int)(windowHeight * 0.03),
+                (int)(windowHeight * 0.03),
+                Image.SCALE_SMOOTH
+        ));
+
+        JLabel imagenPesada = new JLabel(resized3);
+        piedraPesada.add(texto2);
+        piedraPesada.add(imagenPesada);
+
+// Panel para piedraTemporal
+        JPanel piedraTemporal = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        piedraTemporal.setOpaque(false);
+        JLabel texto3 = new JLabel("  - Temporal: Ocupa una casilla. Permanece por tres turnos.");
+        texto3.setForeground(Color.WHITE);
+        ImageIcon imagen4 = new ImageIcon("GomokuImages/temporalStone.png");
+        ImageIcon resized4 = new ImageIcon(imagen4.getImage().getScaledInstance(
+                (int)(windowHeight * 0.03),
+                (int)(windowHeight * 0.03),
+                Image.SCALE_SMOOTH
+        ));
+        JLabel imagenTemporal = new JLabel(resized4);
+        piedraTemporal.add(texto3);
+        piedraTemporal.add(imagenTemporal);
+
+        tiposDePiedra.add(tituloTipos);
+        tiposDePiedra.add(piedraNormal);
+        tiposDePiedra.add(piedraPesada);
+        tiposDePiedra.add(piedraTemporal);
+
+        rulePanel.add(tiposDePiedra, gbc);
+        gbc.gridy++;
+        //rulePanel.add(Box.createRigidArea(new Dimension(0, (int)(windowHeight * 0.005))));
+
+
+
         JPanel tiposDeCasillas = new JPanel();
-        tiposDeCasillas.setBackground(Color.BLUE);
+        JLabel tituloTiposCasillas = new JLabel("TIPOS DE CASILLAS:", SwingConstants.LEFT);
+        tituloTiposCasillas.setForeground(Color.RED);
+        tiposDeCasillas.setOpaque(false);
+        tiposDeCasillas.setLayout(new BoxLayout(tiposDeCasillas, BoxLayout.Y_AXIS));
 
-        // Agrega los botones al panel
-        rulePanel.add(modosDeJuego);
-        rulePanel.add(tiposDePiedras);
-        rulePanel.add(tiposDeCasillas);
-        fondo.add(rulePanel);
+    // Panel para casillaNormal
+        JPanel casillaNormal = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        casillaNormal.setOpaque(false);
+        JLabel texto4 = new JLabel("  - NORMAL: Sin ningun efecto especial.");
+        texto4.setForeground(Color.WHITE);
+        ImageIcon imagen5 = new ImageIcon("GomokuImages/casillaNormal.png");
+        ImageIcon resized5 = new ImageIcon(imagen5.getImage().getScaledInstance(
+                (int)(windowHeight * 0.03),
+                (int)(windowHeight * 0.03),
+                Image.SCALE_SMOOTH
+        ));
+
+        JLabel imagenCasillaNormal = new JLabel(resized5);
+        casillaNormal.add(texto4);
+        casillaNormal.add(imagenCasillaNormal);
+
+    //Panel para casillaMina
+        JPanel casillaMina = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        casillaMina.setOpaque(false);
+        JLabel texto5 = new JLabel("  - MINE: Explota en un espacio 3x3 eliminando todas las piedras en este espacio.");
+        texto5.setForeground(Color.WHITE);
+        ImageIcon imagen6 = new ImageIcon("GomokuImages/casillaMine.png");
+        ImageIcon resized6 = new ImageIcon(imagen6.getImage().getScaledInstance(
+                (int)(windowHeight * 0.03),
+                (int)(windowHeight * 0.03),
+                Image.SCALE_SMOOTH
+        ));
+        JLabel imagenCasillaMina = new JLabel(resized6);
+        casillaMina.add(texto5);
+        casillaMina.add(imagenCasillaMina);
+
+// Panel para piedraTemporal
+        JPanel casillaTeleport = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        casillaTeleport.setOpaque(false);
+        JLabel texto6 = new JLabel("  - TELEPORT: Teletransporta a la piedra a otro lugar aleatorio en el tablero.");
+        texto6.setForeground(Color.WHITE);
+        ImageIcon imagen7 = new ImageIcon("GomokuImages/casillaTelepor.png");
+        ImageIcon resized7 = new ImageIcon(imagen7.getImage().getScaledInstance(
+                (int)(windowHeight * 0.03),
+                (int)(windowHeight * 0.03),
+                Image.SCALE_SMOOTH
+        ));
+        JLabel imagenCasillaTemporal = new JLabel(resized7);
+        casillaTeleport.add(texto6);
+        casillaTeleport.add(imagenCasillaTemporal);
+
+        JPanel casillaGolden = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        casillaGolden.setOpaque(false);
+        JLabel texto7 = new JLabel("  - GOLDEN: Proporciona al jugador un tipo de piedra aleatorio. Si es normal, el jugador debe usar dos piedras normales en el siguiente turno.");
+        texto7.setForeground(Color.WHITE);
+        ImageIcon imagen8 = new ImageIcon("GomokuImages/casillaGolden.png");
+        ImageIcon resized8 = new ImageIcon(imagen8.getImage().getScaledInstance(
+                (int)(windowHeight * 0.03),
+                (int)(windowHeight * 0.03),
+                Image.SCALE_SMOOTH
+        ));
+        JLabel imagenCasillaGolden = new JLabel(resized8);
+        casillaGolden.add(texto7);
+        casillaGolden.add(imagenCasillaGolden);
+
+
+
+        tiposDeCasillas.add(tituloTiposCasillas);
+        tiposDeCasillas.add(casillaNormal);
+        tiposDeCasillas.add(casillaMina);
+        tiposDeCasillas.add(casillaTeleport);
+        tiposDeCasillas.add(casillaGolden);
+
+        rulePanel.add(tiposDeCasillas, gbc);
+        gbc.gridy++;
+
+
+        JPanel puntuaciones = new JPanel();
+        puntuaciones.setLayout(new BoxLayout(puntuaciones, BoxLayout.Y_AXIS));
+        JLabel tituloPuntuaciones = new JLabel("PUNTUACIÓN:", SwingConstants.CENTER);
+        tituloPuntuaciones.setForeground(Color.RED);
+        JLabel informacion2 = new JLabel("     + 100 puntos al eliminar una piedra enemiga");
+        informacion2.setForeground(Color.WHITE);
+        JLabel informacion3 = new JLabel( "     -  50 puntos cuando una piedra propia es eliminada.");
+        informacion3.setForeground(Color.WHITE);
+        JLabel informacion4 = new JLabel("     + 100 puntos al usar una piedra especial");
+        informacion4.setForeground(Color.WHITE);
+        JLabel informacion5 = new JLabel("  Con la obtención de 1000 puntos se pone una piedra extra al jugador correspondiente.");
+        informacion5.setForeground(Color.WHITE);
+        puntuaciones.setForeground(Color.WHITE);
+        puntuaciones.setOpaque(false);
+        puntuaciones.add(tituloPuntuaciones);
+        puntuaciones.add(informacion2);
+        puntuaciones.add(informacion3);
+        puntuaciones.add(informacion4);
+        puntuaciones.add(informacion5);
+        rulePanel.add(puntuaciones, gbc);
+
+        fondo.setLayout(new GridBagLayout());
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weighty = 1.0;
+        fondo.add(rulePanel, gbc);
         return fondo;
     }
+
+
 
     private JPanel createConfiguraciones() {
         ImagePanel fondo = new ImagePanel("GomokuImages/configuraciones.jpg");
@@ -681,7 +925,7 @@ public class GomokuGUI extends JFrame {
                 for (int j = 0; j < cellMatrix[0].length; j++) {
                     Piedra piedra = new Piedra(false);
                     piedras[i][j] = piedra;
-                    piedra.setBackType(chooseColorOfBackgroundPiedra(cellMatrix[i][j]));
+                   // piedra.setBackType(chooseColorOfBackgroundPiedra(cellMatrix[i][j]));
                     piedra.addMouseListener(new CellClickListener(i, j));
                     boardPanel.add(piedra);
                 }
