@@ -322,6 +322,10 @@ public class Board implements Serializable {
         return ("TIEMPO: " + String.format("%02d:%02d", minutos, segundosRestantes));
     }
 
+    public void setCell(int row, int col, Cell cell) {
+        this.cells[row][col] = cell;
+    }
+
     public boolean isFlag() {
         return flag;
     }
