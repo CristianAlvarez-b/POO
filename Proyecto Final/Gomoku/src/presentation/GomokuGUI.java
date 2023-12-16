@@ -157,30 +157,24 @@ public class GomokuGUI extends JFrame {
         return fondo;
     }
     private JPanel createRulePanel() {
+        ImagePanel fondo = new ImagePanel("GomokuImages/fondoReglas.jpg");
         JPanel rulePanel = new JPanel();
+        rulePanel.setOpaque(false);
         rulePanel.setLayout(new GridLayout(1, 3));  // Configura un GridLayout con una fila y tres columnas
 
-        JButton modosDeJuegoButton = new JButton("Modos de juego");
-        JButton tiposDePiedrasButton = new JButton("Tipos de piedras");
-        JButton tiposDeCasillasButton = new JButton("Tipos de casillas");
-
-        // Agrega ActionListener a los botones según sea necesario
-        modosDeJuegoButton.addActionListener(e-> JOptionPane.showMessageDialog(null, "En construccion."));
-
-        tiposDePiedrasButton.addActionListener(e-> {
-            JOptionPane.showMessageDialog(null, "En construccion.");
-        });
-
-        tiposDeCasillasButton.addActionListener(e-> {
-            JOptionPane.showMessageDialog(null, "En construccion.");
-        });
+        JPanel modosDeJuego = new JPanel();
+        modosDeJuego.setBackground(Color.BLACK);
+        JPanel tiposDePiedras = new JPanel();
+        tiposDePiedras.setBackground(Color.RED);
+        JPanel tiposDeCasillas = new JPanel();
+        tiposDeCasillas.setBackground(Color.BLUE);
 
         // Agrega los botones al panel
-        rulePanel.add(modosDeJuegoButton);
-        rulePanel.add(tiposDePiedrasButton);
-        rulePanel.add(tiposDeCasillasButton);
-
-        return rulePanel;
+        rulePanel.add(modosDeJuego);
+        rulePanel.add(tiposDePiedras);
+        rulePanel.add(tiposDeCasillas);
+        fondo.add(rulePanel);
+        return fondo;
     }
 
     private JPanel createConfiguraciones() {
@@ -687,7 +681,7 @@ public class GomokuGUI extends JFrame {
                 for (int j = 0; j < cellMatrix[0].length; j++) {
                     Piedra piedra = new Piedra(false);
                     piedras[i][j] = piedra;
-                    //piedra.setBackType(chooseColorOfBackgroundPiedra(cellMatrix[i][j]));
+                    piedra.setBackType(chooseColorOfBackgroundPiedra(cellMatrix[i][j]));
                     piedra.addMouseListener(new CellClickListener(i, j));
                     boardPanel.add(piedra);
                 }
@@ -1344,7 +1338,7 @@ public class GomokuGUI extends JFrame {
 
     public static class Piedra extends JPanel {
         private Color piedraColor;
-        private final Color backgroundColor;
+        private Color backgroundColor;
         private char type;
         private char backType;
         private int life = 6;
@@ -1473,12 +1467,15 @@ public class GomokuGUI extends JFrame {
             switch (backType) {
                 case 'm':
                     g.setColor(new Color(255, 0, 0, 80));
+                    this.backgroundColor = new Color(255, 0, 0, 80);
                     break;
                 case 'p':
                     g.setColor(new Color(0, 0, 255, 80)); // Cambia a tu color de fondo deseado
+                    this.backgroundColor = new Color(0, 0, 255, 80);
                     break;
                 case 'g':
                     g.setColor(new Color(255, 215, 0, 80)); // Cambia a tu color de fondo deseado
+                    this.backgroundColor = new Color(255, 215, 0, 80);
                     break;
                 default:
                     g.setColor(backgroundColor);
