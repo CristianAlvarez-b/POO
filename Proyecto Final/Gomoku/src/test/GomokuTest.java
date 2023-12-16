@@ -9,24 +9,122 @@ import static org.junit.jupiter.api.Assertions.*;
 public class GomokuTest {
     @Test
     void testInvalidBoardSizeInitialization() {
-        assertThrows(GomokuException.class, () -> new Gomoku(5, 800, 60, 0, "Normal")); // Invalid board size
+        try{
+           new Gomoku(5, 800, 60, 0, "Normal");
+           fail("Algo inesperado a ocurrido");
+        }catch (Exception e){
+            assertEquals(e.getMessage(), GomokuException.INVALID_BOARD_SIZE);
+        }
     }
 
     @Test
     void testValidInitialization() {
-        assertDoesNotThrow(() -> new Gomoku(10, 800, 60, 0, "Normal"));
+        try{
+            Gomoku gomoku = new Gomoku(10, 800, 60, 0, "Normal");
+            assertNotNull(gomoku);
+        }catch (Exception e){
+            fail("Algo inesperado a ocurrido");
+        }
     }
 
-
     @Test
-    void testSetPlayers() throws Exception {
-        Gomoku gomoku = new Gomoku(15, 800, 60, 0, "Normal");
+    void testSetPlayers() {
+        Gomoku gomoku;
+        try {
+            gomoku = new Gomoku(15, 800, 60, 0, "Normal");
+            assertNotNull(gomoku.getPlayer1());
+            assertNotNull(gomoku.getPlayer2());
+        } catch (Exception e) {
+            fail("Algo inesperado a ocurrido");
+        }
+    }
+    @Test
+    void testShouldWinInQuickTime(){
+        try{
+            Gomoku gomoku = new Gomoku(15, 800, 100, 0, "QuickTime");
+            gomoku.play(0, 0, new Stone(Color.BLACK));
+            gomoku.play(1, 0, new Stone(Color.WHITE));
+            gomoku.play(0, 1, new Stone(Color.BLACK));
+            gomoku.play(1, 1, new Stone(Color.WHITE));
+            gomoku.play(0, 2, new Stone(Color.BLACK));
+            gomoku.play(1, 2, new Stone(Color.WHITE));
+            gomoku.play(0, 3, new Stone(Color.BLACK));
+            gomoku.play(1, 3, new Stone(Color.WHITE));
+            assertTrue(gomoku.play(0, 4, new Stone(Color.BLACK)));
+        }catch (Exception e){
+            fail("Algo inesperado a ocurrido");
+        }
+    }
+    @Test
+    void testShouldWinInLimitedStones(){
+        try{
+            Gomoku gomoku = new Gomoku(15, 10, 100, 0, "LimitedStones");
+            gomoku.play(0, 0, new Stone(Color.BLACK));
+            gomoku.play(1, 0, new Stone(Color.WHITE));
+            gomoku.play(0, 1, new Stone(Color.BLACK));
+            gomoku.play(1, 1, new Stone(Color.WHITE));
+            gomoku.play(0, 2, new Stone(Color.BLACK));
+            gomoku.play(1, 2, new Stone(Color.WHITE));
+            gomoku.play(0, 3, new Stone(Color.BLACK));
+            gomoku.play(1, 3, new Stone(Color.WHITE));
+            assertTrue(gomoku.play(0, 4, new Stone(Color.BLACK)));
+        }catch (Exception e){
+            fail("Algo inesperado a ocurrido");
+        }
+    }
+    @Test
+    void testShouldEndGameQuickTime(){
+        try{
+            Gomoku gomoku = new Gomoku(15, 800, 2, 0, "QuickTime");
+            gomoku.play(0, 0, new Stone(Color.BLACK));
+            gomoku.play(1, 0, new Stone(Color.WHITE));
+        }catch (Exception e){
+            assertEquals(e.getMessage(), GomokuException.TIME);
+        }
+    }
+    @Test
+    void testShouldEndGameLimitedStones(){
+        try{
+            Gomoku gomoku = new Gomoku(15, 1, 2, 0, "LimitedStones");
+            gomoku.play(0, 0, new Stone(Color.BLACK));
+            gomoku.play(1, 0, new Stone(Color.WHITE));
+        }catch (Exception e){
+            assertEquals(e.getMessage(), GomokuException.DRAW);
+        }
+    }
+    @Test
+    void shouldWinRow() throws Exception {
+        Gomoku gomoku = new Gomoku(10, 800, 60, 0, "Normal");
         assertDoesNotThrow(() -> gomoku.setPlayers(Human.class, Human.class));
-        assertNotNull(gomoku.getPlayer1());
-        assertNotNull(gomoku.getPlayer2());
+        // Simulate a win condition
+        gomoku.play(0, 0, new Stone(Color.BLACK));
+        gomoku.play(1, 0, new Stone(Color.WHITE));
+        gomoku.play(0, 1, new Stone(Color.BLACK));
+        gomoku.play(1, 1, new Stone(Color.WHITE));
+        gomoku.play(0, 2, new Stone(Color.BLACK));
+        gomoku.play(1, 2, new Stone(Color.WHITE));
+        gomoku.play(0, 3, new Stone(Color.BLACK));
+        gomoku.play(1, 3, new Stone(Color.WHITE));
+        assertTrue(gomoku.play(0, 4, new Stone(Color.BLACK))); // Assuming winning condition
     }
     @Test
-    void testmachine() throws Exception {
+    void shouldWinColumn() throws Exception {
+        Gomoku gomoku = new Gomoku(10, 800, 60, 0, "Normal");
+        assertDoesNotThrow(() -> gomoku.setPlayers(Human.class, Human.class));
+        // Simulate a win condition
+        gomoku.play(0, 0, new Stone(Color.BLACK));
+        gomoku.play(1, 1, new Stone(Color.WHITE));
+        gomoku.play(0, 1, new Stone(Color.BLACK));
+        gomoku.play(2, 4, new Stone(Color.WHITE));
+        gomoku.play(0, 2, new Stone(Color.BLACK));
+        gomoku.play(1, 2, new Stone(Color.WHITE));
+        gomoku.play(0, 3, new Stone(Color.BLACK));
+        gomoku.play(1, 3, new Stone(Color.WHITE));
+        assertTrue(gomoku.play(0, 4, new Stone(Color.BLACK))); // Assuming winning condition
+    }
+
+    @Test
+    void testFearfulmachine() throws Exception {
         Gomoku gomoku = new Gomoku(15, 800, 60, 0, "Normal");
         assertDoesNotThrow(() -> gomoku.setPlayers(Human.class, Fearful.class));
         gomoku.play(0, 0, new Stone(Color.BLACK));

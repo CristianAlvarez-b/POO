@@ -687,7 +687,7 @@ public class GomokuGUI extends JFrame {
                 for (int j = 0; j < cellMatrix[0].length; j++) {
                     Piedra piedra = new Piedra(false);
                     piedras[i][j] = piedra;
-                    piedra.setBackType(chooseColorOfBackgroundPiedra(cellMatrix[i][j]));
+                    //piedra.setBackType(chooseColorOfBackgroundPiedra(cellMatrix[i][j]));
                     piedra.addMouseListener(new CellClickListener(i, j));
                     boardPanel.add(piedra);
                 }
@@ -1142,7 +1142,7 @@ public class GomokuGUI extends JFrame {
         // Revalidar y repintar el gamePanel para asegurar la actualización en la interfaz gráfica
         gamePanel.revalidate();
         gamePanel.repaint();
-        setSize((int)(windowWidth * 0.7), (int)(windowHeight * 0.8));
+        setSize((int)(windowWidth * 0.9), (int)(windowHeight * 0.9));
         setResizable(false);
         setLocationRelativeTo(null);
     }
