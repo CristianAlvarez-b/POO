@@ -1509,45 +1509,17 @@ public class GomokuGUI extends JFrame {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
     }
+    /**
+     * Realiza las acciones necesarias para la opción de salir del juego.
+     */
     private void optionExit(){
         System.exit(0);
     }
-    private class CellClickListener extends MouseAdapter {
-        private final int row;
-        private final int col;
-
-        public CellClickListener(int row, int col) {
-            this.row = row;
-            this.col = col;
-        }
-
-        @Override
-        public void mouseClicked(MouseEvent e) {
-            try {
-                if (clickEnabled) {
-                    ponerFicha(row, col);
-                    reproducirSonido("GomokuSounds/ponerFicha.wav");
-                    reproducirSonidoCasillas(row, col);
-
-                } else {
-                    // Desactivado: puedes mostrar un mensaje o realizar otra acción aquí
-                    System.out.println("Click desactivado");
-                }
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(null, ex.getMessage());
-                Log.record(ex);
-            }
-        }
-        private static void disableClick() {
-            clickEnabled = false;
-        }
-
-        // Método para activar los clics
-        private static void enableClick() {
-            clickEnabled = true;
-        }
-
-    }
+    /**
+     * Reproduce un sonido desde el archivo especificado.
+     *
+     * @param filePath La ruta del archivo de sonido.
+     */
     private void reproducirSonido(String filePath) {
         try {
             if(volumen){
@@ -1560,7 +1532,13 @@ public class GomokuGUI extends JFrame {
             Log.record(e);
         }
     }
-
+    /**
+     * Coloca una ficha en la posición dada en el tablero del juego.
+     *
+     * @param row La fila en la que se coloca la ficha.
+     * @param col La columna en la que se coloca la ficha.
+     * @throws Exception Si ocurre un error durante la colocación de la ficha.
+     */
     private void ponerFicha(int row, int col) throws Exception {
         Stone selectedStone;
         Player currentPlayer = turn ? gomoku.getPlayer1() : gomoku.getPlayer2();
@@ -1605,6 +1583,12 @@ public class GomokuGUI extends JFrame {
         }
     }
 
+    /**
+     * Maneja las excepciones específicas de Gomoku y muestra mensajes de error o información.
+     *
+     * @param e La excepción de Gomoku.
+     * @throws Exception Si ocurre un error inesperado.
+     */
     private void handleException(GomokuException e) throws Exception {
         if (e.getMessage().equals(GomokuException.STONE_OVERLOAP)) {
             turn = !turn;
@@ -1624,7 +1608,12 @@ public class GomokuGUI extends JFrame {
             throw new Exception(e.getMessage());
         }
     }
-
+    /**
+     * Elige un carácter que representa el tipo de piedra (normal, pesada, temporal).
+     *
+     * @param stone La piedra para la cual se selecciona el carácter.
+     * @return El carácter correspondiente al tipo de piedra.
+     */
     public char chooseCharForAStone(Stone stone){
         if(stone instanceof Heavy){
             return 'h';
@@ -1634,6 +1623,12 @@ public class GomokuGUI extends JFrame {
             return 'n';
         }
     }
+    /**
+     * Elige un carácter que representa el tipo de fondo de la piedra (mina, teleport, dorada, común).
+     *
+     * @param cell La celda para la cual se selecciona el carácter.
+     * @return El carácter correspondiente al tipo de fondo de la piedra.
+     */
     public char chooseColorOfBackgroundPiedra(Cell cell){
         if(cell instanceof Mine){
             return 'm';
@@ -1645,6 +1640,12 @@ public class GomokuGUI extends JFrame {
             return 'c';
         }
     }
+    /**
+     * Reproduce un sonido según el tipo de celda en la posición dada en el tablero.
+     *
+     * @param row La fila de la celda.
+     * @param column La columna de la celda.
+     */
     private void reproducirSonidoCasillas(int row, int column){
         Component[] components = boardPanel.getComponents();
         Cell[][] cellMatrix = gomoku.board();
@@ -1662,7 +1663,194 @@ public class GomokuGUI extends JFrame {
             }
         }
     }
+    /**
+     * Actualiza los bordes y etiquetas que muestran la información de las piedras restantes y la puntuación.
+     */
+    private void updateBorders() {
+        if (turn) {
+            // Si es el turno de player1 (izquierda), actualizar el borde de player1 y quitar el borde de player2
+            piedraJ1.setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
+            piedraJ2.setBorder(null);
+        } else {
+            // Sí es el turno de player2 (derecha), actualizar el borde de player2 y quitar el borde de player1
+            piedraJ1.setBorder(null);
+            piedraJ2.setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
+        }
+    }
+    /**
+     * Actualiza las etiquetas que muestran la información de las piedras restantes y la puntuación.
+     */
+    private void updateRemainingLabels() {
+        piedra1.setPiedraColor(colorJ1);
+        piedra2.setPiedraColor(colorJ2);
+        name1.setText(gomoku.getPlayer1().getName());
+        name1.setForeground(Color.WHITE);
+        name2.setText(gomoku.getPlayer2().getName());
+        name2.setForeground(Color.WHITE);
+        numNormalJ1.setText("Normales restantes: "+ gomoku.getPlayer1().numOfType(Stone.class));
+        numPesadaJ1.setText("Pesadas restantes: "+ gomoku.getPlayer1().numOfType(Heavy.class));
+        numTemporaryJ1.setText("Temporales restantes: "+ gomoku.getPlayer1().numOfType(Temporary.class));
+        numNormalJ2.setText("Normales restantes: "+ gomoku.getPlayer2().numOfType(Stone.class));
+        numPesadaJ2.setText("Pesadas restantes: "+ gomoku.getPlayer2().numOfType(Heavy.class));
+        numTemporaryJ2.setText("Temporales restantes: "+ gomoku.getPlayer2().numOfType(Temporary.class));
+        punctuationJ1.setText("La puntuacion es de: " + gomoku.getPlayer1().getPunctuation());
+        punctuationJ2.setText("La puntuacion es de: " + gomoku.getPlayer2().getPunctuation());
+    }
+    /**
+     * Inicia un temporizador que actualiza el tiempoLabel cada segundo y realiza acciones
+     * automáticas si el jugador actual es una máquina en el modo de juego QuickTime.
+     */
+    private void startTimer() {
+        // Actualiza el tiempoLabel cada segundo
+        timerGUI = new Timer(1000, e -> {
+            // Actualiza el tiempoLabel cada segundo
+            try {
+                tiempoLabel.setText(gomoku.getBoard().obtenerTiempoActual());
+            } catch (GomokuException ex) {
+                timerGUI.stop();
+                JOptionPane.showMessageDialog(null, ex.getMessage());
+                winnerOption();
+                showOptionDialog();
+            }
+            if(!turn && gomoku.getPlayer2() instanceof Machine){
+                try {
+                    if(gomoku.getPlayer2().contieneStone(Stone.class)){
+                        selectedStoneJ2 = new Stone(colorJ2);
+                    }else if(gomoku.getPlayer2().contieneStone(Heavy.class)){
+                        selectedStoneJ2 = new Heavy(colorJ2);
+                    }else {
+                        selectedStoneJ2 = new Temporary(colorJ2);
+                    }
+                    if(gameMode.equals("QuickTime")){
+                        try
+                        {
+                            Thread.sleep(1000);
+                            ponerFicha(0,0);
+                            reproducirSonido("GomokuSounds/ponerFicha.wav");
+                        }
+                        catch (InterruptedException ie)
+                        {
+                            Log.record(ie);
+                        }
+                    }else{
+                        ponerFicha(0,0);
+                        reproducirSonido("GomokuSounds/ponerFicha.wav");
+                    }
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
+        timerGUI.start();
+    }
+    /**
+     * Muestra un cuadro de diálogo anunciando al ganador y actualiza la interfaz gráfica.
+     */
+    private void winnerOption(){
+        if (!gomoku.getBoard().getTurn()) {
+            refresh();
+            JOptionPane.showMessageDialog(null, "GANAASTEEEEEEEE. " + gomoku.getPlayer1().getName());
 
+        } else {
+            refresh();
+            JOptionPane.showMessageDialog(null, "GANAASTEEEEEEEE. " + gomoku.getPlayer2().getName());
+
+        }
+    }
+    /**
+     * Restaura los valores predeterminados del juego.
+     */
+    private void reiniciarDefault(){
+        CellClickListener.enableClick();
+        porcentajeEspeciales = 50;
+        gameMode = "Normal";
+        timeLimit = -1;
+        stoneLimit = size*size;
+    }
+    /**
+     * Muestra un cuadro de diálogo con las opciones de "Nuevo Juego" y "Cerrar" al finalizar la partida.
+     */
+    private void showOptionDialog() {
+        String[] options = {"Nuevo Juego", "Cerrar"};
+        int choice = JOptionPane.showOptionDialog(
+                null,
+                "¿Qué deseas hacer?",
+                "Opciones",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[1]); // Índice de la opción predeterminada
+
+        // Procesar la elección del usuario
+        switch (choice) {
+            case 0:
+                reiniciarDefault();
+                optionNewInicio();
+                break;
+            case 1:
+                dispose();
+                break;
+            case JOptionPane.CLOSED_OPTION:
+                CellClickListener.disableClick();
+                break;
+        }
+    }
+
+    /**
+     * Clase interna que representa un listener para clics en las celdas del tablero.
+     */
+    private class CellClickListener extends MouseAdapter {
+        private final int row;
+        private final int col;
+        /**
+         * Constructor que inicializa las coordenadas de la celda.
+         *
+         * @param row Fila de la celda.
+         * @param col Columna de la celda.
+         */
+        public CellClickListener(int row, int col) {
+            this.row = row;
+            this.col = col;
+        }
+        /**
+         * Maneja el evento de clic del mouse en la celda.
+         *
+         * @param e Evento del mouse.
+         */
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            try {
+                if (clickEnabled) {
+                    // Llama al método para colocar una ficha en la celda y reproduce sonidos asociados.
+                    ponerFicha(row, col);
+                    reproducirSonido("GomokuSounds/ponerFicha.wav");
+                    reproducirSonidoCasillas(row, col);
+                }
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage());
+                Log.record(ex);
+            }
+        }
+        /**
+         * Desactiva los clics en las celdas del tablero.
+         */
+        private static void disableClick() {
+            clickEnabled = false;
+        }
+
+        /**
+         * Activa los clics en las celdas del tablero.
+         */
+        private static void enableClick() {
+            clickEnabled = true;
+        }
+
+    }
+    /**
+     * Clase que representa una piedra en el tablero del juego Gomoku.
+     * Extiende JPanel para ser renderizada en la interfaz gráfica.
+     */
     public static class Piedra extends JPanel {
         private Color piedraColor;
         private Color backgroundColor;
@@ -1671,40 +1859,83 @@ public class GomokuGUI extends JFrame {
         private int life = 6;
         private boolean isVisible;
         private boolean sound = true;
-
+        /**
+         * Constructor de la clase Piedra.
+         *
+         * @param isVisible Indica si la piedra es visible o no.
+         */
         public Piedra(boolean isVisible) {
             this.piedraColor = Color.WHITE; // Color predeterminado
             this.backgroundColor = new Color(222, 184, 135, 80); // Color predeterminado
             this.isVisible = isVisible;
         }
+        /**
+         * Establece el tipo de piedra.
+         *
+         * @param type Tipo de piedra ('n' para normal, 'h' para pesada, 't' para temporal).
+         */
         public void setType(char type){
             this.type = type;
         }
+        /**
+         * Establece el tipo de fondo de la piedra.
+         *
+         * @param backType Tipo de fondo ('m' para mina, 'p' para teletransportador, 'g' para dorada).
+         */
         public void setBackType(char backType){this.backType = backType;}
+        /**
+         * Establece el color de la piedra.
+         *
+         * @param piedraColor Color de la piedra.
+         */
         public void setPiedraColor(Color piedraColor) {
             this.piedraColor = piedraColor;
         }
+        /**
+         * Establece si se reproduce sonido al interactuar con la piedra.
+         *
+         * @param sound true si se reproduce sonido, false de lo contrario.
+         */
 
         public void setSound(boolean sound) {
             this.sound = sound;
         }
-
+        /**
+         * Establece la vida de la piedra temporal.
+         *
+         * @param life Vida de la piedra temporal.
+         */
         public void setLife(int life) {
             this.life = life;
         }
 
+        /**
+         * Hace visible la piedra.
+         */
         public void makeVisible() {
             this.isVisible = true;
         }
+        /**
+         * Hace invisible la piedra.
+         */
 
         public void makeInvisible() {
             this.isVisible = false;
         }
+        /**
+         * Verifica si la piedra reproduce sonido al interactuar.
+         *
+         * @return true si reproduce sonido, false de lo contrario.
+         */
 
         public boolean isSound() {
             return sound;
         }
-
+        /**
+         * Método de pintado que define la apariencia de la piedra en el componente gráfico.
+         *
+         * @param g Objeto Graphics para pintar.
+         */
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
@@ -1771,6 +2002,13 @@ public class GomokuGUI extends JFrame {
                 }
             }
         }
+        /**
+         * Dibuja una estrella en el centro de la piedra pesada.
+         *
+         * @param g Objeto Graphics para dibujar.
+         * @param x Coordenada x del centro.
+         * @param y Coordenada y del centro.
+         */
         private void drawStar(Graphics g, int x, int y) {
             int[] xPoints = new int[2 * 5];
             int[] yPoints = new int[2 * 5];
@@ -1790,6 +2028,11 @@ public class GomokuGUI extends JFrame {
             g.fillPolygon(xPoints, yPoints, 2 * 5);
             g.setColor(backgroundColor);
         }
+        /**
+         * Establece el color de fondo de la piedra según el tipo de fondo.
+         *
+         * @param g Objeto Graphics para dibujar.
+         */
         private void setBackgroundColor(Graphics g) {
             switch (backType) {
                 case 'm':
@@ -1810,129 +2053,21 @@ public class GomokuGUI extends JFrame {
             }
         }
     }
-    private void updateBorders() {
-        if (turn) {
-            // Si es el turno de player1 (izquierda), actualizar el borde de player1 y quitar el borde de player2
-            piedraJ1.setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
-            piedraJ2.setBorder(null);
-        } else {
-            // Sí es el turno de player2 (derecha), actualizar el borde de player2 y quitar el borde de player1
-            piedraJ1.setBorder(null);
-            piedraJ2.setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
-        }
-    }
-
-    private void updateRemainingLabels() {
-        piedra1.setPiedraColor(colorJ1);
-        piedra2.setPiedraColor(colorJ2);
-        name1.setText(gomoku.getPlayer1().getName());
-        name1.setForeground(Color.WHITE);
-        name2.setText(gomoku.getPlayer2().getName());
-        name2.setForeground(Color.WHITE);
-        numNormalJ1.setText("Normales restantes: "+ gomoku.getPlayer1().numOfType(Stone.class));
-        numPesadaJ1.setText("Pesadas restantes: "+ gomoku.getPlayer1().numOfType(Heavy.class));
-        numTemporaryJ1.setText("Temporales restantes: "+ gomoku.getPlayer1().numOfType(Temporary.class));
-        numNormalJ2.setText("Normales restantes: "+ gomoku.getPlayer2().numOfType(Stone.class));
-        numPesadaJ2.setText("Pesadas restantes: "+ gomoku.getPlayer2().numOfType(Heavy.class));
-        numTemporaryJ2.setText("Temporales restantes: "+ gomoku.getPlayer2().numOfType(Temporary.class));
-        punctuationJ1.setText("La puntuacion es de: " + gomoku.getPlayer1().getPunctuation());
-        punctuationJ2.setText("La puntuacion es de: " + gomoku.getPlayer2().getPunctuation());
-    }
-    private void startTimer() {
-        // Actualiza el tiempoLabel cada segundo
-        timerGUI = new Timer(1000, e -> {
-            // Actualiza el tiempoLabel cada segundo
-            try {
-                tiempoLabel.setText(gomoku.getBoard().obtenerTiempoActual());
-            } catch (GomokuException ex) {
-                timerGUI.stop();
-                JOptionPane.showMessageDialog(null, ex.getMessage());
-                winnerOption();
-                showOptionDialog();
-            }
-            if(!turn && gomoku.getPlayer2() instanceof Machine){
-                try {
-                    if(gomoku.getPlayer2().contieneStone(Stone.class)){
-                        selectedStoneJ2 = new Stone(colorJ2);
-                    }else if(gomoku.getPlayer2().contieneStone(Heavy.class)){
-                        selectedStoneJ2 = new Heavy(colorJ2);
-                    }else {
-                        selectedStoneJ2 = new Temporary(colorJ2);
-                    }
-                    if(gameMode.equals("QuickTime")){
-                        try
-                        {
-                            Thread.sleep(1000);
-                            ponerFicha(0,0);
-                            reproducirSonido("GomokuSounds/ponerFicha.wav");
-                        }
-                        catch (InterruptedException ie)
-                        {
-                            Log.record(ie);
-                        }
-                    }else{
-                        ponerFicha(0,0);
-                        reproducirSonido("GomokuSounds/ponerFicha.wav");
-                    }
-                } catch (Exception ex) {
-                    throw new RuntimeException(ex);
-                }
-            }
-        });
-        timerGUI.start();
-    }
-    private void winnerOption(){
-        if (!gomoku.getBoard().getTurn()) {
-            refresh();
-            JOptionPane.showMessageDialog(null, "GANAASTEEEEEEEE. " + gomoku.getPlayer1().getName());
-
-        } else {
-            refresh();
-            JOptionPane.showMessageDialog(null, "GANAASTEEEEEEEE. " + gomoku.getPlayer2().getName());
-
-        }
-    }
-    private void reiniciarDefault(){
-        CellClickListener.enableClick();
-        porcentajeEspeciales = 50;
-        gameMode = "Normal";
-        timeLimit = -1;
-        stoneLimit = size*size;
-    }
-
-    private void showOptionDialog() {
-        String[] options = {"Nuevo Juego", "Cerrar"};
-        int choice = JOptionPane.showOptionDialog(
-                null,
-                "¿Qué deseas hacer?",
-                "Opciones",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE,
-                null,
-                options,
-                options[1]); // Índice de la opción predeterminada
-
-        // Procesar la elección del usuario
-        switch (choice) {
-            case 0:
-                reiniciarDefault();
-                optionNewInicio();
-                break;
-            case 1:
-                dispose();
-                break;
-            case JOptionPane.CLOSED_OPTION:
-                CellClickListener.disableClick();
-                break;
-        }
-    }
+    /**
+     * Método principal que inicia la interfaz gráfica del juego Gomoku.
+     * Se ejecuta en el hilo de eventos de Swing utilizando SwingUtilities.invokeLater().
+     */
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             try {
+                // Crear una instancia de la interfaz gráfica GomokuGUI
                 GomokuGUI gui = new GomokuGUI();
+                // Iniciar el temporizador del juego
                 gui.startTimer();
+                // Hacer visible la interfaz gráfica
                 gui.setVisible(true);
             } catch (Exception e) {
+                // Manejar excepciones mostrando un mensaje de error y registrando la excepción
                 JOptionPane.showMessageDialog(null, "Paso algo inesperado");
                 Log.record(e);
             }
