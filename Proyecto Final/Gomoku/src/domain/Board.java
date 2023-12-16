@@ -322,10 +322,8 @@ public class Board implements Serializable {
         return ("TIEMPO: " + String.format("%02d:%02d", minutos, segundosRestantes));
     }
 
-    public void detenerTimer() {
-        if (timer != null && timer.isRunning()) {
-            timer.stop();
-        }
+    public boolean isFlag() {
+        return flag;
     }
 
     public int getSpecialPercentage() {

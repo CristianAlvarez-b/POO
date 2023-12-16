@@ -9,18 +9,18 @@ import static org.junit.jupiter.api.Assertions.*;
 public class GomokuTest {
     @Test
     void testInvalidBoardSizeInitialization() {
-        assertThrows(GomokuException.class, () -> new Gomoku(5, 800, 60, 0, "normal")); // Invalid board size
+        assertThrows(GomokuException.class, () -> new Gomoku(5, 800, 60, 0, "Normal")); // Invalid board size
     }
 
     @Test
     void testValidInitialization() {
-        assertDoesNotThrow(() -> new Gomoku(10, 800, 60, 0, "normal"));
+        assertDoesNotThrow(() -> new Gomoku(10, 800, 60, 0, "Normal"));
     }
 
 
     @Test
     void testSetPlayers() throws Exception {
-        Gomoku gomoku = new Gomoku(15, 800, 60, 0, "normal");
+        Gomoku gomoku = new Gomoku(15, 800, 60, 0, "Normal");
         assertDoesNotThrow(() -> gomoku.setPlayers(Human.class, Human.class));
         assertNotNull(gomoku.getPlayer1());
         assertNotNull(gomoku.getPlayer2());
@@ -44,7 +44,7 @@ public class GomokuTest {
 
     @Test
     void shouldPlay() throws Exception {
-        Gomoku gomoku = new Gomoku(15, 800, 60, 0, "normal");
+        Gomoku gomoku = new Gomoku(15, 800, 60, 0, "Normal");
         assertDoesNotThrow(() -> gomoku.setPlayers(Human.class, Human.class));
 
         // Assuming play method returns true if the game is over
@@ -54,7 +54,7 @@ public class GomokuTest {
     }
     @Test
     void shouldNotPlaceStoneInOccupiedPosition() throws Exception {
-        Gomoku gomoku = new Gomoku(15, 800, 60, 0, "normal");
+        Gomoku gomoku = new Gomoku(15, 800, 60, 0, "Normal");
         assertDoesNotThrow(() -> gomoku.setPlayers(Human.class, Human.class));
 
         // Place a stone in a valid position
@@ -66,7 +66,7 @@ public class GomokuTest {
 
     @Test
     void shouldNotPlaceStoneOutsideBoardBounds() throws Exception {
-        Gomoku gomoku = new Gomoku(15, 800, 60, 0, "normal");
+        Gomoku gomoku = new Gomoku(15, 800, 60, 0, "Normal");
         assertDoesNotThrow(() -> gomoku.setPlayers(Human.class, Human.class));
 
         // Attempt to place a stone outside the board bounds, should throw an exception
@@ -75,7 +75,7 @@ public class GomokuTest {
 
     @Test
     void shouldWin() throws Exception {
-        Gomoku gomoku = new Gomoku(10, 800, 60, 0, "normal");
+        Gomoku gomoku = new Gomoku(10, 800, 60, 0, "Normal");
         assertDoesNotThrow(() -> gomoku.setPlayers(Human.class, Human.class));
         // Simulate a win condition
         gomoku.play(0, 0, new Stone(Color.BLACK));
@@ -88,5 +88,4 @@ public class GomokuTest {
         gomoku.play(1, 3, new Stone(Color.WHITE));
         assertTrue(gomoku.play(0, 4, new Stone(Color.BLACK))); // Assuming winning condition
     }
-
 }

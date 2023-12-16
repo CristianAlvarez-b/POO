@@ -43,7 +43,7 @@ public class Expert extends Machine{
         }
     }
     private boolean cellHasOwnStone(Cell cell) {
-        return cell.getStone() != null && cell.getStone().getColor().equals(color);
+        return cell.getStone() != null && cell.getStone().getColor().equals(Color.WHITE);
     }
 
     private int[] findBestAdjacentMove(Color playerColor) throws GomokuException {
@@ -130,7 +130,7 @@ public class Expert extends Machine{
 
         while (isValidPosition(currentRow, currentCol) &&
                 board.cellHasStone(cells[currentRow][currentCol]) &&
-                cells[currentRow][currentCol].getStone().getColor().equals(playerColor)) {
+                cells[currentRow][currentCol].getStone().getColor().equals(Color.WHITE)) {
             length++;
             currentRow += rowDirection;
             currentCol += colDirection;
