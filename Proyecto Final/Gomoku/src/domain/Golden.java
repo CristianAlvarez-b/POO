@@ -20,7 +20,7 @@ public class Golden extends Cell{
         if (stone != null && active){
             active = false;
             Stone newStone = getRandomStone(stone.getColor());
-            if (board.getPlayers()[0].getColor().equals(stone.getColor())){
+            if (Color.BLACK.equals(stone.getColor())){
                 board.getPlayers()[0].addStone(board.getPlayers()[0].getExtraStones(),newStone);
             }else {
                 board.getPlayers()[1].addStone(board.getPlayers()[1].getExtraStones(),newStone);
