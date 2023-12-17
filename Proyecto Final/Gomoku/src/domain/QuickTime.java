@@ -89,7 +89,6 @@ public class QuickTime extends Board{
         int segundosRestantes = tiempoRestante1 % 60;
         int minutos2 = tiempoRestante2 / 60;
         int segundosRestantes2 = tiempoRestante2 % 60;
-//        System.out.println(String.format("%02d:%02d", minutos, segundosRestantes));
         String time1 = String.format("%02d:%02d", minutos, segundosRestantes);
         String time2 = String.format("%02d:%02d", minutos2, segundosRestantes2);
         return ("TIEMPO J1: " + time1 + "           TIEMPO J2: " + time2);

@@ -74,8 +74,6 @@ public class GomokuGUI extends JFrame {
     private void prepareElements() throws Exception {
         prepareScreens();
         setTitle("Gomoku");
-        System.out.println(windowWidth);
-        System.out.println(windowHeight);
         // Establecer el tamaño de la ventana
         setSize(new Dimension((int) (windowWidth * 0.5), (int) (windowHeight * 0.5)));
         setResizable(false);
@@ -627,8 +625,8 @@ public class GomokuGUI extends JFrame {
             if (e.getStateChange() == ItemEvent.DESELECTED) {
                 // Se ejecuta cuando el JCheckBox se desactiva
                 machineType = Human.class;
-                System.out.println("Se seleccionó la opción: " + machineType);
-                // Realiza aquí las acciones que necesites al desactivar el JCheckBox
+            } else if (e.getStateChange() == ItemEvent.SELECTED) {
+                machineType = Agressive.class;
             }
         });
         JPanel maquinaPanel = new JPanel(new FlowLayout());
@@ -642,9 +640,8 @@ public class GomokuGUI extends JFrame {
         maquinaComboBox.setEnabled(false);  // Inicialmente desactivado
         maquinaComboBox.addActionListener(e -> {
             // Acciones a realizar cuando se selecciona un elemento en el JComboBox
-            String seleccion = (String) maquinaComboBox.getSelectedItem();
-            System.out.println("Se seleccionó la opción: " + seleccion);
 
+            String seleccion = (String) maquinaComboBox.getSelectedItem();
             // Luego puedes realizar acciones adicionales según la selección
             if ("Agresiva".equals(seleccion)) {
                 try {
@@ -742,7 +739,6 @@ public class GomokuGUI extends JFrame {
                 SwingUtilities.invokeLater(() -> {
                     try {
                         size = Integer.parseInt(sizeTextField.getText());
-                        System.out.println("Tamaño del tablero: " + size);
                         stoneLimit = size * size;
                     } catch (NumberFormatException e) {
                         JOptionPane.showMessageDialog(null, "No estás ingresando un número válido.");
@@ -778,7 +774,6 @@ public class GomokuGUI extends JFrame {
                 SwingUtilities.invokeLater(() -> {
                     try {
                         porcentajeEspeciales = Integer.parseInt(especialesTextField.getText());
-                        System.out.println("Porcentaje especiales: " + porcentajeEspeciales);
                     } catch (NumberFormatException e) {
                         JOptionPane.showMessageDialog(null, "No estás ingresando un número válido.");
                         // Log.record(e);
@@ -851,7 +846,6 @@ public class GomokuGUI extends JFrame {
 
         // Aquí puedes manejar la opción seleccionada
         if (seleccion == JOptionPane.CLOSED_OPTION) {
-            System.out.println("Diálogo cerrado sin selección");
         } else if (opciones[seleccion] == "Normal"){
             gameMode = "Normal";
             empezarJuego();
@@ -867,7 +861,6 @@ public class GomokuGUI extends JFrame {
                 Log.record(e);
                 JOptionPane.showMessageDialog(null, "No ingresaste un numero válido");
             }
-            System.out.println("Cantidad de piedras seleccionada: " + cantidadPiedras);
         } else {
             String tiempoLimite = JOptionPane.showInputDialog("Ingresa la cantidad de segundos que deseas jugar:");
             try{
