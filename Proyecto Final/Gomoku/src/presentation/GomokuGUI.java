@@ -1810,7 +1810,7 @@ public class GomokuGUI extends JFrame {
                 JOptionPane.QUESTION_MESSAGE,
                 null,
                 options,
-                options[1]); // Indice de la opción predeterminada
+                options[1]); // Índice de la opción predeterminada
 
         // Procesar la elección del usuario
         switch (choice) {

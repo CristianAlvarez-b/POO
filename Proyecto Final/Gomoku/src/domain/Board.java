@@ -459,8 +459,8 @@ public class Board implements Serializable {
     /**
      * Establece una celda en una posición específica del tablero.
      *
-     * @param row  Indice de fila de la celda.
-     * @param col  Indice de columna de la celda.
+     * @param row  Índice de fila de la celda.
+     * @param col  Índice de columna de la celda.
      * @param cell La celda que se establecerá en la posición especificada.
      */
     public void setCell(int row, int col, Cell cell) {

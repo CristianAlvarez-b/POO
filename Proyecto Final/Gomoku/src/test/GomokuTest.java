@@ -17,7 +17,6 @@ public class GomokuTest {
             assertEquals(e.getMessage(), GomokuException.INVALID_BOARD_SIZE);
         }
     }
-
     @Test
     void testValidInitialization() {
         try{
