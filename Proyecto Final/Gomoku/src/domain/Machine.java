@@ -18,11 +18,11 @@ public abstract class Machine extends Player{
      * @throws Exception Posible excepción durante la jugada.
      */
     public final void play(int row, int column, Stone stone) throws Exception {
+        punctuation += board.addStone(row, column, stone);
         Stone myStone = super.eliminateStone(remainingStones, stone.getClass());
         if (myStone.getClass() != Stone.class){
             punctuation += 100; //Si se usa una piedra especial
         }
-        punctuation += board.addStone(row, column, myStone);
         if(punctuation >= 1000){
             super.addRandomStone();
             punctuation -= 1000;

@@ -52,8 +52,8 @@ public class GomokuGUI extends JFrame {
     public static Color colorJ2 = Color.WHITE;
     private Stone selectedStoneJ1 = null;
     private Stone selectedStoneJ2 = null;
-    private String nombreJ1;
-    private String nombreJ2;
+    private String nombreJ1 = "Jugador 1";
+    private String nombreJ2 = "Jugador 2";
     private Class<? extends Player> machineType = Human.class;
     private String gameMode = "Normal";
     private Timer timerGUI;
