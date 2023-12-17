@@ -138,7 +138,7 @@ public class GomokuGUI extends JFrame {
         button1.addActionListener(e -> {
             cardLayout.show(cardPanel, "config");
             // Establecer el tamaño de la ventana
-            setSize(new Dimension((int)(windowWidth * 0.25), (int)(windowHeight * 0.5)));
+            setSize(new Dimension((int)(windowWidth * 0.25), (int)(windowHeight * 0.6)));
             setResizable(false);
             setLocationRelativeTo(null);
         });
@@ -146,7 +146,7 @@ public class GomokuGUI extends JFrame {
         // Añadir los botones al panel con GridBagLayout
         button3.addActionListener(e -> {
             cardLayout.show(cardPanel, "Rules");
-            setSize(new Dimension((int)(windowWidth * 0.7), (int)(windowHeight * 0.7)));
+            setSize(new Dimension((int)(windowWidth * 0.75), (int)(windowHeight * 0.8)));
             setResizable(false);
             setLocationRelativeTo(null);
         });
@@ -403,9 +403,20 @@ public class GomokuGUI extends JFrame {
         rulePanel.add(tiposDeCasillas, gbc);
         gbc.gridy++;
 
-
         JPanel puntuaciones = new JPanel();
         puntuaciones.setLayout(new BoxLayout(puntuaciones, BoxLayout.Y_AXIS));
+        String imagePath = "GomokuImages/flecha.png";
+
+        // Crear un ImageIcon
+
+        // Redimensionar la imagen
+        ImageIcon ima = new ImageIcon("GomokuImages/flecha.png");
+        ImageIcon res = new ImageIcon(ima.getImage().getScaledInstance((int)(windowWidth * 0.006481481), (int)(windowHeight * 0.0069444444), Image.SCALE_SMOOTH));
+
+        // Crear un botón con la imagen redimensionada
+        JButton back = new JButton(res);
+
+        back.addActionListener(e -> optionNewInicio());
         JLabel tituloPuntuaciones = new JLabel("PUNTUACIÓN:", SwingConstants.CENTER);
         tituloPuntuaciones.setForeground(Color.RED);
         JLabel informacion2 = new JLabel("     + 100 puntos al eliminar una piedra enemiga");
@@ -423,6 +434,8 @@ public class GomokuGUI extends JFrame {
         puntuaciones.add(informacion3);
         puntuaciones.add(informacion4);
         puntuaciones.add(informacion5);
+        puntuaciones.add(new JLabel(" "));
+        puntuaciones.add(back);
         rulePanel.add(puntuaciones, gbc);
 
         fondo.setLayout(new GridBagLayout());
@@ -740,7 +753,7 @@ public class GomokuGUI extends JFrame {
                         stoneLimit = size * size;
                     } catch (NumberFormatException e) {
                         JOptionPane.showMessageDialog(null, "No estás ingresando un número válido.");
-                        // Log.record(e);
+                        Log.record(e);
                         sizeTextField.setText("");
                     }
                 });
@@ -808,6 +821,10 @@ public class GomokuGUI extends JFrame {
 
         gbc.gridy = 3;
         JButton modosJuego = new JButton("Iniciar Juego");
+        ImageIcon ima = new ImageIcon("GomokuImages/flecha.png");
+        ImageIcon res = new ImageIcon(ima.getImage().getScaledInstance((int)(windowWidth * 0.006481481), (int)(windowHeight * 0.0069444444), Image.SCALE_SMOOTH));
+        // Crear un botón con la imagen redimensionada
+        JButton devolverse = new JButton(res);
         modosJuego.addActionListener(e -> {
             try {
                 if(size < 10){
@@ -822,12 +839,16 @@ public class GomokuGUI extends JFrame {
                 throw new RuntimeException(ex);
             }
         });
+        devolverse.addActionListener(e -> optionNewInicio());
         panelSize.add(modosJuego, gbc);
 
         gbc.gridx = 1; // Nueva posición para el botón
         gbc.gridy = 5; // Mismo nivel que el JComboBox
         gbc.gridwidth = 1; // Restaurar gridwidth a 1
         gbc.anchor = GridBagConstraints.EAST; // Alineación a la derecha
+
+        // Agregar botón de devolverse a la derecha del botón de inicio
+        panelSize.add(devolverse, gbc);
 
         return panelSize;
     }
@@ -858,7 +879,11 @@ public class GomokuGUI extends JFrame {
             try{
                 stoneLimit = Integer.parseInt(cantidadPiedras);
                 porcentajeEspeciales = 0;
-                empezarJuego();
+                if(stoneLimit <= 0){
+                    JOptionPane.showMessageDialog(null, "Ingresa un numero positivo");
+                }else{
+                    empezarJuego();
+                }
             }catch (Exception e){
                 Log.record(e);
                 JOptionPane.showMessageDialog(null, "No ingresaste un numero válido");
@@ -868,7 +893,11 @@ public class GomokuGUI extends JFrame {
             try{
                 gameMode = "QuickTime";
                 timeLimit = Integer.parseInt(tiempoLimite);
-                empezarJuego();
+                if(timeLimit <= 0){
+                    JOptionPane.showMessageDialog(null, "Ingresa un tiempo positivo");
+                }else{
+                    empezarJuego();
+                }
             }catch (Exception e){
                 Log.record(e);
                 JOptionPane.showMessageDialog(null, "No ingresaste un numero válido");
@@ -1402,7 +1431,7 @@ public class GomokuGUI extends JFrame {
 
 
             // Establecer el tamaño de la ventana
-            setSize(new Dimension((int)(windowWidth * 0.25), (int)(windowHeight * 0.5)));
+            setSize(new Dimension((int)(windowWidth * 0.25), (int)(windowHeight * 0.6)));
             setResizable(false);
             setLocationRelativeTo(null);
             cardLayout.show(cardPanel, "config");
@@ -1729,6 +1758,7 @@ public class GomokuGUI extends JFrame {
                         reproducirSonido("GomokuSounds/ponerFicha.wav");
                     }
                 } catch (Exception ex) {
+                    Log.record(ex);
                     throw new RuntimeException(ex);
                 }
             }
