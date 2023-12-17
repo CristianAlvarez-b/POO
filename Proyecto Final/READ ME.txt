@@ -1,0 +1,5 @@
+Este proyecto fue realizado por: Cristian Alvarez y Juliana Briceño
+Este proyecto se realiza con el fin de poner en practica todo lo aprendido en el curso de programacion
+orientada a objetos.
+Es importante que se abra la carpeta superior llamada Proyecto Final para que carguen
+correctamente las imagenes y los sonidos.
