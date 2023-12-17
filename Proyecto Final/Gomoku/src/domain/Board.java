@@ -6,21 +6,13 @@ import java.util.*;
 import java.util.List;
 
 public class Board implements Serializable {
-    // Dimensiones del tablero (número de filas y columnas)
     private final int[] dimension;
-    // Matriz de celdas que forman el tablero
     protected Cell[][] cells;
-    // Jugadores que participan en el juego
     protected Player[] players;
-    // Indica el turno actual (true si es el turno del primer jugador, false si es el turno del segundo jugador)
     protected boolean turn;
-    // Temporizador para medir el tiempo transcurrido en el juego
     protected Timer timer;
-    // Segundos transcurridos en el juego
     protected int segundosTranscurridos;
-    // Porcentaje de celdas especiales en el tablero
     private int specialPercentage;
-    // Bandera para indicar si se ha activado una celda especial
     private boolean flag = false;
 
     /**
@@ -459,8 +451,8 @@ public class Board implements Serializable {
     /**
      * Establece una celda en una posición específica del tablero.
      *
-     * @param row  Índice de fila de la celda.
-     * @param col  Índice de columna de la celda.
+     * @param row  Indice de fila de la celda.
+     * @param col  Indice de columna de la celda.
      * @param cell La celda que se establecerá en la posición especificada.
      */
     public void setCell(int row, int col, Cell cell) {
