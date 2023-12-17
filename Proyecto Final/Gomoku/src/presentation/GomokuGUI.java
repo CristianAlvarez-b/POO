@@ -271,7 +271,7 @@ public class GomokuGUI extends JFrame {
 // Panel para piedraNormal
         JPanel piedraNormal = new JPanel(new FlowLayout(FlowLayout.LEFT));
         piedraNormal.setOpaque(false);
-        JLabel texto = new JLabel("  - Normal: Ocupa una casilla. Es permanente.");
+        JLabel texto = new JLabel("  - Normal: Ocupa una casilla.");
         texto.setForeground(Color.WHITE);
         ImageIcon imagen2 = new ImageIcon("GomokuImages/normalStone.png");
         ImageIcon resized2 = new ImageIcon(imagen2.getImage().getScaledInstance(
@@ -287,7 +287,7 @@ public class GomokuGUI extends JFrame {
 // Panel para piedraPesada
         JPanel piedraPesada = new JPanel(new FlowLayout(FlowLayout.LEFT));
         piedraPesada.setOpaque(false);
-        JLabel texto2 = new JLabel("  - Pesada: Ocupa dos casillas consecutivas en direcciones norte, este y noreste. Es permanente.");
+        JLabel texto2 = new JLabel("  - Pesada: Vale por dos piedras en esa posicion");
         texto2.setForeground(Color.WHITE);
         ImageIcon imagen3 = new ImageIcon("GomokuImages/pesadaStone.png");
         ImageIcon resized3 = new ImageIcon(imagen3.getImage().getScaledInstance(
@@ -303,7 +303,7 @@ public class GomokuGUI extends JFrame {
 // Panel para piedraTemporal
         JPanel piedraTemporal = new JPanel(new FlowLayout(FlowLayout.LEFT));
         piedraTemporal.setOpaque(false);
-        JLabel texto3 = new JLabel("  - Temporal: Ocupa una casilla. Permanece por tres turnos.");
+        JLabel texto3 = new JLabel("  - Temporal: Permanece por tres turnos.");
         texto3.setForeground(Color.WHITE);
         ImageIcon imagen4 = new ImageIcon("GomokuImages/temporalStone.png");
         ImageIcon resized4 = new ImageIcon(imagen4.getImage().getScaledInstance(
@@ -843,8 +843,8 @@ public class GomokuGUI extends JFrame {
                 opciones[0]);
 
         // Aquí puedes manejar la opción seleccionada
-
-        if (opciones[seleccion] == "Normal"){
+        if (seleccion == JOptionPane.CLOSED_OPTION) {
+        }else if (opciones[seleccion] == "Normal"){
             gameMode = "Normal";
             empezarJuego();
         } else if (opciones[seleccion] == "Piedras Limitadas") {
