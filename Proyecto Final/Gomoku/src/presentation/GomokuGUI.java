@@ -841,7 +841,6 @@ public class GomokuGUI extends JFrame {
                 null,
                 opciones,
                 opciones[0]);
-
         // Aquí puedes manejar la opción seleccionada
         if (seleccion == JOptionPane.CLOSED_OPTION) {
         }else if (opciones[seleccion] == "Normal"){
