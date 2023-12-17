@@ -45,9 +45,7 @@ public class Board implements Serializable {
      * Inicia el temporizador del juego.
      */
     public void starTimer(){
-        this.timer = new Timer(1000, e -> {
-            segundosTranscurridos++;
-        });
+        this.timer = new Timer(1000, e -> segundosTranscurridos++);
         this.timer.start();
     }
     /**
@@ -271,7 +269,6 @@ public class Board implements Serializable {
      * @return true si hay una secuencia ganadora en las filas, false si no la hay.
      */
     public boolean checkRows(boolean turn) {
-        int rows = cells.length;
         int columns = cells[0].length;
         Color playerColor = turn ? players[0].getColor() : players[1].getColor();
         if(playerColor.equals(players[0].getColor())){
@@ -281,11 +278,11 @@ public class Board implements Serializable {
         }
 
         // Iterar sobre las filas del tablero
-        for (int row = 0; row < rows; row++) {
+        for (Cell[] cell : cells) {
             int stoneCount = 0;
             // Iterar sobre las columnas de la fila actual
             for (int column = 0; column < columns; column++) {
-                stoneCount = updateStoneCount(stoneCount, cells[row][column], playerColor);
+                stoneCount = updateStoneCount(stoneCount, cell[column], playerColor);
                 // Verificar si el jugador actual ha alcanzado 5 piedras consecutivas
                 if (stoneCount == 5) {
                     return true;  // El jugador actual ha ganado
@@ -301,7 +298,6 @@ public class Board implements Serializable {
      * @return true si hay una secuencia ganadora en las columnas, false si no la hay.
      */
     public boolean checkColumns(boolean turn) {
-        int rows = cells.length;
         int columns = cells[0].length;
         Color playerColor = turn ? players[0].getColor() : players[1].getColor();
         if(playerColor.equals(players[0].getColor())){
@@ -313,15 +309,14 @@ public class Board implements Serializable {
         for (int column = 0; column < columns; column++) {
             int stoneCount = 0;
 
-            for (int row = 0; row < rows; row++) {
-                stoneCount = updateStoneCount(stoneCount, cells[row][column], playerColor);
+            for (Cell[] cell : cells) {
+                stoneCount = updateStoneCount(stoneCount, cell[column], playerColor);
 
                 if (stoneCount == 5) {
                     return true;  // El jugador actual ha ganado
                 }
             }
         }
-
         return false;
     }
 

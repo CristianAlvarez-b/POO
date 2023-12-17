@@ -193,8 +193,6 @@ public class GomokuGUI extends JFrame {
         JLabel ganar = new JLabel(
                 "  - El objetivo es alinear cinco piedras exactas de un color consecutivas en cualquier dirección.\n"
         );
-        //JLabel defecto = new JLabel("  - El juego se juega en un tablero cuadrado de 15x15 por defecto.");
-        //defecto.setForeground(Color.WHITE);
         ganar.setForeground(Color.WHITE);
 
         ImageIcon imagen = new ImageIcon("GomokuImages/victoria.png");
@@ -845,8 +843,8 @@ public class GomokuGUI extends JFrame {
                 opciones[0]);
 
         // Aquí puedes manejar la opción seleccionada
-        if (seleccion == JOptionPane.CLOSED_OPTION) {
-        } else if (opciones[seleccion] == "Normal"){
+
+        if (opciones[seleccion] == "Normal"){
             gameMode = "Normal";
             empezarJuego();
         } else if (opciones[seleccion] == "Piedras Limitadas") {
@@ -936,11 +934,7 @@ public class GomokuGUI extends JFrame {
         JCheckBoxMenuItem menuItemMute = new JCheckBoxMenuItem("Mute");
 
         menuItemMute.addActionListener(e -> {
-            if (menuItemMute.isSelected()) {
-                volumen = false; // Mute
-            }else{
-                volumen = true;
-            }
+            volumen = !menuItemMute.isSelected(); // Mute
         });
         menuConfiguraciones.add(menuItemMute);
 
@@ -1306,6 +1300,7 @@ public class GomokuGUI extends JFrame {
                 int respuesta = confirmarEleccion("¿Estás seguro de que deseas reiniciar el juego?");
                 // Si el usuario confirma, ejecutar la acción
                 if (respuesta == JOptionPane.YES_OPTION) {
+                    CellClickListener.enableClick();
                     optionNew();
                 }
             } catch (Exception ex) {

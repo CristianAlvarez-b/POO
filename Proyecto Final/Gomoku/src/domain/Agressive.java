@@ -90,9 +90,8 @@ public class Agressive extends Machine {
      *
      * @param playerColor Color del jugador.
      * @return Arreglo de dos elementos con las coordenadas [fila, columna] de la mejor jugada adyacente.
-     * @throws GomokuException Posible excepción durante la búsqueda.
      */
-    private int[] findBestAdjacentMove(Color playerColor) throws GomokuException {
+    private int[] findBestAdjacentMove(Color playerColor) {
         int[] bestMove = null;
         int maxLength = 0;
 
@@ -130,9 +129,8 @@ public class Agressive extends Machine {
      * @param row         Fila de la posición.
      * @param column      Columna de la posición.
      * @return Longitud máxima de la cadena del jugador en la posición dada.
-     * @throws GomokuException Posible excepción durante el cálculo.
      */
-    private int calculateMaxLength(int row, int column) throws GomokuException {
+    private int calculateMaxLength(int row, int column) {
         int maxLength = 0;
 
         // Verifica la longitud máxima en la fila horizontal
@@ -157,9 +155,8 @@ public class Agressive extends Machine {
      * @param rowDirection Dirección en la fila (puede ser 1, 0, -1).
      * @param colDirection Dirección en la columna (puede ser 1, 0, -1).
      * @return Longitud en la dirección especificada desde la posición dada.
-     * @throws GomokuException Posible excepción durante el cálculo.
      */
-    private int calculateLengthInDirection(int row, int column, int rowDirection, int colDirection) throws GomokuException {
+    private int calculateLengthInDirection(int row, int column, int rowDirection, int colDirection)  {
         Cell[][] cells = board.getCells();
         int length = 0;
 
