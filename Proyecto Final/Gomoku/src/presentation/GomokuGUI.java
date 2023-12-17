@@ -832,6 +832,11 @@ public class GomokuGUI extends JFrame {
                 }else if(porcentajeEspeciales < 0 || porcentajeEspeciales > 100){
                     JOptionPane.showMessageDialog(null, "El porcentaje de especiales es un numero entre 0 y 100.");
                 }else{
+                    if(nombreJ1.isEmpty()){
+                        nombreJ1 = "Jugador1";
+                    } else if (nombreJ2.isEmpty()) {
+                        nombreJ2 = "Jugador2";
+                    }
                     mostrarDialogo();
                 }
             } catch (Exception ex) {
@@ -881,6 +886,7 @@ public class GomokuGUI extends JFrame {
                 porcentajeEspeciales = 0;
                 if(stoneLimit <= 0){
                     JOptionPane.showMessageDialog(null, "Ingresa un numero positivo");
+                    stoneLimit = size*size;
                 }else{
                     empezarJuego();
                 }
@@ -895,6 +901,7 @@ public class GomokuGUI extends JFrame {
                 timeLimit = Integer.parseInt(tiempoLimite);
                 if(timeLimit <= 0){
                     JOptionPane.showMessageDialog(null, "Ingresa un tiempo positivo");
+                    timeLimit = 10000000;
                 }else{
                     empezarJuego();
                 }
@@ -1623,6 +1630,7 @@ public class GomokuGUI extends JFrame {
             JOptionPane.showMessageDialog(null, "No te quedan mas piedras de ese tipo, elige otra.");
         }else if(e.getMessage().equals(GomokuException.DRAW)) {
             refresh();
+            CellClickListener.disableClick();
             JOptionPane.showMessageDialog(null, "Empate.");
         }
         else {
