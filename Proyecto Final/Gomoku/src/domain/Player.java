@@ -152,7 +152,7 @@ public abstract class Player implements Serializable {
     public boolean contieneStone(Class<? extends Stone> tipo) {
         boolean contiene = false;
         for (Stone stone : remainingStones) {
-            if (tipo.isInstance(stone)) {
+            if (stone.getClass().equals(tipo)) {
                 contiene = true;
                 break;
             }
@@ -227,4 +227,5 @@ public abstract class Player implements Serializable {
         }
         return null; // Si no se encuentra un objeto del tipo especificado
     }
+
 }

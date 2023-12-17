@@ -74,7 +74,10 @@ public class Fearful extends Machine {
             try {
                 // Verifica que la posición esté dentro de los límites y la celda esté vacía
                 if (isValidPosition(row, column) && !board.cellHasStone(board.getCells()[row][column])) {
-                    super.play(row, column, new Stone(color));
+                    Random random2 = new Random();
+                    int randomIndex = random2.nextInt(remainingStones.size());
+                    Stone selectedStone = remainingStones.isEmpty() ? new Stone(color) : remainingStones.get(randomIndex);
+                    super.play(row, column, selectedStone);
                     // Si la jugada se realiza con éxito, la máquina ha realizado una jugada
                     return;
                 }

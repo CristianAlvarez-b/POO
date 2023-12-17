@@ -745,7 +745,6 @@ public class GomokuGUI extends JFrame {
                     }
                 });
             }
-
         });
 
         JLabel especialesLabel = new JLabel("Porcentaje de especiales:");
@@ -774,7 +773,7 @@ public class GomokuGUI extends JFrame {
                         porcentajeEspeciales = Integer.parseInt(especialesTextField.getText());
                     } catch (NumberFormatException e) {
                         JOptionPane.showMessageDialog(null, "No estás ingresando un número válido.");
-                        // Log.record(e);
+                        Log.record(e);
                         especialesTextField.setText("");
                     }
                 });
@@ -811,7 +810,13 @@ public class GomokuGUI extends JFrame {
         JButton modosJuego = new JButton("Iniciar Juego");
         modosJuego.addActionListener(e -> {
             try {
-                mostrarDialogo();
+                if(size < 10){
+                    JOptionPane.showMessageDialog(null, "El valor minimo para el tablero es de 10.");
+                }else if(porcentajeEspeciales < 0 || porcentajeEspeciales > 100){
+                    JOptionPane.showMessageDialog(null, "El porcentaje de especiales es un numero entre 0 y 100.");
+                }else{
+                    mostrarDialogo();
+                }
             } catch (Exception ex) {
                 Log.record(ex);
                 throw new RuntimeException(ex);
